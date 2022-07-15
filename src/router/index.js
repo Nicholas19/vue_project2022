@@ -4,9 +4,9 @@ import ProductPage from "@/views/ProductPage";
 
 const routes = [
   {
-    path: "/",
     name: "home",
-    component: HomeView,
+    path: "/",
+    component: ViewHome,
   },
   {
     path: "/product",
