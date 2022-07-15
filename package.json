@@ -46,7 +46,9 @@
       "prettier/prettier": [
         "error",
         {
-          "endOfLine": "auto"
+          "endOfLine": "auto",
+          "generator-star-spacing": "off",
+          "useTabs": false
         }
       ]
     }
