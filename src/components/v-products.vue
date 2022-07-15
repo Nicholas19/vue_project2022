@@ -41,6 +41,7 @@
               </li>
               <li class="category__button">
                 <!--  тут должен быть копонент кнопки (Стили прописаны чисто для примеры) -->
+
                 <button class="btn">White</button>
               </li>
               <li class="category__button">
@@ -210,7 +211,9 @@ export default {
     text-align: left;
     color: #ff7020;
   }
-
+  .test {
+    color: red;
+  }
   &__filter {
     width: 100%;
     color: #ffffff;
@@ -288,7 +291,8 @@ export default {
     grid-template-columns: repeat(4, 1fr);
     gap: 39px 43px;
   }
-
+  .test {
+  }
   &__show {
     display: block;
     font-family: "Lato", sans-serif;
