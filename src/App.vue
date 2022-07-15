@@ -1,10 +1,5 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-  </nav>
-  <router-view />
+  <router-view></router-view>
 </template>
 
-<style>
-
-</style>
+<style></style>
