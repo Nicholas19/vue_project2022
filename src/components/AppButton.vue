@@ -4,13 +4,10 @@
     @click="click"
     class="stndt-btn"
     :class="[{ icon: icon }, variant]"
-    {{
-    name
-    }}
-    <img
-    v-if="icon"
-    :src="iconSrc"
-  ></button>
+  >
+    {{ name }}
+    <img v-if="icon" :src="iconSrc" />
+  </button>
 </template>
 
 <script>
