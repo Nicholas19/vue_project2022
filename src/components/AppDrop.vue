@@ -60,6 +60,7 @@ export default {
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap");
+
 .custom-select-wrapper .input-wrapper {
   background-color: #fff;
 }
@@ -75,7 +76,7 @@ export default {
 }
 
 .custom-select-wrapper.open-dropdown ul {
-  border: 1px solid #ced4da;
+  border: 2px solid #ebebeb;
 }
 
 .custom-select-wrapper ul {
@@ -87,11 +88,11 @@ export default {
   height: 0;
   overflow: hidden;
   margin: 5px 0 0 0;
-  transition: 0.1s ease-out;
   position: absolute;
   width: auto;
   left: 0;
   right: 0;
+  z-index: 1;
 }
 
 input,
@@ -101,17 +102,17 @@ input,
   font-weight: 500;
   font-size: 20px;
   line-height: 24px;
+  padding: 10px 32px;
   /* identical to box height */
   color: #575757;
 }
 
 .custom-select-wrapper ul li:hover {
-  background-color: #0d6efd;
+  color: #ff7020;
 }
 
 .custom-select-wrapper.open-dropdown ul {
   height: auto;
-  transition: 0.1s ease-in;
 }
 
 .custom-select-wrapper {
