@@ -203,7 +203,8 @@ export default {
       content: "";
       position: absolute;
       top: 100%;
-      left: 0;
+      left: 50%;
+      transform: translate(-50%);
       width: calc(100% + 30px);
       height: 1px;
       background: #c4c4c4;

@@ -5,16 +5,17 @@
   <div class="main">
     <v-products></v-products>
   </div>
-  <v-footer></v-footer>
+
+  <AppFooter></AppFooter>
 </template>
 
 <script>
 import VProducts from "@/components/v-products";
 import vHeader from "@/components/v-header.vue";
-import vFooter from "@/components/v-footer.vue";
+import AppFooter from "@/components/AppFooter.vue";
 
 export default {
-  components: { VProducts, vHeader, vFooter },
+  components: { VProducts, vHeader, AppFooter },
 
   name: "HomeView",
 };
