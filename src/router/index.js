@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import ViewHome from "@/views/ViewHome";
 import ProductPage from "@/views/ProductPage";
-import ChildrenView from "@/views/ChildrenView";
 
 const routes = [
   {
@@ -13,24 +12,6 @@ const routes = [
     path: "/product/:productId",
     name: "product",
     component: ProductPage,
-  },
-  {
-    path: "/user/",
-    component: ChildrenView,
-    children: [
-      {
-        // при совпадении пути с шаблоном /uer/:id/profile
-        // в <router-view> компонента User будет показан UserProfile
-        path: "profile",
-        component: ProductPage,
-      },
-      {
-        // при совпадении пути с шаблоном /user/:id/posts
-        // в <router-view> компонента User будет показан UserPosts
-        path: "posts",
-        component: ViewHome,
-      },
-    ],
   },
   // {
   //   path: "/about",

@@ -1,16 +1,17 @@
 <template>
-  <transition-group name="flip-list" tag="ul" class="grid">
-    <li v-for="card in goodsData" :key="card.id">
-      <app-card
-        :name="card.name"
-        :price="card.price"
-        :amount="card.amount"
-        :picture="card.picture"
-        :raiting="card.raiting"
-        @click="handleCardClick(card.id)"
-      ></app-card>
-    </li>
-  </transition-group>
+  <div class="grid">
+    <app-card
+      v-for="(card, index) in goodsData"
+      :key="index"
+      :name="card.name"
+      :price="card.price"
+      :amount="card.amount"
+      :picture="card.picture"
+      :raiting="card.raiting"
+      @click="handleCardClick(card.id)"
+      @add-to-cart="addToCart(card.id)"
+    ></app-card>
+  </div>
 </template>
 
 <script>
@@ -96,14 +97,16 @@ export default {
         params: { productId: id },
       });
     },
+    addToCart(id) {
+      // this.$store.state.cart.push(id);
+      // this.$store.commit("addToCart", id);
+      this.$store.dispatch("addToCart", id);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.flip-list-move {
-  transition: transform 0.8s ease;
-}
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

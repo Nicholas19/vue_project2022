@@ -25,7 +25,9 @@
               <svg width="25" height="25">
                 <use xlink:href="@/assets/images/svg/sprites.svg#basket"></use>
               </svg>
-              <span class="header__count">5</span>
+              <span class="header__count" v-if="$store.getters.cartCount">{{
+                $store.getters.cartCount
+              }}</span>
             </router-link>
             <!-- Заглушка -->
             <button>Заглушка</button>
@@ -55,6 +57,12 @@
 
 <script>
 export default {
+  // props: {
+  //   productCount: {
+  //     type: Number,
+  //     required: true,
+  //   },
+  // },
   data: () => ({
     links: [
       { route: "home", text: "All Categories" },
@@ -70,7 +78,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap");
 * {
   margin: 0;
   padding: 0;

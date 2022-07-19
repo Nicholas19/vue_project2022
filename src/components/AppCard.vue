@@ -10,7 +10,7 @@
           <p class="card__price">{{ "$" + price }}</p>
           <app-raiting :amount="amount" :raiting="raiting"></app-raiting>
         </div>
-        <button class="btn">Add to cart</button>
+        <button class="btn" @click.stop="handleClick">Add to cart</button>
       </div>
     </div>
   </div>
@@ -44,6 +44,11 @@ export default {
     picture: {
       type: String,
       default: require("@/assets/img/card-default.jpg"),
+    },
+  },
+  methods: {
+    handleClick() {
+      this.$emit("add-to-cart");
     },
   },
 };
