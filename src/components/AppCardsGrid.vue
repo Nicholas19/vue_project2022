@@ -8,6 +8,7 @@
       :amount="card.amount"
       :picture="card.picture"
       :raiting="card.raiting"
+      @click="handleCardClick(card.id)"
     ></app-card>
   </div>
 </template>
@@ -23,6 +24,7 @@ export default {
   data: () => ({
     goodsData: [
       {
+        id: 100,
         name: "Macbook Pro 2020 With 260 SSD",
         price: 1099,
         raiting: 4,
@@ -30,6 +32,7 @@ export default {
         picture: require("@/assets/img/card.jpg"),
       },
       {
+        id: 101,
         name: "ASUS Gaming Notebook ROG",
         price: 1629,
         raiting: 3,
@@ -37,6 +40,7 @@ export default {
         picture: require("@/assets/img/card-2.jpg"),
       },
       {
+        id: 102,
         name: "Ultra slim Macbook Pro 2020",
         price: 1219,
         raiting: 2,
@@ -44,6 +48,7 @@ export default {
         picture: require("@/assets/img/card-3.jpg"),
       },
       {
+        id: 103,
         name: "Recoil Pro Gaming Laptop",
         price: 2081,
         raiting: 3,
@@ -51,6 +56,7 @@ export default {
         picture: require("@/assets/img/card-4.jpg"),
       },
       {
+        id: 104,
         name: "Ultra slim Macbook Pro 2020",
         price: 1219,
         raiting: 1,
@@ -58,6 +64,7 @@ export default {
         picture: require("@/assets/img/card-3.jpg"),
       },
       {
+        id: 105,
         name: "Macbook Pro 2020 With 260 SSD",
         price: 1099,
         raiting: 3,
@@ -65,6 +72,7 @@ export default {
         picture: require("@/assets/img/card.jpg"),
       },
       {
+        id: 106,
         name: "Recoil Pro Gaming Laptop",
         price: 2081,
         raiting: 4,
@@ -72,6 +80,7 @@ export default {
         picture: require("@/assets/img/card-4.jpg"),
       },
       {
+        id: 107,
         name: "ASUS Gaming Notebook ROG",
         price: 1629,
         raiting: 3,
@@ -80,6 +89,14 @@ export default {
       },
     ],
   }),
+  methods: {
+    handleCardClick(id) {
+      this.$router.push({
+        name: "product",
+        params: { productId: id },
+      });
+    },
+  },
 };
 </script>
 
