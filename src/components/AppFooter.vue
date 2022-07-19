@@ -205,7 +205,7 @@ export default {
       top: 100%;
       left: 50%;
       transform: translate(-50%);
-      width: calc(100% + 30px);
+      width: calc(100% + 15vw);
       height: 1px;
       background: #c4c4c4;
     }
