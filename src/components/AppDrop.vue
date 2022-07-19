@@ -55,6 +55,9 @@ export default {
     /*сворачиваем дропдаун при клике в любой точке*/
     document.addEventListener("click", this.hide);
   },
+  beforeUnmount() {
+    document.removeEventListener("click", this.hide);
+  },
 };
 </script>
 
