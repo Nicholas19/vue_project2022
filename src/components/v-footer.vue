@@ -191,14 +191,23 @@ export default {
 
 <style scoped lang="scss">
 .footer {
+  overflow: hidden;
   &__top {
     padding-bottom: 70px;
 
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 130px;
-
-    border-bottom: 1px solid #c4c4c4;
+    position: relative;
+    &:after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: calc(100% + 30px);
+      height: 1px;
+      background: #c4c4c4;
+    }
   }
 
   &__left {
