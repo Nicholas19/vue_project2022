@@ -40,8 +40,6 @@ export default {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap");
-
 .stndt-btn {
   font-family: "Lato";
   font-style: normal;
