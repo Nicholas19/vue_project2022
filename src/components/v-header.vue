@@ -40,9 +40,9 @@
             >
             </app-button>
             <div class="userInfo" v-if="userInfo">
-              <div class="info"><span>Full name:</span>Hoida Vitalii</div>
-              <div class="info"><span>Login:</span>Ho_Vi</div>
-              <div class="info"><span>Email:</span>vitaliy.gojda@gmail.com</div>
+              <div class="info"><span>Full name:</span>{{ name }}</div>
+              <div class="info"><span>Login:</span>{{ login }}</div>
+              <div class="info"><span>Email:</span>{{ email }}</div>
             </div>
           </div>
         </div>
@@ -86,6 +86,9 @@ export default {
       { route: "home", text: "Speaker" },
     ],
     userInfo: false,
+    name: "Hoida Vitalii",
+    login: "Ho_Vi",
+    email: "vitaliy.gojda@gmail.com",
   }),
   methods: {
     showInfo() {
