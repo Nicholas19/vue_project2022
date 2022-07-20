@@ -3,6 +3,8 @@ import { createStore } from "vuex";
 export default createStore({
   state: {
     cart: [1, 2],
+    brands: ["Apple", "HP", "Dell"],
+    brand: "",
   },
   getters: {
     cartCount(state) {
@@ -12,6 +14,9 @@ export default createStore({
   mutations: {
     addToCart(state, id) {
       state.cart.push(id);
+    },
+    chooseBrand(state, val) {
+      state.brand = val;
     },
   },
   actions: {
