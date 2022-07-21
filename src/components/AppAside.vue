@@ -49,7 +49,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .aside {
   margin: 0 60px 0 0;
   width: 350px;
@@ -106,7 +106,7 @@ export default {
 .filter_head button::before {
   content: "";
   display: block;
-  background: url("@/assets/images/svg/check.svg") no-repeat;
+  background: url("../assets/images/svg/check.svg") no-repeat;
   width: 20px;
   height: 21px;
   float: left;
@@ -115,7 +115,7 @@ export default {
 
 .filter_head button:hover::before,
 .filter_head button.active::before {
-  background: url("@/assets/images/svg/check_active.svg") no-repeat;
+  background: url("../assets/images/svg/check_active.svg") no-repeat;
 }
 
 .filter .btns button {

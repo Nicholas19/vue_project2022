@@ -6,7 +6,7 @@
 export default {};
 </script>
 
-<style>
+<style scoped>
 .title {
   margin-top: 100px;
   font-size: 48px;

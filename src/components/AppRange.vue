@@ -29,13 +29,13 @@
 
 <script>
 export default {
-  name: "VRange",
+  name: "AppRange",
 
   data() {
     return {
       minPrice: 0,
       maxPrice: 100000,
-      priceGap: 1000,
+      priceGap: 500,
     };
   },
   methods: {
@@ -45,24 +45,12 @@ export default {
         this.maxPrice = this.minPrice;
         this.minPrice = buffer;
       }
+
+      // if(this.maxPrice - this.minPrice) && this.maxPrice <= this.
     },
-    // ramgeValue(e) {
-    //   let rangeInput;
-    //   let minVal = parseInt(rangeInput[0].value),
-    //       maxVal = parseInt(rangeInput[1].value);
-    //   if((maxVal - minVal) < this.priceGap){
-    //     if(e.target.className === "range-min"){
-    //       rangeInput[0].value = maxVal - this.priceGap
-    //     }else{
-    //       rangeInput[1].value = minVal + this.priceGap;
-    //     }
-    //   }else{
-    //     priceInput[0].value = minVal;
-    //     priceInput[1].value = maxVal;
-    //     range.style.left = ((minVal / rangeInput[0].max) * 100) + "%";
-    //     range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
-    //   }
-    // },
+    // slideOne() {
+    //   // if(parseInt(this.))
+    // }
   },
 };
 </script>
