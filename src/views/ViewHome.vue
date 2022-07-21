@@ -1,7 +1,7 @@
 <template>
   <!--  <app-aside></app-aside>-->
   <div class="main">
-    <app-cards-grid></app-cards-grid>
+    <!--    <app-cards-grid></app-cards-grid>-->
     <AppMain></AppMain>
   </div>
   <AppFooter></AppFooter>

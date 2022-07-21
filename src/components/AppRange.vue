@@ -1,24 +1,24 @@
 <template>
   <div class="slider">
-    <div class="progress"></div>
+    <div class="progress" :style="fillColor"></div>
   </div>
   <div class="range-input">
     <input
       type="range"
-      min="0"
-      max="100000"
-      step="500"
-      v-model.number="minPrice"
-      @change="setRange"
+      :min="min"
+      :max="max"
+      :step="priceGap"
+      :value="minPrice"
+      @change="getInput($event, 'minPrice')"
     />
 
     <input
       type="range"
-      min="0"
-      max="100000"
-      step="500"
-      v-model.number="maxPrice"
-      @change="setRange"
+      :min="min"
+      :max="max"
+      :step="priceGap"
+      :value="maxPrice"
+      @change="getInput($event, 'maxPrice')"
     />
   </div>
   <div class="range__values">
@@ -33,24 +33,31 @@ export default {
 
   data() {
     return {
-      minPrice: 0,
-      maxPrice: 100000,
+      min: 0,
+      max: 100000,
+      minPrice: 3000,
+      maxPrice: 8000,
       priceGap: 500,
     };
   },
   methods: {
-    setRange() {
+    getInput(e, params) {
+      this[params] = e.target.value;
       if (this.minPrice > this.maxPrice) {
         let buffer = this.maxPrice;
         this.maxPrice = this.minPrice;
         this.minPrice = buffer;
       }
-
-      // if(this.maxPrice - this.minPrice) && this.maxPrice <= this.
     },
-    // slideOne() {
-    //   // if(parseInt(this.))
-    // }
+  },
+  computed: {
+    fillColor() {
+      let percent1 = (this.minPrice / this.max) * 100;
+      let percent2 = (this.maxPrice / this.max) * 100;
+      return {
+        "background-image": `linear-gradient(to right, #dadae5 ${percent1}% , #ff7020 ${percent1}% , #ff7020 ${percent2}%, #dadae5 ${percent2}%))`,
+      };
+    },
   },
 };
 </script>
