@@ -21,7 +21,7 @@
             </button>
           </div>
           <div class="header__right">
-            <router-link to="/cart" class="header__cart">
+            <router-link to="/" class="header__cart">
               <svg width="25" height="25">
                 <use xlink:href="@/assets/images/svg/sprites.svg#basket"></use>
               </svg>
@@ -60,7 +60,10 @@ export default {
       { route: "home", text: "All Categories" },
       { route: "home", text: "accessories" },
       { route: "home", text: "Smartphone" },
-      { route: "home", text: "Gaming Equipments" },
+      {
+        route: "home",
+        text: "Gaming Equipments",
+      },
       { route: "home", text: "TV & Monitors" },
       { route: "home", text: "Headphones" },
       { route: "home", text: "Speaker" },
