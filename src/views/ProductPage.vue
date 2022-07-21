@@ -10,7 +10,12 @@
         <aside>
           <rating-block :rating="4.2" :reviews="reviewsStat" />
         </aside>
-        <div>Дпополнительная информация о продукте</div>
+        <div class="product-about">
+          <app-tabs :tabs="tabList" v-model="currentTab" />
+          <div class="wrapper">
+            <component :is="currentComponent" />
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -18,6 +23,9 @@
 
 <script>
 import RatingBlock from "@/components/RatingBlock";
+import AppTabs from "@/components/AppTabs";
+import ProductDescription from "@/components/ProductDescription";
+import ProductSpecification from "@/components/ProductSpecification";
 export default {
   data: () => ({
     reviewsStat: [
@@ -42,21 +50,32 @@ export default {
         reviewsCount: 25,
       },
     ],
+    tabList: new Set(["Description", "Specification", "Reviews"]),
+    currentTab: "Description",
   }),
+  computed: {
+    currentComponent() {
+      switch (this.currentTab) {
+        case "Description":
+          return "ProductDescription";
+        case "Specification":
+          return "ProductSpecification";
+        case "Reviews":
+          return "ProductReviews";
+      }
+      return null;
+    },
+  },
   components: {
     RatingBlock,
+    AppTabs,
+    ProductDescription,
+    ProductSpecification,
   },
 };
 </script>
 
 <style>
-.title {
-  margin-top: 100px;
-  font-size: 48px;
-  font-weight: 600;
-  text-align: center;
-}
-
 .product-section,
 .info-section {
   margin-top: 100px;
@@ -65,5 +84,13 @@ export default {
 .product-info {
   display: flex;
   gap: 35px;
+}
+
+.product-about {
+  width: 100%;
+}
+
+.wrapper {
+  padding: 33px;
 }
 </style>
