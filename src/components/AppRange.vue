@@ -2,8 +2,9 @@
   <div class="slider">
     <div class="progress" :style="fillColor"></div>
   </div>
-  <div class="range-input">
+  <div class="input__range">
     <input
+      id="input1"
       type="range"
       :min="min"
       :max="max"
@@ -11,8 +12,8 @@
       :value="minPrice"
       @change="getInput($event, 'minPrice')"
     />
-
     <input
+      id="input2"
       type="range"
       :min="min"
       :max="max"
@@ -21,9 +22,9 @@
       @change="getInput($event, 'maxPrice')"
     />
   </div>
-  <div class="range__values">
-    <p>Min{{ minPrice }}</p>
-    <p>Max{{ maxPrice }}</p>
+  <div class="input__values">
+    <span> ${{ minPrice }}</span>
+    <span> ${{ maxPrice }}</span>
   </div>
 </template>
 
@@ -35,8 +36,8 @@ export default {
     return {
       min: 0,
       max: 100000,
-      minPrice: 3000,
-      maxPrice: 8000,
+      minPrice: 15000,
+      maxPrice: 80500,
       priceGap: 500,
     };
   },
@@ -55,7 +56,7 @@ export default {
       let percent1 = (this.minPrice / this.max) * 100;
       let percent2 = (this.maxPrice / this.max) * 100;
       return {
-        "background-image": `linear-gradient(to right, #dadae5 ${percent1}% , #ff7020 ${percent1}% , #ff7020 ${percent2}%, #dadae5 ${percent2}%))`,
+        "background-image": `linear-gradient(to right, #dadae5 ${percent1}% , #ff7020 ${percent1}% , #ff7020 ${percent2}%, #dadae5 ${percent2}%)`,
       };
     },
   },
@@ -63,42 +64,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-//.range {
-//  width: 100%;
-//  max-width: 350px;
-//  margin-top: 30px;
-//  text-align: center;
-//  position: relative;
-//
-//  & svg,
-//  input[type="range"] {
-//    width: 100%;
-//    max-width: 350px;
-//
-//    position: absolute;
-//    left: 0;
-//    bottom: 0;
-//
-//    -webkit-appearance: none;
-//    -moz-appearance: none;
-//    appearance: none;
-//  }
-//  input[type="range"]::-webkit-slider-thumb {
-//    background: #ff7020;
-//    cursor: pointer;
-//    width: 24px;
-//    height: 24px;
-//    border-radius: 50%;
-//    -webkit-appearance: none;
-//    margin-top: -10px;
-//    z-index: 2;
-//    position: relative;
-//  }
-//  input[type="range"]::-webkit-slider-runnable-track {
-//    height: 6px;
-//    background-color: #c4c4c4;
-//  }
-//}
 .slider {
   height: 6px;
   position: relative;
@@ -106,28 +71,74 @@ export default {
   border-radius: 5px;
 }
 
-.slider .progress {
+.progress {
   height: 100%;
-  left: 25%;
-  right: 25%;
+  width: 100%;
   position: absolute;
   border-radius: 5px;
   background: #ff7020;
 }
 
-.range-input {
-  position: relative;
-}
+.input {
+  &__range {
+    position: relative;
 
-.range-input input {
-  position: absolute;
-  width: 100%;
-  height: 6px;
-  top: -5px;
-  background: none;
-  pointer-events: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+    input {
+      position: absolute;
+      width: 100%;
+      height: 6px;
+      top: -5px;
+      background: none;
+      pointer-events: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+  }
+
+  &__wrap {
+    position: relative;
+
+    &:before {
+      content: attr(data-min);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    &:after {
+      content: attr(data-max);
+      position: absolute;
+      top: 0%;
+      left: 50%;
+      transform: translate(-50%);
+    }
+  }
+
+  &__price {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%);
+  }
+  &__values {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    span {
+      display: block;
+      margin: 0 auto;
+
+      font-family: "Lato", sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 19px;
+      letter-spacing: 0em;
+      text-align: left;
+    }
+  }
 }
 
 input[type="range"]::-webkit-slider-thumb {
