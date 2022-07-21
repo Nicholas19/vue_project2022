@@ -13,7 +13,6 @@
           :values="$store.state.brands"
           :default_item="$store.state.brand"
         ></app-drop>
-        <app-drop :placeholder="'Choose Location'"></app-drop>
       </div>
       <div class="filter">
         <div class="filter_head">

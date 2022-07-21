@@ -5,7 +5,7 @@
       <span class="max-rating">5</span>
     </div>
     <div class="average-stars">
-      <app-raiting :raiting="4" fill-star-color="#EBFF00" star-size="30" />
+      <app-rating :raiting="4" fill-star-color="#EBFF00" star-size="30" />
     </div>
     <div class="reviews">
       <span class="reviews-count">{{ reviewsQuantity }}</span>
@@ -17,7 +17,7 @@
         :key="review.starsCount"
         class="statistic-item"
       >
-        <app-raiting
+        <app-rating
           :raiting="review.starsCount"
           fill-star-color="#EBFF00"
           :show-empty-star="false"
@@ -34,9 +34,13 @@
 </template>
 
 <script>
-import AppRaiting from "@/components/AppRaiting";
+import AppRating from "@/components/AppRating";
+
 export default {
   name: "RatingBlock",
+  components: {
+    AppRating,
+  },
   props: {
     rating: {
       type: Number,
@@ -51,9 +55,6 @@ export default {
     reviewsQuantity() {
       return this.reviews.reduce((acm, val) => acm + val.reviewsCount, 0);
     },
-  },
-  components: {
-    AppRaiting,
   },
 };
 </script>
