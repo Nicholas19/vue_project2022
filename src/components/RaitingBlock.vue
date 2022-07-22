@@ -1,11 +1,11 @@
 <template>
-  <div class="rating-block">
-    <div class="rating">
-      <span class="average-rating">{{ rating }}</span>
-      <span class="max-rating">5</span>
+  <div class="raiting-block">
+    <div class="raiting">
+      <span class="average-raiting">{{ raiting }}</span>
+      <span class="max-raiting">5</span>
     </div>
     <div class="average-stars">
-      <app-rating :raiting="4" fill-star-color="#EBFF00" star-size="30" />
+      <app-raiting :raiting="4" fill-star-color="#EBFF00" star-size="30" />
     </div>
     <div class="reviews">
       <span class="reviews-count">{{ reviewsQuantity }}</span>
@@ -17,7 +17,7 @@
         :key="review.starsCount"
         class="statistic-item"
       >
-        <app-rating
+        <app-raiting
           :raiting="review.starsCount"
           fill-star-color="#EBFF00"
           :show-empty-star="false"
@@ -34,15 +34,15 @@
 </template>
 
 <script>
-import AppRating from "@/components/AppRating";
+import AppRaiting from "@/components/AppRaiting";
 
 export default {
-  name: "RatingBlock",
+  name: "RaitingBlock",
   components: {
-    AppRating,
+    AppRaiting,
   },
   props: {
-    rating: {
+    raiting: {
       type: Number,
       required: true,
     },
@@ -61,7 +61,7 @@ export default {
 
 <style scoped lang="scss">
 @import "../assets/css/colors.scss";
-.rating-block {
+.raiting-block {
   background-color: $accent-color;
   width: 375px;
   padding: 60px 40px;
@@ -69,20 +69,20 @@ export default {
   border-radius: 8px;
 }
 
-.rating {
+.raiting {
   text-align: center;
 }
 
-.average-rating {
+.average-raiting {
   font-size: 100px;
   font-weight: 600;
 }
 
-.max-rating {
+.max-raiting {
   font-size: 24px;
 }
 
-.max-rating::before {
+.max-raiting::before {
   content: "/";
 }
 
