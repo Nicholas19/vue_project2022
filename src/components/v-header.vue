@@ -25,8 +25,8 @@
               <svg width="25" height="25">
                 <use xlink:href="@/assets/images/svg/sprites.svg#basket"></use>
               </svg>
-              <span class="header__count" v-if="$store.getters.cartCount">{{
-                $store.getters.cartCount
+              <span class="header__count" v-if="cartCount">{{
+                cartCount
               }}</span>
             </router-link>
             <!-- Заглушка -->
@@ -70,6 +70,7 @@
 
 <script>
 import AppButton from "@/components/AppButton.vue";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -93,6 +94,9 @@ export default {
     login: "Ho_Vi",
     email: "vitaliy.gojda@gmail.com",
   }),
+  computed: {
+    ...mapGetters("Products", ["cartCount"]),
+  },
   methods: {
     showInfo() {
       this.userInfo = !this.userInfo;

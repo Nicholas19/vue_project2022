@@ -10,8 +10,8 @@
         <app-drop
           style="margin-bottom: 20px"
           :placeholder="'Choose Brand'"
-          :values="$store.state.brands"
-          :default_item="$store.state.brand"
+          :values="brands"
+          :default_item="brand"
         ></app-drop>
       </div>
       <div class="filter">
@@ -40,12 +40,16 @@
 <script>
 import AppDrop from "@/components/AppDrop.vue";
 import AppButton from "@/components/AppButton.vue";
+import { mapState } from "vuex";
 
 export default {
   name: "AppAside",
   components: {
     AppDrop,
     AppButton,
+  },
+  computed: {
+    ...mapState("Products", ["brands", "brand"]),
   },
 };
 </script>
