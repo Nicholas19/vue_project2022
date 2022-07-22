@@ -1,5 +1,4 @@
 <template>
-  <h1 class="title">Product: {{ $route.params.productId }}</h1>
   <section class="product">
     <div class="container">
       <div class="product__inner">
