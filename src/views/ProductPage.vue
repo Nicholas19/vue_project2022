@@ -107,9 +107,7 @@
             </button>
           </div>
         </div>
-        <div class="product__about">
-          <h2>Тут будет описание товара</h2>
-        </div>
+        <app-about-product></app-about-product>
       </div>
     </div>
   </section>
@@ -117,7 +115,7 @@
     <div class="container">
       <div class="product-info">
         <aside>
-          <rating-block :rating="4.2" :reviews="reviewsStat" />
+          <raiting-block :raiting="4.2" :reviews="reviewsStat" />
         </aside>
         <div class="product-about">
           <app-tabs :tabs="tabList" v-model="currentTab" />
@@ -138,19 +136,15 @@ import { EffectCreative } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-creative";
-import RatingBlock from "@/components/RatingBlock";
-import AppTabs from "@/components/AppTabs";
-import ProductDescription from "@/components/ProductDescription";
-import ProductSpecification from "@/components/ProductSpecification";
+import RaitingBlock from "@/components/RaitingBlock";
+import AppAboutProduct from "@/components/AppAboutProduct";
 
 export default {
   components: {
     Swiper,
     SwiperSlide,
-    RatingBlock,
-    AppTabs,
-    ProductDescription,
-    ProductSpecification,
+    RaitingBlock,
+    AppAboutProduct,
   },
   setup() {
     const onSwiper = (swiper) => {
@@ -213,11 +207,6 @@ export default {
 </script>
 
 <style lang="scss">
-.container {
-  max-width: 1650px;
-  padding: 0 15px;
-  margin: 0 auto;
-}
 .product {
   margin-top: 45px;
   &__inner {
@@ -263,8 +252,6 @@ export default {
       transition: 0.2s ease;
       fill: transparent;
       stroke: #ff7020;
-    }
-    &--prev {
     }
     &--next {
       transform: rotate(180deg);
