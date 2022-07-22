@@ -107,9 +107,7 @@
             </button>
           </div>
         </div>
-        <div class="product__about">
-          <h2>Тут будет описание товара</h2>
-        </div>
+        <app-about-product></app-about-product>
       </div>
     </div>
   </section>
@@ -117,9 +115,14 @@
     <div class="container">
       <div class="product-info">
         <aside>
-          <rating-block :rating="4.2" :reviews="reviewsStat" />
+          <raiting-block :raiting="4.2" :reviews="reviewsStat" />
         </aside>
-        <div>Дпополнительная информация о продукте</div>
+        <div class="product-about">
+          <app-tabs :tabs="tabList" v-model="currentTab" />
+          <div class="wrapper">
+            <component :is="currentComponent" />
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -133,13 +136,15 @@ import { EffectCreative } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-creative";
-import RatingBlock from "@/components/RatingBlock";
+import RaitingBlock from "@/components/RaitingBlock";
+import AppAboutProduct from "@/components/AppAboutProduct";
 
 export default {
   components: {
     Swiper,
     SwiperSlide,
-    RatingBlock,
+    RaitingBlock,
+    AppAboutProduct,
   },
   setup() {
     const onSwiper = (swiper) => {
@@ -182,16 +187,26 @@ export default {
         reviewsCount: 25,
       },
     ],
+    tabList: new Set(["Description", "Specification", "Reviews"]),
+    currentTab: "Description",
   }),
+  computed: {
+    currentComponent() {
+      switch (this.currentTab) {
+        case "Description":
+          return "ProductDescription";
+        case "Specification":
+          return "ProductSpecification";
+        case "Reviews":
+          return "ProductReviews";
+      }
+      return null;
+    },
+  },
 };
 </script>
 
 <style lang="scss">
-.container {
-  max-width: 1650px;
-  padding: 0 15px;
-  margin: 0 auto;
-}
 .product {
   margin-top: 45px;
   &__inner {
@@ -238,8 +253,6 @@ export default {
       fill: transparent;
       stroke: #ff7020;
     }
-    &--prev {
-    }
     &--next {
       transform: rotate(180deg);
     }
@@ -273,15 +286,5 @@ export default {
   font-size: 48px;
   font-weight: 600;
   text-align: center;
-}
-
-.product-section,
-.info-section {
-  margin-top: 100px;
-}
-
-.product-info {
-  display: flex;
-  gap: 35px;
 }
 </style>
