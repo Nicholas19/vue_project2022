@@ -119,7 +119,12 @@
         <aside>
           <rating-block :rating="4.2" :reviews="reviewsStat" />
         </aside>
-        <div>Дпополнительная информация о продукте</div>
+        <div class="product-about">
+          <app-tabs :tabs="tabList" v-model="currentTab" />
+          <div class="wrapper">
+            <component :is="currentComponent" />
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -134,12 +139,18 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-creative";
 import RatingBlock from "@/components/RatingBlock";
+import AppTabs from "@/components/AppTabs";
+import ProductDescription from "@/components/ProductDescription";
+import ProductSpecification from "@/components/ProductSpecification";
 
 export default {
   components: {
     Swiper,
     SwiperSlide,
     RatingBlock,
+    AppTabs,
+    ProductDescription,
+    ProductSpecification,
   },
   setup() {
     const onSwiper = (swiper) => {
@@ -182,7 +193,22 @@ export default {
         reviewsCount: 25,
       },
     ],
+    tabList: new Set(["Description", "Specification", "Reviews"]),
+    currentTab: "Description",
   }),
+  computed: {
+    currentComponent() {
+      switch (this.currentTab) {
+        case "Description":
+          return "ProductDescription";
+        case "Specification":
+          return "ProductSpecification";
+        case "Reviews":
+          return "ProductReviews";
+      }
+      return null;
+    },
+  },
 };
 </script>
 
@@ -273,15 +299,5 @@ export default {
   font-size: 48px;
   font-weight: 600;
   text-align: center;
-}
-
-.product-section,
-.info-section {
-  margin-top: 100px;
-}
-
-.product-info {
-  display: flex;
-  gap: 35px;
 }
 </style>
