@@ -5,8 +5,8 @@
     class="stndt-btn"
     :class="[{ icon: icon }, variant]"
   >
-    {{ name }}
     <img v-if="icon" :src="iconSrc" />
+    {{ name }}
   </button>
 </template>
 
