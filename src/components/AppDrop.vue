@@ -1,13 +1,11 @@
 <template>
   <div class="custom-select-wrapper" :class="{ 'open-dropdown': shown }">
     <div class="input-wrapper">
-      <label> {{ lbl }} </label>
-      <!--  @click.stop - запрещает ивент клика по документу для сворачивания списка    -->
       <input
         type="text"
         class="custom-select"
         readonly="readonly"
-        @click.stop="show"
+        @click="show"
         :value="default_item"
         :placeholder="placeholder"
       />
@@ -16,7 +14,7 @@
           v-for="item in values"
           :key="item"
           @click="choose(item)"
-          v-show="item !== default_item"
+          :class="{ selected: item === default_item }"
         >
           <span> {{ item }} </span>
         </li>
@@ -30,7 +28,6 @@ export default {
   props: {
     default_item: String,
     values: Array,
-    lbl: String,
     placeholder: String,
   },
   data() {
@@ -41,18 +38,19 @@ export default {
   methods: {
     choose(e) {
       let value = e;
+      this.$store.commit("chooseBrand", value);
       this.show();
-      this.$emit("choose-drop", value);
     },
     show() {
       this.shown = !this.shown;
     },
-    hide() {
-      this.shown = false;
+    hide(e) {
+      if (!this.$el.contains(e.target)) {
+        this.shown = false;
+      }
     },
   },
   created() {
-    /*сворачиваем дропдаун при клике в любой точке*/
     document.addEventListener("click", this.hide);
   },
   beforeUnmount() {
@@ -62,8 +60,6 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap");
-
 .custom-select-wrapper .input-wrapper {
   background-color: #fff;
 }
@@ -106,7 +102,6 @@ input,
   font-size: 20px;
   line-height: 24px;
   padding: 10px 32px;
-  /* identical to box height */
   color: #575757;
 }
 
@@ -121,5 +116,10 @@ input,
 .custom-select-wrapper {
   position: relative;
   cursor: pointer;
+}
+
+.custom-select-wrapper ul li.selected {
+  color: #4d4d4d73;
+  cursor: default;
 }
 </style>

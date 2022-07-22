@@ -10,8 +10,9 @@
         <app-drop
           style="margin-bottom: 20px"
           :placeholder="'Choose Brand'"
+          :values="$store.state.brands"
+          :default_item="$store.state.brand"
         ></app-drop>
-        <app-drop :placeholder="'Choose Location'"></app-drop>
       </div>
       <div class="filter">
         <div class="filter_head">
@@ -50,9 +51,6 @@ export default {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap");
-
 .aside {
   margin: 0 60px 0 0;
   width: 350px;

@@ -8,24 +8,21 @@
       <div class="card__info">
         <div class="card__price-wrapper">
           <p class="card__price">{{ "$" + price }}</p>
-          <app-card-raiting
-            :amount="amount"
-            :raiting="raiting"
-          ></app-card-raiting>
+          <app-rating :amount="amount" :raiting="raiting"></app-rating>
         </div>
-        <button class="btn">Add to cart</button>
+        <button class="btn" @click.stop="handleClick">Add to cart</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import AppCardRaiting from "@/components/AppCardRaiting.vue";
+import AppRating from "@/components/AppRating.vue";
 
 export default {
   name: "AppCard",
   components: {
-    AppCardRaiting,
+    AppRating,
   },
   props: {
     name: {
@@ -47,6 +44,11 @@ export default {
     picture: {
       type: String,
       default: require("@/assets/img/card-default.jpg"),
+    },
+  },
+  methods: {
+    handleClick() {
+      this.$emit("add-to-cart");
     },
   },
 };
