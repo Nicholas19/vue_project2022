@@ -47,21 +47,7 @@
           </div>
         </div>
         <div class="header__bottom">
-          <nav class="header__nav nav">
-            <ul class="nav__list">
-              <li class="nav__item" v-for="link in links" :key="link.route">
-                <router-link :to="{ name: link.route }" class="nav__link"
-                  >{{ link.text }}
-                </router-link>
-              </li>
-
-              <li class="nav__item">
-                <router-link to="/" class="nav__link nav__link--hot"
-                  >HOT DEALS
-                </router-link>
-              </li>
-            </ul>
-          </nav>
+          <header-nav />
         </div>
       </div>
     </div>
@@ -70,22 +56,15 @@
 
 <script>
 import AppButton from "@/components/AppButton.vue";
+import HeaderNav from "@/components/HeaderNav";
 import { mapGetters } from "vuex";
 
 export default {
   components: {
     AppButton,
+    HeaderNav,
   },
   data: () => ({
-    links: [
-      { route: "home", text: "All Categories" },
-      { route: "home", text: "accessories" },
-      { route: "home", text: "Smartphone" },
-      { route: "home", text: "Gaming Equipments" },
-      { route: "home", text: "TV & Monitors" },
-      { route: "home", text: "Headphones" },
-      { route: "home", text: "Speaker" },
-    ],
     userInfo: false,
     name: "Hoida Vitalii",
     login: "Ho_Vi",
@@ -218,53 +197,6 @@ export default {
   margin: 0 auto;
 }
 
-.nav {
-  &__list {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    display: flex;
-    list-style: none;
-  }
-
-  &__item {
-    &:not(:last-child) {
-      margin-right: 70px;
-    }
-  }
-
-  &__link {
-    text-decoration: none;
-    font-family: "Lato";
-    font-style: normal;
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 19px;
-    text-transform: capitalize;
-
-    color: #4d4d4d;
-
-    &--hot {
-      font-weight: 900;
-      color: #161616;
-      display: flex;
-
-      &::before {
-        content: "";
-        width: 18px;
-        height: 20px;
-        margin-right: 10px;
-        background: url(@/assets/images/svg/fire.svg);
-      }
-    }
-
-    @media (any-hover: hover) {
-      &:hover {
-        color: #222222;
-      }
-    }
-  }
-}
 .header__right button.colored {
   border-radius: 12px;
   padding: 21px 45px 21px 31px;

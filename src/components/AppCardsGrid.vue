@@ -8,7 +8,7 @@
       :amount="card.amount"
       :picture="'http://strapi.elextra.pp.ua' + card.imgSrc"
       :raiting="card.raiting"
-      @click="handleCardClick(card.id)"
+      @click="handleCardClick(card.category.code, card.id)"
     ></app-card>
   </div>
 </template>
@@ -30,10 +30,10 @@ export default {
   },
   methods: {
     ...mapActions("Products", ["getProducts"]),
-    handleCardClick(id) {
+    handleCardClick(category, id) {
+      console.log(category);
       this.$router.push({
-        name: "product",
-        params: { productId: id },
+        path: `/${category}/${id}`,
       });
     },
   },
