@@ -10,7 +10,7 @@
       :max="max"
       :step="priceGap"
       :value="minPrice"
-      @change="getInput($event, 'minPrice')"
+      @input="getFirstInput"
     />
     <input
       id="input2"
@@ -19,7 +19,7 @@
       :max="max"
       :step="priceGap"
       :value="maxPrice"
-      @change="getInput($event, 'maxPrice')"
+      @input="getSecondInput"
     />
   </div>
   <div class="input__values">
@@ -42,12 +42,16 @@ export default {
     };
   },
   methods: {
-    getInput(e, params) {
-      this[params] = e.target.value;
-      if (this.minPrice > this.maxPrice) {
-        let buffer = this.maxPrice;
-        this.maxPrice = this.minPrice;
-        this.minPrice = buffer;
+    getFirstInput(e) {
+      this.minPrice = parseInt(e.target.value);
+      if (parseInt(this.maxPrice) - parseInt(this.minPrice) <= this.priceGap) {
+        this.minPrice = parseInt(this.maxPrice) - this.priceGap;
+      }
+    },
+    getSecondInput(e) {
+      this.maxPrice = parseInt(e.target.value);
+      if (parseInt(this.maxPrice) - parseInt(this.minPrice) <= this.priceGap) {
+        this.maxPrice = parseInt(this.minPrice) + this.priceGap;
       }
     },
   },
