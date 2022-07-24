@@ -5,7 +5,7 @@
       <span class="max-rating">5</span>
     </div>
     <div class="average-stars">
-      <app-rating :raiting="4" fill-star-color="#EBFF00" star-size="30" />
+      <app-rating :rating="4" fill-star-color="#EBFF00" star-size="30" />
     </div>
     <div class="reviews">
       <span class="reviews-count">{{ reviewsQuantity }}</span>
@@ -18,7 +18,7 @@
         class="statistic-item"
       >
         <app-rating
-          :raiting="review.starsCount"
+          :rating="review.starsCount"
           fill-star-color="#EBFF00"
           :show-empty-star="false"
         />

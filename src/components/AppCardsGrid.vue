@@ -7,7 +7,7 @@
       :price="card.price"
       :amount="card.amount"
       :picture="card.picture"
-      :raiting="card.raiting"
+      :rating="card.rating"
       @click="handleCardClick(card.id)"
       @add-to-cart="addToCart(card.id)"
     ></app-card>
@@ -28,7 +28,7 @@ export default {
         id: 100,
         name: "Macbook Pro 2020 With 260 SSD",
         price: 1099,
-        raiting: 4,
+        rating: 4,
         amount: 129,
         picture: require("@/assets/img/card.jpg"),
       },
@@ -36,7 +36,7 @@ export default {
         id: 101,
         name: "ASUS Gaming Notebook ROG",
         price: 1629,
-        raiting: 3,
+        rating: 3,
         amount: 24,
         picture: require("@/assets/img/card-2.jpg"),
       },
@@ -44,7 +44,7 @@ export default {
         id: 102,
         name: "Ultra slim Macbook Pro 2020",
         price: 1219,
-        raiting: 2,
+        rating: 2,
         amount: 78,
         picture: require("@/assets/img/card-3.jpg"),
       },
@@ -52,7 +52,7 @@ export default {
         id: 103,
         name: "Recoil Pro Gaming Laptop",
         price: 2081,
-        raiting: 3,
+        rating: 3,
         amount: 13,
         picture: require("@/assets/img/card-4.jpg"),
       },
@@ -60,7 +60,7 @@ export default {
         id: 104,
         name: "Ultra slim Macbook Pro 2020",
         price: 1219,
-        raiting: 1,
+        rating: 1,
         amount: 78,
         picture: require("@/assets/img/card-3.jpg"),
       },
@@ -68,7 +68,7 @@ export default {
         id: 105,
         name: "Macbook Pro 2020 With 260 SSD",
         price: 1099,
-        raiting: 3,
+        rating: 3,
         amount: 129,
         picture: require("@/assets/img/card.jpg"),
       },
@@ -76,7 +76,7 @@ export default {
         id: 106,
         name: "Recoil Pro Gaming Laptop",
         price: 2081,
-        raiting: 4,
+        rating: 4,
         amount: 13,
         picture: require("@/assets/img/card-4.jpg"),
       },
@@ -84,7 +84,7 @@ export default {
         id: 107,
         name: "ASUS Gaming Notebook ROG",
         price: 1629,
-        raiting: 3,
+        rating: 3,
         amount: 24,
         picture: require("@/assets/img/card-2.jpg"),
       },
