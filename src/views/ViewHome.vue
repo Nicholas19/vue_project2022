@@ -9,7 +9,7 @@
 <script>
 // import AppCardsGrid from "@/components/AppCardsGrid.vue";
 // import AppMain from "@/components/AppMain.vue";
-// import AppAside from "@/components/AppAside.vue";
+А// import AppAside from "@/components/AppAside.vue";
 import AppFooter from "@/components/AppFooter.vue";
 
 export default {
