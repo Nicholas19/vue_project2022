@@ -197,6 +197,7 @@ export default {
 
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    grid-auto-flow: row;
     gap: 130px;
     position: relative;
     &:after {
@@ -208,6 +209,9 @@ export default {
       width: calc(100% + 15vw);
       height: 1px;
       background: #c4c4c4;
+    }
+    @media (max-width: 1600px) {
+      grid-template-columns: repeat(auto-fill, minmax(390px, 1fr));
     }
   }
 
