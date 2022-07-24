@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: "AppRating",
+  name: "AppRaiting",
   props: {
     rating: {
       type: Number,
