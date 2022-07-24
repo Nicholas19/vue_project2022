@@ -17,12 +17,12 @@
 </template>
 
 <script>
-import AppRaiting from "@/components/AppRaiting.vue";
+import AppRating from "@/components/AppRating.vue";
 
 export default {
   name: "AppCard",
   components: {
-    AppRaiting,
+    AppRating,
   },
   props: {
     name: {

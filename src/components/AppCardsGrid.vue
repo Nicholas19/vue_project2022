@@ -7,7 +7,7 @@
       :price="card.price"
       :amount="card.amount"
       :picture="'http://strapi.elextra.pp.ua' + card.imgSrc"
-      :raiting="card.raiting"
+      :rating="card.rating"
       @click="handleCardClick(card.id)"
     ></app-card>
   </div>

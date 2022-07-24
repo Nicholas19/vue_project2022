@@ -4,7 +4,7 @@
     <h2 class="about__title">LED Monitor With High Quality In The World</h2>
     <ul class="about__info">
       <li class="about__item">
-        <app-raiting :raiting="4" :amount="223"></app-raiting>
+        <app-rating :rating="4" :amount="223"></app-rating>
       </li>
       <li class="about__item">
         <svg
@@ -152,13 +152,13 @@
 </template>
 
 <script>
-import AppRaiting from "./AppRaiting.vue";
+import AppRating from "./AppRating.vue";
 import AppButton from "./AppButton.vue";
 
 export default {
   name: "AppAboutProduct",
   components: {
-    AppRaiting,
+    AppRating,
     AppButton,
   },
   props: {},

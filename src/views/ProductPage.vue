@@ -114,7 +114,7 @@
     <div class="container">
       <div class="product-info">
         <aside>
-          <raiting-block :raiting="4.2" :reviews="reviewsStat" />
+          <rating-block :rating="4.2" :reviews="reviewsStat" />
         </aside>
         <div class="product-about">
           <app-tabs :tabs="tabList" v-model="currentTab" />
@@ -135,14 +135,14 @@ import { EffectCreative } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-creative";
-import RaitingBlock from "@/components/RaitingBlock";
+import RatingBlock from "@/components/RatingBlock";
 import AppAboutProduct from "@/components/AppAboutProduct";
 
 export default {
   components: {
     Swiper,
     SwiperSlide,
-    RaitingBlock,
+    RatingBlock,
     AppAboutProduct,
   },
   setup() {
