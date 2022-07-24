@@ -19,13 +19,34 @@
           <span class="range-title">Color</span>
           <app-button :name="'Select All'"></app-button>
         </div>
-        <div class="btns">
-          <app-button :name="'White'" :variant="'filter-select'"></app-button>
-          <app-button :name="'Black'" :variant="'filter-select'"></app-button>
-          <app-button :name="'Blue'" :variant="'filter-select'"></app-button>
-          <app-button :name="'Red'" :variant="'filter-select'"></app-button>
+        <div class="btns" v-if="!showColors">
+          <app-button
+            :name="colors[item]"
+            :variant="'filter-select'"
+            v-for="item in 4"
+            :key="item"
+          ></app-button>
           <br />
-          <app-button :name="'+ Show More'" :variant="'orange'"></app-button>
+          <app-button
+            :name="'+ Show More'"
+            :variant="'orange'"
+            v-if="colors.length > 4"
+            @click="showColors = !showColors"
+          ></app-button>
+        </div>
+        <div class="btns" v-else>
+          <app-button
+            :name="item"
+            :variant="'filter-select'"
+            v-for="item in colors"
+            :key="item"
+          ></app-button>
+          <br />
+          <app-button
+            :name="'+ Show Less'"
+            :variant="'orange'"
+            @click="showColors = !showColors"
+          ></app-button>
         </div>
         <app-button></app-button>
         <div class="filter_foot">
@@ -40,7 +61,7 @@
 <script>
 import AppDrop from "@/components/AppDrop.vue";
 import AppButton from "@/components/AppButton.vue";
-import { mapState } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 
 export default {
   name: "AppAside",
@@ -48,8 +69,34 @@ export default {
     AppDrop,
     AppButton,
   },
+  created() {
+    this.getProducts();
+  },
+  data: () => ({
+    showColors: false,
+  }),
   computed: {
     ...mapState("Products", ["brands", "brand"]),
+    ...mapGetters("Products", ["products"]),
+    colors() {
+      let res = [];
+      this.products?.forEach((item) => {
+        res.push(item.color);
+      });
+      return this.find_uniqums(res.flat(1));
+    },
+  },
+  methods: {
+    ...mapActions("Products", ["getProducts"]),
+    find_uniqums(arr) {
+      let result = [];
+      for (let str of arr) {
+        if (!result.includes(str)) {
+          result.push(str);
+        }
+      }
+      return result;
+    },
   },
 };
 </script>
