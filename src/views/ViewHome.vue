@@ -1,15 +1,16 @@
 <template>
-  <app-aside></app-aside>
+  <!-- <app-aside></app-aside> -->
   <div class="main">
-    <app-cards-grid></app-cards-grid>
+    <!-- <app-cards-grid></app-cards-grid> -->
+    <AppMain></AppMain>
   </div>
   <AppFooter></AppFooter>
 </template>
 
 <script>
 // import AppCardsGrid from "@/components/AppCardsGrid.vue";
-// import AppMain from "@/components/AppMain.vue";
-А// import AppAside from "@/components/AppAside.vue";
+import AppMain from "@/components/AppMain.vue";
+// import AppAside from "@/components/AppAside.vue";
 import AppFooter from "@/components/AppFooter.vue";
 
 export default {
@@ -17,7 +18,7 @@ export default {
   components: {
     // AppCardsGrid,
     // AppAside,
-    // AppMain,
+    AppMain,
     AppFooter,
   },
 };
