@@ -164,6 +164,8 @@ export default {
       this.filter.brand = "";
       this.showColors = false;
       this.filter.colors.splice(0, this.filter.colors.length);
+      this.filter.rangeMin = null;
+      this.filter.rangeMax = null;
     },
   },
 };
