@@ -35,11 +35,11 @@
               :variant="'colored'"
               icon
               :icon-src="require('@/assets/images/svg/person.svg')"
+              :class="{ active: userInfo }"
               @mouseover="showInfo"
-              @mouseleave="showInfo"
             >
             </app-button>
-            <div class="userInfo" v-if="userInfo">
+            <div class="userInfo" v-if="userInfo" @mouseleave="showInfo">
               <div class="info"><span>Full name:</span>{{ name }}</div>
               <div class="info"><span>Login:</span>{{ login }}</div>
               <div class="info"><span>Email:</span>{{ email }}</div>
@@ -197,6 +197,54 @@ export default {
   margin: 0 auto;
 }
 
+.nav {
+  &__list {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    list-style: none;
+  }
+
+  &__item {
+    &:not(:last-child) {
+      margin-right: 70px;
+    }
+  }
+
+  &__link {
+    text-decoration: none;
+    font-family: "Lato";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    text-transform: capitalize;
+
+    color: #4d4d4d;
+
+    &--hot {
+      font-weight: 900;
+      color: #161616;
+      display: flex;
+
+      &::before {
+        content: "";
+        width: 18px;
+        height: 20px;
+        margin-right: 10px;
+        background: url(@/assets/images/svg/fire.svg);
+      }
+    }
+
+    @media (any-hover: hover) {
+      &:hover {
+        color: #222222;
+      }
+    }
+  }
+}
+
 .header__right button.colored {
   border-radius: 12px;
   padding: 21px 45px 21px 31px;
@@ -211,8 +259,11 @@ export default {
   justify-content: space-between;
   box-shadow: 0px 11px 27px rgba(255, 112, 32, 0.36);
   border: 1px solid #ff7020;
+  position: relative;
 }
-.header__right button.colored:hover {
+
+.header__right button.colored:hover,
+.header__right button.colored.active {
   background-color: #ff7020;
   color: #fff;
   box-shadow: unset;
@@ -220,7 +271,7 @@ export default {
 
 .userInfo {
   position: absolute;
-  top: 100px;
+  top: 85px;
   left: 0;
   padding: 20px;
   border: 2px solid #ff7020;
@@ -239,6 +290,10 @@ export default {
 
 .userInfo .info {
   padding: 10px 0;
+}
+
+.userInfo .info #text {
+  cursor: text;
 }
 
 .userInfo span {

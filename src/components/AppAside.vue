@@ -10,27 +10,71 @@
         <app-drop
           style="margin-bottom: 20px"
           :placeholder="'Choose Brand'"
-          :values="brands"
-          :default_item="brand"
+          :values="brandsArray"
+          :default_item="filter.brand"
+          @choose="chooseBrand"
         ></app-drop>
       </div>
       <div class="filter">
         <div class="filter_head">
           <span class="range-title">Color</span>
-          <app-button :name="'Select All'"></app-button>
+          <app-button
+            v-if="!allSelected"
+            :name="'Select All'"
+            @click="selectAllColors(colors)"
+          ></app-button>
+          <app-button
+            v-else
+            :name="'Clear All'"
+            @click="clearAllColors"
+            class="clear"
+          ></app-button>
         </div>
-        <div class="btns">
-          <app-button :name="'White'" :variant="'filter-select'"></app-button>
-          <app-button :name="'Black'" :variant="'filter-select'"></app-button>
-          <app-button :name="'Blue'" :variant="'filter-select'"></app-button>
-          <app-button :name="'Red'" :variant="'filter-select'"></app-button>
+        <div class="btns" v-if="!showColors">
+          <app-button
+            :name="colors[item]"
+            :variant="'filter-select'"
+            v-for="item in 4"
+            :key="item"
+            @click="chooseColor(colors[item])"
+            :class="{
+              'filter-select-active': filter.colors.includes(colors[item]),
+            }"
+          ></app-button>
           <br />
-          <app-button :name="'+ Show More'" :variant="'orange'"></app-button>
+          <app-button
+            :name="'+ Show More'"
+            :variant="'orange'"
+            v-if="colors.length > 4"
+            @click="showColors = !showColors"
+          ></app-button>
+        </div>
+        <div class="btns" v-else>
+          <app-button
+            :name="item"
+            :variant="'filter-select'"
+            v-for="item in colors"
+            :key="item"
+            @click="chooseColor(item)"
+            :class="{
+              'filter-select-active': filter.colors.includes(item),
+            }"
+          ></app-button>
+          <br />
+          <app-button
+            :name="'+ Show Less'"
+            :variant="'orange'"
+            @click="showColors = !showColors"
+          ></app-button>
         </div>
         <app-button></app-button>
         <div class="filter_foot">
           <app-button :name="'FILTER'" :variant="'colored'"></app-button>
-          <app-button :name="'Reset Filter'" :variant="'orange'"></app-button>
+          <app-button
+            :name="'Reset Filter'"
+            :variant="'orange'"
+            @click="resetFilter"
+          ></app-button>
         </div>
       </div>
     </div>
@@ -40,7 +84,7 @@
 <script>
 import AppDrop from "@/components/AppDrop.vue";
 import AppButton from "@/components/AppButton.vue";
-import { mapState } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "AppAside",
@@ -48,8 +92,82 @@ export default {
     AppDrop,
     AppButton,
   },
+  created() {
+    this.getProducts();
+    this.getBrands();
+  },
+  data: () => ({
+    showColors: false,
+    filter: {
+      brand: "",
+      colors: [],
+      rangeMin: null,
+      rangeMax: null,
+    },
+    allSelected: false,
+  }),
   computed: {
-    ...mapState("Products", ["brands", "brand"]),
+    ...mapGetters("Brands", ["brands"]),
+    ...mapGetters("Products", ["products"]),
+    colors() {
+      let res = [];
+      this.products?.forEach((item) => {
+        res.push(item.color);
+      });
+      return this.find_uniqums(res.flat(1));
+    },
+    brandsArray() {
+      let arr = [];
+      this.brands?.forEach((item) => {
+        arr.push(item.name);
+      });
+      return arr;
+    },
+  },
+  methods: {
+    ...mapActions("Products", ["getProducts"]),
+    ...mapActions("Brands", ["getBrands"]),
+    find_uniqums(arr) {
+      let result = [];
+      for (let str of arr) {
+        if (!result.includes(str)) {
+          result.push(str);
+        }
+      }
+      return result;
+    },
+    chooseColor(e) {
+      if (this.filter.colors.includes(e)) {
+        let i = this.filter.colors.indexOf(e);
+        this.filter.colors.splice(i, 1);
+      } else {
+        this.filter.colors.push(e);
+      }
+    },
+    selectAllColors(arr) {
+      this.showColors = true;
+      this.allSelected = true;
+      arr.forEach((element) => {
+        if (!this.filter.colors.includes(element)) {
+          this.filter.colors.push(element);
+        }
+      });
+    },
+    clearAllColors() {
+      this.filter.colors.splice(0, this.filter.colors.length);
+      this.allSelected = false;
+      this.showColors = false;
+    },
+    chooseBrand(e) {
+      this.filter.brand = e;
+    },
+    resetFilter() {
+      this.filter.brand = "";
+      this.showColors = false;
+      this.filter.colors.splice(0, this.filter.colors.length);
+      this.filter.rangeMin = null;
+      this.filter.rangeMax = null;
+    },
   },
 };
 </script>
@@ -108,6 +226,10 @@ export default {
   text-align: right;
 }
 
+.filter_head button.clear:hover {
+  color: #ff3535;
+}
+
 .filter_head button::before {
   content: "";
   display: block;
@@ -118,9 +240,26 @@ export default {
   margin: 0 10px 0 0;
 }
 
+.filter_head button.clear::before {
+  content: "";
+  display: block;
+  background: url("@/assets/images/svg/clear.svg") no-repeat;
+  width: 20px;
+  height: 21px;
+  float: left;
+  margin: 0 10px 0 0;
+  background-size: contain;
+}
+
 .filter_head button:hover::before,
 .filter_head button.active::before {
   background: url("../assets/images/svg/check_active.svg") no-repeat;
+}
+
+.filter_head button.clear:hover::before,
+.filter_head button.clear.active::before {
+  background: url("@/assets/images/svg/clear_active.svg") no-repeat;
+  background-size: contain;
 }
 
 .filter .btns button {

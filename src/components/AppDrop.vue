@@ -24,8 +24,6 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
-
 export default {
   props: {
     default_item: String,
@@ -38,10 +36,9 @@ export default {
     };
   },
   methods: {
-    ...mapMutations("Products", ["chooseBrand"]),
     choose(e) {
       let value = e;
-      this.chooseBrand(value);
+      this.$emit("choose", value);
       this.show();
     },
     show() {

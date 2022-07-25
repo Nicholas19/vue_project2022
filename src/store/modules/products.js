@@ -5,8 +5,6 @@ export default {
   namespaced: true,
   state: {
     cart: [1, 2],
-    brands: ["Apple", "HP", "Dell"],
-    brand: "",
     products: null,
   },
   getters: {
@@ -27,9 +25,6 @@ export default {
   mutations: {
     addToCart(state, id) {
       state.cart.push(id);
-    },
-    chooseBrand(state, val) {
-      state.brand = val;
     },
     setProducts(state, val) {
       state.products = val;
