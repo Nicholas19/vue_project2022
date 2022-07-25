@@ -27,6 +27,7 @@
             v-else
             :name="'Clear All'"
             @click="clearAllColors"
+            class="clear"
           ></app-button>
         </div>
         <div class="btns" v-if="!showColors">
@@ -225,6 +226,10 @@ export default {
   text-align: right;
 }
 
+.filter_head button.clear:hover {
+  color: #ff3535;
+}
+
 .filter_head button::before {
   content: "";
   display: block;
@@ -235,9 +240,26 @@ export default {
   margin: 0 10px 0 0;
 }
 
+.filter_head button.clear::before {
+  content: "";
+  display: block;
+  background: url("@/assets/images/svg/clear.svg") no-repeat;
+  width: 20px;
+  height: 21px;
+  float: left;
+  margin: 0 10px 0 0;
+  background-size: contain;
+}
+
 .filter_head button:hover::before,
 .filter_head button.active::before {
   background: url("@/assets/images/svg/check_active.svg") no-repeat;
+}
+
+.filter_head button.clear:hover::before,
+.filter_head button.clear.active::before {
+  background: url("@/assets/images/svg/clear_active.svg") no-repeat;
+  background-size: contain;
 }
 
 .filter .btns button {
