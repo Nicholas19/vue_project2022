@@ -62,7 +62,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .custom-select-wrapper .input-wrapper {
   background-color: #fff;
 }

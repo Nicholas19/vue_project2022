@@ -119,7 +119,9 @@
         <div class="product-about">
           <app-tabs :tabs="tabList" v-model="currentTab" />
           <div class="wrapper">
-            <component :is="currentComponent" />
+            <keep-alive>
+              <component :is="currentComponent" />
+            </keep-alive>
           </div>
         </div>
       </div>
@@ -128,14 +130,14 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { Thumbs, Navigation } from "swiper";
+import { defineAsyncComponent, ref } from "vue";
+import { EffectCreative, Navigation, Thumbs } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { EffectCreative } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-creative";
 import RaitingBlock from "@/components/RaitingBlock";
+import AppTabs from "@/components/AppTabs";
 import AppAboutProduct from "@/components/AppAboutProduct";
 
 export default {
@@ -143,11 +145,21 @@ export default {
     Swiper,
     SwiperSlide,
     RaitingBlock,
+    AppTabs,
     AppAboutProduct,
+    ProductDescription: defineAsyncComponent(() =>
+      import("@/components/ProductDescription.vue")
+    ),
+    ProductSpecification: defineAsyncComponent(() =>
+      import("@/components/ProductSpecification.vue")
+    ),
+    ProductReviews: defineAsyncComponent(() =>
+      import("@/components/ProductReviews.vue")
+    ),
   },
   setup() {
-    const onSwiper = (swiper) => {
-      console.log(swiper);
+    const onSwiper = () => {
+      //console.log(swiper); Нужно убирать за собой
     };
     const thumbsSwiper = ref(null);
     const setThumbsSwiper = (swiper) => {
@@ -199,7 +211,7 @@ export default {
         case "Reviews":
           return "ProductReviews";
       }
-      return null;
+      return "ProductDescription";
     },
   },
 };
@@ -280,10 +292,21 @@ export default {
     }
   }
 }
-.title {
+
+.info-section {
   margin-top: 100px;
-  font-size: 48px;
-  font-weight: 600;
-  text-align: center;
+}
+
+.product-info {
+  display: flex;
+  gap: 35px;
+}
+
+.product-about {
+  width: 100%;
+}
+
+.wrapper {
+  padding: 33px;
 }
 </style>

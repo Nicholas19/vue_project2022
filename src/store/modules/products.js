@@ -18,6 +18,7 @@ export default {
         return {
           id: item.id,
           ...item.attributes,
+          category: item.attributes.category.data.attributes,
           imgSrc: item.attributes.images.data[0].attributes.url,
         };
       });
@@ -37,7 +38,7 @@ export default {
   actions: {
     getProducts(store) {
       axios
-        .get("/products/?populate[0] = images")
+        .get("/products/?populate[0]=images&populate[1]=category")
         .then((resp) => store.commit("setProducts", resp.data?.data))
         .catch((e) => console.log(e));
     },
