@@ -2,84 +2,7 @@
   <section class="products">
     <div class="container">
       <div class="products__wrapper">
-        <div class="category">
-          <h2 class="title">Filters</h2>
-          <!--     range     -->
-          <div class="category__range">
-            <h3 class="category__title category__title--price">Price range</h3>
-
-            <!--  тут должен быть input range -->
-            <AppRange></AppRange>
-          </div>
-
-          <!--     selects     -->
-          <ul class="category__selects">
-            <li class="category__selects-item">
-              <app-drop
-                style="margin-bottom: 20px"
-                :placeholder="'Choose Brand'"
-              ></app-drop>
-            </li>
-            <li class="category__selects-item">
-              <app-drop :placeholder="'Choose Location'"></app-drop>
-            </li>
-          </ul>
-          <!--     button color     -->
-
-          <div class="category__colors">
-            <div class="category__head">
-              <h3 class="category__title">Color</h3>
-              <app-button :name="'Select All'"></app-button>
-              <!--              <button class="category__all">-->
-              <!--                <svg width="20" height="21">-->
-              <!--                  <use-->
-              <!--                    xlink:href="@/assets/images/svg/sprites.svg#select-all"-->
-              <!--                  ></use>-->
-              <!--                </svg>-->
-              <!--                Select All-->
-              <!--              </button>-->
-            </div>
-
-            <ul class="category__buttons">
-              <li class="category__button">
-                <app-button
-                  :name="'White'"
-                  :variant="'filter-select'"
-                  class="btn"
-                ></app-button>
-              </li>
-              <li class="category__button">
-                <app-button
-                  :name="'Black'"
-                  :variant="'filter-select'"
-                  class="btn"
-                ></app-button>
-              </li>
-              <li class="category__button">
-                <app-button
-                  :name="'Blue'"
-                  :variant="'filter-select'"
-                  class="btn"
-                ></app-button>
-              </li>
-
-              <li class="category__button">
-                <app-button
-                  :name="'Red'"
-                  :variant="'filter-select'"
-                  class="btn"
-                ></app-button>
-              </li>
-            </ul>
-
-            <button class="category__show">+ Show more</button>
-          </div>
-
-          <button class="category__filter">FILTER</button>
-
-          <button class="category__reset">Reset Filter</button>
-        </div>
-
+        <app-aside></app-aside>
         <!--      правая колонка -->
         <div class="cards">
           <div class="cards__head">
@@ -141,20 +64,22 @@
 </template>
 
 <script>
-import AppRange from "@/components/AppRange.vue";
 import AppDrop from "@/components/AppDrop.vue";
-import AppButton from "@/components/AppButton.vue";
 import AppCard from "@/components/AppCard.vue";
+import AppAside from "@/components/AppAside.vue";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "AppMain",
   components: {
-    AppRange,
     AppDrop,
-    AppButton,
     AppCard,
+    AppAside,
   },
+  data: () => ({
+    values: [1, 2, 3],
+    imgPrefix: process.env.VUE_APP_DOMAIN,
+  }),
   created() {
     this.getProducts();
   },

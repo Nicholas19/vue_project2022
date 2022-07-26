@@ -4,7 +4,7 @@
       <h2 class="title">Filters</h2>
       <div class="range">
         <span class="range-title">Price range</span>
-        <p>заглушка</p>
+        <app-range></app-range>
       </div>
       <div class="drops">
         <app-drop
@@ -84,6 +84,7 @@
 <script>
 import AppDrop from "@/components/AppDrop.vue";
 import AppButton from "@/components/AppButton.vue";
+import AppRange from "@/components/AppRange.vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
@@ -91,6 +92,7 @@ export default {
   components: {
     AppDrop,
     AppButton,
+    AppRange,
   },
   created() {
     this.getProducts();
