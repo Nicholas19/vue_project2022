@@ -117,7 +117,7 @@
                 :name="card.name"
                 :price="card.price"
                 :amount="card.amount"
-                :picture="'http://strapi.elextra.pp.ua' + card.imgSrc"
+                :picture="imgPrefix + card.imgSrc"
                 :raiting="card.raiting"
                 @click="handleCardClick(card.category.code, card.id)"
               ></app-card>
@@ -168,6 +168,7 @@ export default {
   },
   computed: {
     ...mapGetters("Products", ["products"]),
+    imgPrefix: () => process.env.VUE_APP_BASE_URL,
   },
   methods: {
     ...mapActions("Products", ["getProducts"]),

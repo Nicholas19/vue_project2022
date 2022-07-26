@@ -60,6 +60,7 @@ import HeaderNav from "@/components/HeaderNav";
 import { mapGetters } from "vuex";
 
 export default {
+  name: "AppHeader",
   components: {
     AppButton,
     HeaderNav,
