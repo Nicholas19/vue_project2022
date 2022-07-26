@@ -9,7 +9,12 @@ const routes = [
     component: ViewHome,
   },
   {
-    path: "/product/:productId",
+    path: "/:categoryCode",
+    name: "category",
+    component: ViewHome,
+  },
+  {
+    path: "/:categoryCode/:productId",
     name: "product",
     component: ProductPage,
   },
@@ -26,6 +31,9 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
+  scrollBehavior() {
+    return { top: 0, behavior: "smooth" };
+  },
   routes,
 });
 
