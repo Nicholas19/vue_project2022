@@ -1,13 +1,13 @@
 <template>
-  <v-header />
+  <app-header />
   <router-view />
 </template>
 
 <script>
-import vHeader from "@/components/v-header";
+import AppHeader from "@/components/AppHeader";
 
 export default {
-  components: { vHeader },
+  components: { AppHeader },
 };
 </script>
 
