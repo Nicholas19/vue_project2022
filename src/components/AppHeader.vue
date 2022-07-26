@@ -13,6 +13,7 @@
               type="text"
               class="header__input"
               placeholder="Search here..."
+              @input="productsSearch($event.target.value)"
             />
             <button class="header__btn">
               <svg width="24" height="24">
@@ -57,7 +58,7 @@
 <script>
 import AppButton from "@/components/AppButton.vue";
 import HeaderNav from "@/components/HeaderNav";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "AppHeader",
@@ -75,6 +76,7 @@ export default {
     ...mapGetters("Products", ["cartCount"]),
   },
   methods: {
+    ...mapActions("Products", ["productsSearch"]),
     showInfo() {
       this.userInfo = !this.userInfo;
     },
