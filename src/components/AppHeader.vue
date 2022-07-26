@@ -35,11 +35,11 @@
               :variant="'colored'"
               icon
               :icon-src="require('@/assets/images/svg/person.svg')"
+              :class="{ active: userInfo }"
               @mouseover="showInfo"
-              @mouseleave="showInfo"
             >
             </app-button>
-            <div class="userInfo" v-if="userInfo">
+            <div class="userInfo" v-if="userInfo" @mouseleave="showInfo">
               <div class="info"><span>Full name:</span>{{ name }}</div>
               <div class="info"><span>Login:</span>{{ login }}</div>
               <div class="info"><span>Email:</span>{{ email }}</div>
@@ -47,21 +47,7 @@
           </div>
         </div>
         <div class="header__bottom">
-          <nav class="header__nav nav">
-            <ul class="nav__list">
-              <li class="nav__item" v-for="link in links" :key="link.route">
-                <router-link :to="{ name: link.route }" class="nav__link"
-                  >{{ link.text }}
-                </router-link>
-              </li>
-
-              <li class="nav__item">
-                <router-link to="/" class="nav__link nav__link--hot"
-                  >HOT DEALS
-                </router-link>
-              </li>
-            </ul>
-          </nav>
+          <header-nav />
         </div>
       </div>
     </div>
@@ -70,22 +56,16 @@
 
 <script>
 import AppButton from "@/components/AppButton.vue";
+import HeaderNav from "@/components/HeaderNav";
 import { mapGetters } from "vuex";
 
 export default {
+  name: "AppHeader",
   components: {
     AppButton,
+    HeaderNav,
   },
   data: () => ({
-    links: [
-      { route: "home", text: "All Categories" },
-      { route: "home", text: "accessories" },
-      { route: "home", text: "Smartphone" },
-      { route: "home", text: "Gaming Equipments" },
-      { route: "home", text: "TV & Monitors" },
-      { route: "home", text: "Headphones" },
-      { route: "home", text: "Speaker" },
-    ],
     userInfo: false,
     name: "Hoida Vitalii",
     login: "Ho_Vi",
@@ -265,6 +245,7 @@ export default {
     }
   }
 }
+
 .header__right button.colored {
   border-radius: 12px;
   padding: 21px 45px 21px 31px;
@@ -279,8 +260,11 @@ export default {
   justify-content: space-between;
   box-shadow: 0px 11px 27px rgba(255, 112, 32, 0.36);
   border: 1px solid #ff7020;
+  position: relative;
 }
-.header__right button.colored:hover {
+
+.header__right button.colored:hover,
+.header__right button.colored.active {
   background-color: #ff7020;
   color: #fff;
   box-shadow: unset;
@@ -288,7 +272,7 @@ export default {
 
 .userInfo {
   position: absolute;
-  top: 100px;
+  top: 85px;
   left: 0;
   padding: 20px;
   border: 2px solid #ff7020;
@@ -307,6 +291,10 @@ export default {
 
 .userInfo .info {
   padding: 10px 0;
+}
+
+.userInfo .info #text {
+  cursor: text;
 }
 
 .userInfo span {

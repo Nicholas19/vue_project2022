@@ -8,7 +8,7 @@
       <div class="card__info">
         <div class="card__price-wrapper">
           <p class="card__price">{{ "$" + price }}</p>
-          <app-raiting :amount="amount" :raiting="raiting"></app-raiting>
+          <app-rating :amount="amount" :raiting="raiting"></app-rating>
         </div>
         <button class="btn" @click.stop="handleClick">Add to cart</button>
       </div>
@@ -17,12 +17,12 @@
 </template>
 
 <script>
-import AppRaiting from "@/components/AppRaiting.vue";
+import AppRating from "@/components/AppRating.vue";
 
 export default {
   name: "AppCard",
   components: {
-    AppRaiting,
+    AppRating,
   },
   props: {
     name: {
@@ -56,7 +56,6 @@ export default {
 
 <style lang="scss" scoped>
 .card {
-  width: 273px;
   height: 412px;
   background-color: #fff;
   border-radius: 20px;

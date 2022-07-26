@@ -2,110 +2,7 @@
   <section class="product">
     <div class="container">
       <div class="product__inner">
-        <div class="product__slider slider">
-          <swiper
-            class="slider__left"
-            :modules="[Thumbs, EffectCreative, Navigation]"
-            :thumbs="{ swiper: thumbsSwiper }"
-            :spaceBetween="20"
-            @swiper="onSwiper"
-            :navigation="{
-              nextEl: '.slider__btn--next',
-              prevEl: '.slider__btn--prev',
-            }"
-            :effect="'creative'"
-            :creativeEffect="{
-              prev: {
-                shadow: true,
-                translate: ['-120%', 0, -500],
-              },
-              next: {
-                shadow: true,
-                translate: ['120%', 0, -500],
-              },
-            }"
-          >
-            <swiper-slide class="slider__slide">
-              <img
-                src="https://swiperjs.com/demos/images/nature-1.jpg"
-                alt=""
-              />
-            </swiper-slide>
-            <swiper-slide class="slider__slide">
-              <img
-                src="https://swiperjs.com/demos/images/nature-1.jpg"
-                alt=""
-              />
-            </swiper-slide>
-            <swiper-slide class="slider__slide">
-              <img src="https://swiperjs.com/demos/images/nature-2.jpg" alt=""
-            /></swiper-slide>
-            <swiper-slide class="slider__slide">
-              <img src="https://swiperjs.com/demos/images/nature-3.jpg" alt=""
-            /></swiper-slide>
-            <swiper-slide class="slider__slide">
-              <img src="https://swiperjs.com/demos/images/nature-6.jpg" alt=""
-            /></swiper-slide>
-            <swiper-slide class="slider__slide">
-              <img src="https://swiperjs.com/demos/images/nature-7.jpg" alt=""
-            /></swiper-slide>
-          </swiper>
-          <div class="slider__thumb">
-            <button class="slider__btn slider__btn--prev" @click="slidePrev">
-              <svg width="16" height="16">
-                <use xlink:href="@/assets/images/svg/sprites.svg#arrow"></use>
-              </svg>
-            </button>
-
-            <swiper
-              class="slider__right"
-              :modules="[Thumbs]"
-              :direction="'vertical'"
-              :allowTouchMove="false"
-              watch-slides-progress
-              :slidesPerView="'auto'"
-              @swiper="setThumbsSwiper"
-            >
-              <swiper-slide class="slider__slide">
-                <img
-                  src="https://swiperjs.com/demos/images/nature-1.jpg"
-                  alt=""
-                />
-              </swiper-slide>
-              <swiper-slide class="slider__slide">
-                <img
-                  src="https://swiperjs.com/demos/images/nature-1.jpg"
-                  alt=""
-                />
-              </swiper-slide>
-              <swiper-slide class="slider__slide">
-                <img
-                  src="https://swiperjs.com/demos/images/nature-2.jpg"
-                  alt=""
-              /></swiper-slide>
-              <swiper-slide class="slider__slide">
-                <img
-                  src="https://swiperjs.com/demos/images/nature-3.jpg"
-                  alt=""
-              /></swiper-slide>
-              <swiper-slide class="slider__slide">
-                <img
-                  src="https://swiperjs.com/demos/images/nature-6.jpg"
-                  alt=""
-              /></swiper-slide>
-              <swiper-slide class="slider__slide">
-                <img
-                  src="https://swiperjs.com/demos/images/nature-7.jpg"
-                  alt=""
-              /></swiper-slide>
-            </swiper>
-            <button class="slider__btn slider__btn--next" @click="slideNext">
-              <svg width="16" height="16">
-                <use xlink:href="@/assets/images/svg/sprites.svg#arrow"></use>
-              </svg>
-            </button>
-          </div>
-        </div>
+        <app-slider :images="testImages" />
         <app-about-product></app-about-product>
       </div>
     </div>
@@ -119,7 +16,9 @@
         <div class="product-about">
           <app-tabs :tabs="tabList" v-model="currentTab" />
           <div class="wrapper">
-            <component :is="currentComponent" />
+            <keep-alive>
+              <component :is="currentComponent" />
+            </keep-alive>
           </div>
         </div>
       </div>
@@ -128,26 +27,38 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { Thumbs, Navigation } from "swiper";
+import { defineAsyncComponent, ref } from "vue";
+import { EffectCreative, Navigation, Thumbs } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { EffectCreative } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-creative";
 import RaitingBlock from "@/components/RaitingBlock";
+import AppTabs from "@/components/AppTabs";
 import AppAboutProduct from "@/components/AppAboutProduct";
+import AppSlider from "@/components/AppSlider.vue";
 
 export default {
   components: {
     Swiper,
     SwiperSlide,
     RaitingBlock,
+    AppTabs,
     AppAboutProduct,
+    AppSlider,
+    ProductDescription: defineAsyncComponent(() =>
+      import("@/components/ProductDescription.vue")
+    ),
+    ProductSpecification: defineAsyncComponent(() =>
+      import("@/components/ProductSpecification.vue")
+    ),
+    ProductReviews: defineAsyncComponent(() =>
+      import("@/components/ProductReviews.vue")
+    ),
   },
   setup() {
-    const onSwiper = (swiper) => {
-      console.log(swiper);
+    const onSwiper = () => {
+      //console.log(swiper); Нужно убирать за собой
     };
     const thumbsSwiper = ref(null);
     const setThumbsSwiper = (swiper) => {
@@ -186,6 +97,11 @@ export default {
         reviewsCount: 25,
       },
     ],
+    testImages: [
+      "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_1_aa820bd34d.jpg",
+      "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_2_7827799980.jpg",
+      "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_3_b9a54c371c.jpg",
+    ],
     tabList: new Set(["Description", "Specification", "Reviews"]),
     currentTab: "Description",
   }),
@@ -199,7 +115,7 @@ export default {
         case "Reviews":
           return "ProductReviews";
       }
-      return null;
+      return "ProductDescription";
     },
   },
 };
@@ -212,78 +128,17 @@ export default {
     display: flex;
   }
 }
-.slider {
+
+.product-info {
   display: flex;
-  align-items: center;
-  &__slide {
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-  }
-  &__left {
-    margin: 0;
-    padding: 0;
-    width: 600px;
-    height: 529px;
-  }
-  &__thumb {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  &__btn {
-    background-color: transparent;
-
-    width: 50px;
-    height: 50px;
-    &.swiper-button-disabled {
-      pointer-events: none;
-
-      svg {
-        fill: transparent;
-        stroke: #c4c4c4;
-      }
-    }
-    svg {
-      transition: 0.2s ease;
-      fill: transparent;
-      stroke: #ff7020;
-    }
-    &--next {
-      transform: rotate(180deg);
-    }
-  }
-  &__right {
-    margin: 0 10px;
-    padding: 0;
-    width: 104px;
-
-    max-height: 416px;
-    .swiper-slide {
-      box-sizing: border-box;
-      margin: 0;
-      border: 1px solid transparent;
-      padding: 6px;
-      transition: 0.2s ease;
-      &.swiper-slide-thumb-active {
-        border-color: #ff7020;
-      }
-    }
-  }
-  @media (max-width: 1400px) {
-    &__left {
-      width: 450px;
-      height: 450px;
-    }
-  }
+  gap: 35px;
 }
-.title {
-  margin-top: 100px;
-  font-size: 48px;
-  font-weight: 600;
-  text-align: center;
+
+.product-about {
+  width: 100%;
+}
+
+.wrapper {
+  padding: 33px;
 }
 </style>
