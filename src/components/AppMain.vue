@@ -168,7 +168,7 @@ export default {
   },
   computed: {
     ...mapGetters("Products", ["products"]),
-    imgPrefix: () => process.env.VUE_APP_BASE_URL,
+    imgPrefix: () => process.env.VUE_APP_DOMAIN,
   },
   methods: {
     ...mapActions("Products", ["getProducts"]),
