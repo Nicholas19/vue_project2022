@@ -16,7 +16,7 @@
           @click="choose(item)"
           :class="{ selected: item === default_item }"
         >
-          <span> {{ item }} </span>
+          <span> {{ typeof item === "object" ? item.title : item }} </span>
         </li>
       </ul>
     </div>

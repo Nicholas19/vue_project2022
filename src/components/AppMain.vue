@@ -30,7 +30,9 @@
               <app-drop
                 placeholder="Choose sort"
                 class="sort"
-                :values="values"
+                :values="sortValues"
+                @choose="handleChoose"
+                :default_item="currentSortField?.title"
               />
             </div>
           </div>
@@ -41,7 +43,7 @@
                 :price="card.price"
                 :amount="card.amount"
                 :picture="imgPrefix + card.imgSrc"
-                :raiting="card.raiting"
+                :raiting="card.rating"
                 @click="handleCardClick(card.category.code, card.id)"
               ></app-card>
             </li>
@@ -50,15 +52,17 @@
           <div class="cards__history">
             <span class="cards__show">Showing 9 of 120 result</span>
 
-            <ul class="cards__pagination">
-              <li class="cards__pagination-item cards__pagination-item--active">
-                <a href="#" class="cards__pagination-number">1</a>
-              </li>
-              <li class="cards__pagination-item">
-                <a href="#" class="cards__pagination-number">2</a>
-              </li>
-              <li class="cards__pagination-item">
-                <a href="#" class="cards__pagination-number">3</a>
+            <ul class="cards__pagination" v-if="pagesCount">
+              <li
+                class="cards__pagination-item cards__pagination-item--active"
+                v-for="page in pagesCount"
+                :key="page"
+              >
+                <router-link
+                  :to="{ path: `${$route.fullPath}`, query: { page } }"
+                  class="cards__pagination-number"
+                  >{{ page }}
+                </router-link>
               </li>
             </ul>
           </div>
@@ -82,17 +86,55 @@ export default {
     AppAside,
   },
   data: () => ({
-    values: [1, 2, 3],
+    sortValues: [
+      {
+        title: "Price: Low To High",
+        value: "price",
+        direction: "asc",
+      },
+      {
+        title: "Price: High To Low",
+        value: "price",
+        direction: "desc",
+      },
+    ],
+    currentSortField: { value: "id", direction: "asc" },
     imgPrefix: process.env.VUE_APP_DOMAIN,
   }),
   created() {
-    this.getProducts();
+    this.getProducts({
+      category: this.$route.params.categoryCode,
+      page: this.$route.query.page,
+    });
   },
   computed: {
-    ...mapGetters("Products", ["products"]),
+    ...mapGetters("Products", ["products", "pagesCount"]),
+  },
+  watch: {
+    $route() {
+      this.getProducts({
+        category: this.$route.params.categoryCode,
+        sort: {
+          field: this.currentSortField?.value,
+          direction: this.currentSortField?.direction,
+        },
+        page: this.$route.query.page,
+      });
+    },
   },
   methods: {
     ...mapActions("Products", ["getProducts"]),
+    handleChoose(val) {
+      this.currentSortField = val;
+      this.getProducts({
+        category: this.$route.params.categoryCode,
+        sort: {
+          field: this.currentSortField?.value,
+          direction: this.currentSortField?.direction,
+        },
+        page: this.$route.query.page,
+      });
+    },
     handleCardClick(category, id) {
       this.$router.push({
         path: `/${category}/${id}`,

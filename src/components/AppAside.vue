@@ -32,7 +32,7 @@
         </div>
         <div class="btns" v-if="!showColors">
           <app-button
-            :name="colors[item]"
+            :name="colors[item - 1]"
             :variant="'filter-select'"
             v-for="item in 4"
             :key="item"
@@ -95,7 +95,6 @@ export default {
     AppRange,
   },
   created() {
-    this.getProducts();
     this.getBrands();
   },
   data: () => ({
