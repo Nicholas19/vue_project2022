@@ -4,14 +4,12 @@
     <!-- <app-cards-grid></app-cards-grid> -->
     <AppMain></AppMain>
   </div>
-  <AppFooter></AppFooter>
 </template>
 
 <script>
 // import AppCardsGrid from "@/components/AppCardsGrid.vue";
 import AppMain from "@/components/AppMain.vue";
 // import AppAside from "@/components/AppAside.vue";
-import AppFooter from "@/components/AppFooter.vue";
 
 export default {
   name: "ViewHome",
@@ -19,7 +17,6 @@ export default {
     // AppCardsGrid,
     // AppAside,
     AppMain,
-    AppFooter,
   },
 };
 </script>
