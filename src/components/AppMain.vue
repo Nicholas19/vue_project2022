@@ -104,11 +104,6 @@
               <button class="cards__sort-btn">Show by</button>
 
               <!--     тут еще dropdown должен быть-->
-              <app-drop
-                placeholder="Choose sort"
-                class="sort"
-                :values="values"
-              />
             </div>
           </div>
           <ul class="cards__list">
@@ -117,7 +112,7 @@
                 :name="card.name"
                 :price="card.price"
                 :amount="card.amount"
-                :picture="imgPrefix + card.imgSrc"
+                :picture="'http://strapi.elextra.pp.ua' + card.imgSrc"
                 :raiting="card.raiting"
                 @click="handleCardClick(card.category.code, card.id)"
               ></app-card>
@@ -160,15 +155,11 @@ export default {
     AppButton,
     AppCard,
   },
-  data: () => ({
-    values: [1, 2, 3],
-  }),
   created() {
     this.getProducts();
   },
   computed: {
     ...mapGetters("Products", ["products"]),
-    imgPrefix: () => process.env.VUE_APP_BASE_URL,
   },
   methods: {
     ...mapActions("Products", ["getProducts"]),
@@ -181,43 +172,6 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.sort {
-  max-width: 150px;
-  &.open-dropdown {
-    :deep(.input-wrapper) {
-      &::after {
-        transform: translateY(-50%) rotate(180deg);
-      }
-    }
-  }
-  :deep(.input-wrapper input[type="text"]) {
-    padding: 0;
-    border: none;
-    &::placeholder {
-      font-family: "Lato";
-      font-style: normal;
-      font-weight: 600;
-      font-size: 16px;
-      line-height: 19px;
-
-      color: #000000;
-    }
-  }
-  :deep(.input-wrapper) {
-    &::after {
-      transition: 0.25s ease;
-      content: "";
-      position: absolute;
-      top: 50%;
-      right: 0;
-      transform: translateY(-50%);
-      background: url("@/assets/images/svg/arrow-down.svg") no-repeat center/
-        contain;
-      width: 9px;
-      height: 9px;
-    }
-  }
-}
 .btn {
   background: transparent;
   padding: 16px;
