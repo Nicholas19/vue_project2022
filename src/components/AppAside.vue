@@ -4,7 +4,18 @@
       <h2 class="title">Filters</h2>
       <div class="range">
         <span class="range-title">Price range</span>
-        <app-range></app-range>
+        {{ getMinPrice }}
+        {{ getMaxPrice }}
+        <app-range
+          :min="range.min"
+          :max="range.max"
+          :valueFirst="range.input1"
+          :priceGap="range.gap"
+          :valueSecond="range.input2"
+          v-model:input1="range.input1"
+          v-model:input2="range.input2"
+          :fillColor="fillColor"
+        ></app-range>
       </div>
       <div class="drops">
         <app-drop
@@ -99,6 +110,14 @@ export default {
   },
   data: () => ({
     showColors: false,
+    /* Дефолтные состояния для тестирования */
+    range: {
+      min: 250,
+      max: 12000,
+      gap: 50,
+      input1: 250,
+      input2: 12000,
+    },
     filter: {
       brand: "",
       colors: [],
@@ -109,7 +128,7 @@ export default {
   }),
   computed: {
     ...mapGetters("Brands", ["brands"]),
-    ...mapGetters("Products", ["products"]),
+    ...mapGetters("Products", ["products", "getMinPrice", "getMaxPrice"]),
     colors() {
       let res = [];
       this.products?.forEach((item) => {
@@ -123,6 +142,11 @@ export default {
         arr.push(item.name);
       });
       return arr;
+    },
+    fillColor() {
+      let percent1 = (this.range.input1 / this.range.max) * 100;
+      let percent2 = (this.range.input2 / this.range.max) * 100;
+      return `linear-gradient(to right, #dadae5 ${percent1}% , #ff7020 ${percent1}% , #ff7020 ${percent2}%, #dadae5 ${percent2}%)`;
     },
   },
   methods: {
@@ -201,7 +225,6 @@ export default {
   font-weight: 600;
   font-size: 20px;
   line-height: 24px;
-  /* identical to box height */
   color: #575757;
 }
 

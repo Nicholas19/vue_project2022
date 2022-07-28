@@ -145,7 +145,7 @@ export default {
 </script>
 <style scoped lang="scss">
 .sort {
-  max-width: 150px;
+  max-width: 200px;
   &.open-dropdown {
     :deep(.input-wrapper) {
       &::after {
@@ -166,6 +166,7 @@ export default {
       color: #000000;
     }
   }
+
   :deep(.input-wrapper) {
     &::after {
       transition: 0.25s ease;
@@ -178,6 +179,14 @@ export default {
         contain;
       width: 9px;
       height: 9px;
+    }
+  }
+  :deep(.droplist) {
+    li {
+      padding: 10px 12px;
+    }
+    span {
+      font-size: 14px;
     }
   }
 }
@@ -375,12 +384,6 @@ export default {
     display: flex;
 
     &-item {
-      width: 59px;
-      height: 48px;
-      padding: 15px 15px 14px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       background: #ffefe7;
       border-radius: 13px;
 
@@ -403,6 +406,12 @@ export default {
     }
 
     &-number {
+      width: 59px;
+      height: 48px;
+      padding: 15px 15px 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       font-family: "Lato", sans-serif;
       font-size: 16px;
       font-weight: 700;
