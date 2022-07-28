@@ -3,9 +3,10 @@
     <input
       type="checkbox"
       :name="name"
+      :value="name"
       :id="name"
       class="custom-checkbox"
-      v-model="checked"
+      @change="updatedInput($event.target.value)"
     />
     <label :for="name"></label>
   </div>
@@ -20,9 +21,12 @@ export default {
       required: true,
     },
   },
-  data: () => ({
-    checked: false,
-  }),
+  methods: {
+    updatedInput(e) {
+      console.log(e);
+      this.$emit("cus-input", e);
+    },
+  },
 };
 </script>
 

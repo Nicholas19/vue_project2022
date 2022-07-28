@@ -1,14 +1,19 @@
 <template>
   <div class="item_wrap">
-    <app-customcheck :name="sku" :checked="checked"></app-customcheck>
+    <app-customcheck
+      :name="title"
+      @cus-input="select($event)"
+    ></app-customcheck>
     <div class="img-box">
       <img :src="imgSrc" class="item-img" />
     </div>
     <div class="main_content">
       <div class="item_info">
         <div class="head">
-          <div class="prod_title">{{ title }}</div>
-          <div class="sku">{{ sku }}</div>
+          <router-link to="/" class="aside_link"
+            ><div class="prod_title">{{ title }}</div>
+          </router-link>
+          <div class="sku">{{ id }}</div>
         </div>
         <div class="price">$ {{ price }}</div>
         <div class="btns">
@@ -24,7 +29,7 @@
                 <path d="M0 0H19V4H0V0Z" />
               </svg>
             </button>
-            <p class="counter__number">{{ countD }}</p>
+            <p class="counter__number">{{ count }}</p>
             <button class="counter__btn" @click="increaseCount">
               <svg
                 class="counter__icon"
@@ -80,7 +85,7 @@ export default {
       type: String,
       default: "Product Title",
     },
-    sku: {
+    id: {
       type: String,
       default: "SKU 12314124124",
     },
@@ -93,15 +98,19 @@ export default {
       default: 1,
     },
   },
-  data: () => ({
-    countD: 1,
-  }),
+
   methods: {
     decreaseCount() {
-      this.countD > 1 ? this.countD-- : -1;
+      this.$emit("less");
     },
     increaseCount() {
-      this.countD++;
+      this.$emit("more");
+    },
+    deleteItem() {
+      this.$emit("deleteItem");
+    },
+    select(e) {
+      this.$emit("choose", e);
     },
   },
 };
@@ -152,6 +161,10 @@ export default {
   line-height: 30px;
   /* identical to box height */
   color: #000000;
+}
+
+.head .prod_title:hover {
+  color: #ff7020;
 }
 
 .head .sku {

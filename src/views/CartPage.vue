@@ -13,15 +13,19 @@
             <app-button name="REMOVE" variant="red"></app-button>
           </div>
         </div>
+        {{ selected }}
         <div class="cart-items">
           <app-cartitem
-            v-for="item in items"
-            :key="item.sku"
-            :sku="item.sku"
+            v-for="(item, index) in items"
+            :key="item.id"
+            :id="item.id"
             :title="item.name"
             :price="item.price"
             :count="item.count"
-            :checked="false"
+            @more="increaseCount(index)"
+            @less="decreaseCount(index)"
+            @delete-item="deleteItem(index)"
+            @choose="sel"
           ></app-cartitem>
         </div>
       </div>
@@ -59,17 +63,24 @@ import AppCartitem from "@/components/AppCartitem.vue";
 import AppCustomcheck from "@/components/AppCustomcheck.vue";
 
 export default {
+  components: {
+    AppButton,
+    AppAsidecart,
+    AppCartitem,
+    AppCustomcheck,
+  },
   data: () => ({
     items: [
       {
         name: "tv",
-        sku: "tv1",
+        id: "tv1",
         count: 1,
         price: 500,
       },
-      { name: "phone", sku: "phone1", count: 1, price: 250 },
-      { name: "laptop", sku: "laptop1", count: 1, price: 400 },
+      { name: "phone", id: "phone1", count: 1, price: 250 },
+      { name: "laptop", id: "laptop1", count: 1, price: 400 },
     ],
+    selected: [],
   }),
   computed: {
     totalSum() {
@@ -80,11 +91,19 @@ export default {
       return sum;
     },
   },
-  components: {
-    AppButton,
-    AppAsidecart,
-    AppCartitem,
-    AppCustomcheck,
+  methods: {
+    decreaseCount(i) {
+      this.items[i].count > 1 ? this.items[i].count-- : -1;
+    },
+    increaseCount(i) {
+      this.items[i].count++;
+    },
+    deleteItem(i) {
+      this.items.splice(i, 1);
+    },
+    sel(e) {
+      this.selected.push(e);
+    },
   },
 };
 </script>
