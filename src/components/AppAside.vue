@@ -4,7 +4,7 @@
       <h2 class="title">Filters</h2>
       <div class="range">
         <span class="range-title">Price range</span>
-        <p>заглушка</p>
+        <app-range></app-range>
       </div>
       <div class="drops">
         <app-drop
@@ -32,7 +32,7 @@
         </div>
         <div class="btns" v-if="!showColors">
           <app-button
-            :name="colors[item]"
+            :name="colors[item - 1]"
             :variant="'filter-select'"
             v-for="item in 4"
             :key="item"
@@ -65,6 +65,7 @@
             :name="'+ Show Less'"
             :variant="'orange'"
             @click="showColors = !showColors"
+            v-if="colors.length > 4"
           ></app-button>
         </div>
         <app-button></app-button>
@@ -84,6 +85,7 @@
 <script>
 import AppDrop from "@/components/AppDrop.vue";
 import AppButton from "@/components/AppButton.vue";
+import AppRange from "@/components/AppRange.vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
@@ -91,6 +93,7 @@ export default {
   components: {
     AppDrop,
     AppButton,
+    AppRange,
   },
   created() {
     this.getProducts();
@@ -202,6 +205,10 @@ export default {
   line-height: 24px;
   /* identical to box height */
   color: #575757;
+}
+
+.range .slider {
+  margin-top: 35px;
 }
 
 .drops {
