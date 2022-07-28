@@ -1,13 +1,15 @@
 <template>
-  <v-header />
+  <app-header />
   <router-view />
+  <app-footer></app-footer>
 </template>
 
 <script>
-import vHeader from "@/components/v-header";
+import AppHeader from "@/components/AppHeader";
+import AppFooter from "@/components/AppFooter.vue";
 
 export default {
-  components: { vHeader },
+  components: { AppHeader, AppFooter },
 };
 </script>
 

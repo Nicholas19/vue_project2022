@@ -1,27 +1,13 @@
 import { createStore } from "vuex";
+import Products from "./modules/products";
+import categories from "@/store/modules/categories";
+import Brands from "./modules/brands";
 
 export default createStore({
-  state: {
-    cart: [1, 2],
+  strict: process.env.NODE_ENV !== "production",
+  modules: {
+    Products,
+    categories,
+    Brands,
   },
-  getters: {
-    cartCount(state) {
-      return state.cart.length;
-    },
-  },
-  mutations: {
-    addToCart(state, id) {
-      state.cart.push(id);
-    },
-  },
-  actions: {
-    addToCart({ commit }, id) {
-      setTimeout(() => {
-        console.log("ACTION");
-      });
-
-      commit("addToCart", id);
-    },
-  },
-  modules: {},
 });
