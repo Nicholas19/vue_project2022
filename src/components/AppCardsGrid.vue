@@ -9,6 +9,7 @@
       :picture="card.picture"
       :raiting="card.raiting"
       @click="handleCardClick(card.id)"
+      @add-to-cart="addToCart(card.id)"
     ></app-card>
   </div>
 </template>
@@ -95,6 +96,11 @@ export default {
         name: "product",
         params: { productId: id },
       });
+    },
+    addToCart(id) {
+      // this.$store.state.cart.push(id);
+      // this.$store.commit("addToCart", id);
+      this.$store.dispatch("addToCart", id);
     },
   },
 };

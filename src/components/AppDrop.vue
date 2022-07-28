@@ -62,8 +62,6 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap");
-
 .custom-select-wrapper .input-wrapper {
   background-color: #fff;
 }
