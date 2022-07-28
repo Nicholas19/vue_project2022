@@ -54,7 +54,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .aside {
   margin: 0 60px 0 0;
   width: 350px;

@@ -136,7 +136,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-creative";
-import RaitingBlock from "@/components/RaitingBlock";
+import RatingBlock from "@/components/RatingBlock";
 import AppTabs from "@/components/AppTabs";
 import AppAboutProduct from "@/components/AppAboutProduct";
 
@@ -144,7 +144,7 @@ export default {
   components: {
     Swiper,
     SwiperSlide,
-    RaitingBlock,
+    RatingBlock,
     AppTabs,
     AppAboutProduct,
     ProductDescription: defineAsyncComponent(() =>
@@ -307,6 +307,6 @@ export default {
 }
 
 .wrapper {
-  padding: 33px;
+  padding: 120px 45px;
 }
 </style>
