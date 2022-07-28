@@ -61,7 +61,7 @@ export default {
 
 <style scoped>
 .custom-select-wrapper .input-wrapper {
-  background-color: #fff;
+  background-color: transparent;
 }
 
 .custom-select-wrapper .input-wrapper input[type="text"] {

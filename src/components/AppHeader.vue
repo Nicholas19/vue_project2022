@@ -1,5 +1,6 @@
 <template>
   <header class="header">
+    <header-toolbar />
     <div class="container">
       <div class="header__inner">
         <div class="header__top">
@@ -58,6 +59,7 @@
 <script>
 import AppButton from "@/components/AppButton.vue";
 import HeaderNav from "@/components/HeaderNav";
+import HeaderToolbar from "@/components/HeaderToolbar";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
@@ -65,6 +67,7 @@ export default {
   components: {
     AppButton,
     HeaderNav,
+    HeaderToolbar,
   },
   data: () => ({
     userInfo: false,
