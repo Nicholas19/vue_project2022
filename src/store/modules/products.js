@@ -74,9 +74,25 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response);
-          store.commit("setProducts", response.data?.products);
-          store.commit("setPagination", null);
+          let products = response.data.products;
+          let params = {
+            "populate[0]": "images",
+            "populate[1]": "category",
+          };
+
+          if (products.length > 0) {
+            products?.forEach((el, i) => {
+              params[`filters[id][$in][${i}]`] = el.id;
+            });
+          }
+
+          axios
+            .get("/products", {
+              params,
+            })
+            .then((response) => {
+              store.commit("setProducts", response.data?.data);
+            });
         })
         .catch((e) => console.log(e));
     },

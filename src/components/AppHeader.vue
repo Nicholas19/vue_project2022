@@ -1,5 +1,6 @@
 <template>
   <header class="header">
+    <header-toolbar />
     <div class="container">
       <div class="header__inner">
         <div class="header__top">
@@ -8,19 +9,7 @@
               <img src="@/assets/images/svg/logo.svg" alt="" />
             </router-link>
           </div>
-          <div class="header__search">
-            <input
-              type="text"
-              class="header__input"
-              placeholder="Search here..."
-              @input="productsSearch($event.target.value)"
-            />
-            <button class="header__btn">
-              <svg width="24" height="24">
-                <use xlink:href="@/assets/images/svg/sprites.svg#search"></use>
-              </svg>
-            </button>
-          </div>
+          <header-search />
           <div class="header__right">
             <router-link to="/" class="header__cart">
               <svg width="25" height="25">
@@ -58,13 +47,17 @@
 <script>
 import AppButton from "@/components/AppButton.vue";
 import HeaderNav from "@/components/HeaderNav";
-import { mapGetters, mapActions } from "vuex";
+import HeaderSearch from "@/components/HeaderSearch";
+import HeaderToolbar from "@/components/HeaderToolbar";
+import { mapGetters } from "vuex";
 
 export default {
   name: "AppHeader",
   components: {
     AppButton,
     HeaderNav,
+    HeaderSearch,
+    HeaderToolbar,
   },
   data: () => ({
     userInfo: false,
@@ -76,7 +69,6 @@ export default {
     ...mapGetters("Products", ["cartCount"]),
   },
   methods: {
-    ...mapActions("Products", ["productsSearch"]),
     showInfo() {
       this.userInfo = !this.userInfo;
     },
@@ -111,31 +103,6 @@ export default {
       height: 100%;
       display: block;
     }
-  }
-
-  &__search {
-    overflow: hidden;
-    border-radius: 12px;
-    max-width: 796px;
-    flex: 1;
-    display: flex;
-    background-color: #f1f1f1;
-  }
-
-  &__input {
-    transition: 0.25s ease;
-    outline: none;
-    background-color: transparent;
-
-    border: none;
-    padding: 24px 0 24px 30px;
-    width: 100%;
-    font-family: "Lato";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 22px;
-    color: #4d4d4d;
   }
 
   &__btn {

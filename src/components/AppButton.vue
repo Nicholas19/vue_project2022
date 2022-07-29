@@ -7,6 +7,7 @@
   >
     <img v-if="icon" :src="iconSrc" />
     {{ name }}
+    <slot></slot>
   </button>
 </template>
 

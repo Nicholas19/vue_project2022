@@ -11,7 +11,7 @@
     <div class="container">
       <div class="product-info">
         <aside>
-          <raiting-block :raiting="4.2" :reviews="reviewsStat" />
+          <rating-block :rating="4.2" :reviews="reviewsStat" />
         </aside>
         <div class="product-about">
           <app-tabs :tabs="tabList" v-model="currentTab" />
@@ -33,7 +33,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-creative";
-import RaitingBlock from "@/components/RaitingBlock";
+import RatingBlock from "@/components/RatingBlock";
 import AppTabs from "@/components/AppTabs";
 import AppAboutProduct from "@/components/AppAboutProduct";
 import AppSlider from "@/components/AppSlider.vue";
@@ -42,7 +42,7 @@ export default {
   components: {
     Swiper,
     SwiperSlide,
-    RaitingBlock,
+    RatingBlock,
     AppTabs,
     AppAboutProduct,
     AppSlider,
@@ -139,6 +139,6 @@ export default {
 }
 
 .wrapper {
-  padding: 33px;
+  padding: 120px 45px;
 }
 </style>
