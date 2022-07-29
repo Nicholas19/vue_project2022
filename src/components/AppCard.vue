@@ -56,7 +56,7 @@ export default {
 
 <style lang="scss" scoped>
 .card {
-  height: 412px;
+  height: 390px;
   background-color: #fff;
   border-radius: 20px;
   padding: 20px;
@@ -67,17 +67,18 @@ export default {
   flex-direction: column;
 
   &__img-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     min-height: 160px;
     border-radius: 10px;
-    overflow: hidden;
     margin-bottom: 24px;
   }
 
   &__img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: auto;
+    height: 160px;
   }
 
   &__block {
