@@ -49,7 +49,7 @@ import AppButton from "@/components/AppButton.vue";
 import HeaderNav from "@/components/HeaderNav";
 import HeaderSearch from "@/components/HeaderSearch";
 import HeaderToolbar from "@/components/HeaderToolbar";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "AppHeader",
