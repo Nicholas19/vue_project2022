@@ -72,13 +72,16 @@ export default {
     align-items: center;
     width: 100%;
     min-height: 160px;
+    max-width: 230px;
     border-radius: 10px;
     margin-bottom: 24px;
   }
 
   &__img {
     width: auto;
+    max-width: 230px;
     height: 160px;
+    object-fit: contain;
   }
 
   &__block {
