@@ -2,7 +2,8 @@
   <div class="item_wrap">
     <app-customcheck
       :name="title"
-      @cus-input="select($event)"
+      @cus-input="select"
+      :is-checked="isCheck"
     ></app-customcheck>
     <div class="img-box">
       <img :src="imgSrc" class="item-img" />
@@ -97,6 +98,10 @@ export default {
       type: Number,
       default: 1,
     },
+    isCheck: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   methods: {
@@ -109,8 +114,8 @@ export default {
     deleteItem() {
       this.$emit("deleteItem");
     },
-    select(e) {
-      this.$emit("choose", e);
+    select() {
+      this.$emit("choose");
     },
   },
 };
