@@ -8,7 +8,7 @@
       <div class="card__info">
         <div class="card__price-wrapper">
           <p class="card__price">{{ "$" + price }}</p>
-          <app-rating :amount="amount" :raiting="raiting"></app-rating>
+          <app-rating :amount="amount" :rating="rating"></app-rating>
         </div>
         <button class="btn" @click.stop="handleClick">Add to cart</button>
       </div>
@@ -33,7 +33,7 @@ export default {
       type: Number,
       required: true,
     },
-    raiting: {
+    rating: {
       type: Number,
       default: 0,
     },
