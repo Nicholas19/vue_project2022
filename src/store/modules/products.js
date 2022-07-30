@@ -7,6 +7,12 @@ export default {
     cart: [1, 2],
     products: null,
     pagination: null,
+    filter: {
+      brand: "",
+      colors: [],
+      rangeMin: null,
+      rangeMax: null,
+    },
   },
   getters: {
     cartCount(state) {
@@ -23,6 +29,16 @@ export default {
       });
     },
     pagesCount: (state) => state.pagination?.pageCount,
+    getMinPrice: (_, getters) =>
+      Math.min.apply(
+        null,
+        getters.products?.map((item) => item.price)
+      ),
+    getMaxPrice: (_, getters) =>
+      Math.max.apply(
+        null,
+        getters.products?.map((item) => item.price)
+      ),
   },
   mutations: {
     addToCart(state, id) {
@@ -34,18 +50,59 @@ export default {
     setPagination(state, data) {
       state.pagination = data;
     },
+    chooseBrand(state, val) {
+      state.filter.brand = val;
+    },
+    resetFilter(state) {
+      state.filter.brand = "";
+      state.filter.colors = [];
+      state.filter.rangeMin = null;
+      state.filter.rangeMax = null;
+    },
+    chooseColor(state, e) {
+      if (state.filter.colors.includes(e)) {
+        let i = state.filter.colors.indexOf(e);
+        state.filter.colors.splice(i, 1);
+      } else {
+        state.filter.colors.push(e);
+      }
+    },
+    selectAll(state, arr) {
+      arr.forEach((element) => {
+        if (!state.filter.colors.includes(element)) {
+          state.filter.colors.push(element);
+        }
+      });
+    },
+    resetColors(state) {
+      state.filter.colors = [];
+    },
   },
   actions: {
     getProducts(
       store,
-      { category, sort = { field: "id", direction: "asc" }, page = 1 }
+      {
+        category,
+        sort = { field: "id", direction: "asc" },
+        page = 1,
+        brand,
+        colors,
+      }
     ) {
+      let additionalParams = {};
+      if (colors?.length > 0) {
+        colors?.forEach((el, i) => {
+          additionalParams[`filters[color][$in][${i}]`] = el.name;
+        });
+      }
       axios
         .get("/products", {
           params: {
             "populate[0]": "images",
             "populate[1]": "category",
             "filters[category][code][$eq]": category,
+            "filters[brand][name][$eq]": brand,
+            ...additionalParams,
             sort: `${sort?.field}:${sort?.direction}`,
             "pagination[page]": page,
           },

@@ -2,7 +2,10 @@
   <section class="products">
     <div class="container">
       <div class="products__wrapper">
-        <app-aside></app-aside>
+        <app-aside
+          @filter-data="filterData"
+          @reset-filter="resetData"
+        ></app-aside>
         <!--      правая колонка -->
         <div class="cards">
           <div class="cards__head">
@@ -43,8 +46,9 @@
                 :price="card.price"
                 :amount="card.amount"
                 :picture="imgPrefix + card.imgSrc"
-                :raiting="card.rating"
+                :rating="card.rating"
                 @click="handleCardClick(card.category.code, card.id)"
+                @add-to-cart="handleAddToCartClick(card.id)"
               ></app-card>
             </li>
           </ul>
@@ -76,7 +80,7 @@
 import AppDrop from "@/components/AppDrop.vue";
 import AppCard from "@/components/AppCard.vue";
 import AppAside from "@/components/AppAside.vue";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
 
 export default {
   name: "AppMain",
@@ -109,6 +113,7 @@ export default {
   },
   computed: {
     ...mapGetters("Products", ["products", "pagesCount"]),
+    ...mapState("Products", ["filter"]),
   },
   watch: {
     $route() {
@@ -119,11 +124,14 @@ export default {
           direction: this.currentSortField?.direction,
         },
         page: this.$route.query.page,
+        brand: this.filter.brand,
       });
     },
   },
   methods: {
     ...mapActions("Products", ["getProducts"]),
+    ...mapActions("Cart", ["updateCart"]),
+    ...mapMutations("Cart", ["pushToCart"]),
     handleChoose(val) {
       this.currentSortField = val;
       this.getProducts({
@@ -133,6 +141,7 @@ export default {
           direction: this.currentSortField?.direction,
         },
         page: this.$route.query.page,
+        brand: this.filter.brand,
       });
     },
     handleCardClick(category, id) {
@@ -140,12 +149,41 @@ export default {
         path: `/${category}/${id}`,
       });
     },
+    filterData() {
+      this.getProducts({
+        category: this.$route.params.categoryCode,
+        sort: {
+          field: this.currentSortField?.value,
+          direction: this.currentSortField?.direction,
+        },
+        page: this.$route.query.page,
+        brand: this.filter.brand,
+        colors: this.filter.colors,
+      });
+    },
+    resetData() {
+      this.getProducts({
+        category: this.$route.params.categoryCode,
+        sort: {
+          field: this.currentSortField?.value,
+          direction: this.currentSortField?.direction,
+        },
+        page: this.$route.query.page,
+      });
+    },
+    handleAddToCartClick(productId) {
+      this.pushToCart({
+        id: productId,
+        quantity: 1,
+      });
+      this.updateCart();
+    },
   },
 };
 </script>
 <style scoped lang="scss">
 .sort {
-  max-width: 150px;
+  max-width: 200px;
   &.open-dropdown {
     :deep(.input-wrapper) {
       &::after {
@@ -166,6 +204,7 @@ export default {
       color: #000000;
     }
   }
+
   :deep(.input-wrapper) {
     &::after {
       transition: 0.25s ease;
@@ -178,6 +217,14 @@ export default {
         contain;
       width: 9px;
       height: 9px;
+    }
+  }
+  :deep(.droplist) {
+    li {
+      padding: 10px 12px;
+    }
+    span {
+      font-size: 14px;
     }
   }
 }
@@ -375,12 +422,6 @@ export default {
     display: flex;
 
     &-item {
-      width: 59px;
-      height: 48px;
-      padding: 15px 15px 14px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       background: #ffefe7;
       border-radius: 13px;
 
@@ -403,6 +444,12 @@ export default {
     }
 
     &-number {
+      width: 59px;
+      height: 48px;
+      padding: 15px 15px 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       font-family: "Lato", sans-serif;
       font-size: 16px;
       font-weight: 700;

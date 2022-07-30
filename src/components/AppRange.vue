@@ -1,73 +1,73 @@
 <template>
-  <div class="slider">
-    <div class="progress" :style="fillColor"></div>
-  </div>
-  <div class="input__range">
-    <input
-      id="input1"
-      type="range"
-      :min="min"
-      :max="max"
-      :step="priceGap"
-      :value="minPrice"
-      @input="getFirstInput"
-    />
-    <input
-      id="input2"
-      type="range"
-      :min="min"
-      :max="max"
-      :step="priceGap"
-      :value="maxPrice"
-      @input="getSecondInput"
-    />
-  </div>
-  <div class="input__values">
-    <span> ${{ minPrice }}</span>
-    <span> ${{ maxPrice }}</span>
+  <div class="wrapp">
+    <div class="slider">
+      <div class="progress" :style="{ backgroundImage: fillColor }"></div>
+    </div>
+    <div class="input__range">
+      <input
+        id="input1"
+        type="range"
+        :min="min"
+        :max="max"
+        :step="priceGap"
+        :value="input1"
+        @input="$emit('update:input1', parseInt($event.target.value))"
+      />
+      <input
+        id="input2"
+        type="range"
+        :min="min"
+        :max="max"
+        :step="priceGap"
+        :value="input2"
+        @input="$emit('update:input2', parseInt($event.target.value))"
+      />
+    </div>
+    <div class="input__values">
+      <span> ${{ input1 }}</span>
+      <span> ${{ input2 }}</span>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "AppRange",
-
-  data() {
-    return {
-      min: 0,
-      max: 100000,
-      minPrice: 15000,
-      maxPrice: 80500,
-      priceGap: 500,
-    };
-  },
-  methods: {
-    getFirstInput(e) {
-      this.minPrice = parseInt(e.target.value);
-      if (parseInt(this.maxPrice) - parseInt(this.minPrice) <= this.priceGap) {
-        this.minPrice = parseInt(this.maxPrice) - this.priceGap;
-      }
+  props: {
+    input1: {
+      type: Number,
+      required: true,
     },
-    getSecondInput(e) {
-      this.maxPrice = parseInt(e.target.value);
-      if (parseInt(this.maxPrice) - parseInt(this.minPrice) <= this.priceGap) {
-        this.maxPrice = parseInt(this.minPrice) + this.priceGap;
-      }
+    input2: {
+      type: Number,
+      required: true,
     },
-  },
-  computed: {
-    fillColor() {
-      let percent1 = (this.minPrice / this.max) * 100;
-      let percent2 = (this.maxPrice / this.max) * 100;
-      return {
-        "background-image": `linear-gradient(to right, #dadae5 ${percent1}% , #ff7020 ${percent1}% , #ff7020 ${percent2}%, #dadae5 ${percent2}%)`,
-      };
+    min: {
+      type: Number,
+      required: true,
+    },
+    max: {
+      type: Number,
+      required: true,
+    },
+    priceGap: {
+      type: Number,
+      default: 50,
+    },
+    fillColor: {
+      type: String,
+      default: "",
     },
   },
+  methods: {},
+  computed: {},
 };
 </script>
 
 <style scoped lang="scss">
+.wrapp {
+  margin-top: 30px;
+}
 .slider {
   height: 6px;
   position: relative;
