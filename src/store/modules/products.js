@@ -23,6 +23,16 @@ export default {
       });
     },
     pagesCount: (state) => state.pagination?.pageCount,
+    getMinPrice: (_, getters) =>
+      Math.min.apply(
+        null,
+        getters.products?.map((item) => item.price)
+      ),
+    getMaxPrice: (_, getters) =>
+      Math.max.apply(
+        null,
+        getters.products?.map((item) => item.price)
+      ),
   },
   mutations: {
     addToCart(state, id) {
