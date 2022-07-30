@@ -8,7 +8,7 @@
       <div class="card__info">
         <div class="card__price-wrapper">
           <p class="card__price">{{ "$" + price }}</p>
-          <app-rating :amount="amount" :raiting="raiting"></app-rating>
+          <app-rating :amount="amount" :rating="rating"></app-rating>
         </div>
         <button class="btn" @click.stop="handleClick">Add to cart</button>
       </div>
@@ -33,7 +33,7 @@ export default {
       type: Number,
       required: true,
     },
-    raiting: {
+    rating: {
       type: Number,
       default: 0,
     },
@@ -56,7 +56,7 @@ export default {
 
 <style lang="scss" scoped>
 .card {
-  height: 412px;
+  height: 390px;
   background-color: #fff;
   border-radius: 20px;
   padding: 20px;
@@ -67,17 +67,21 @@ export default {
   flex-direction: column;
 
   &__img-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     min-height: 160px;
+    max-width: 230px;
     border-radius: 10px;
-    overflow: hidden;
     margin-bottom: 24px;
   }
 
   &__img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: auto;
+    max-width: 230px;
+    height: 160px;
+    object-fit: contain;
   }
 
   &__block {
