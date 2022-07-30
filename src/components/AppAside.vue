@@ -63,11 +63,15 @@
         </div>
         <app-button></app-button>
         <div class="filter_foot">
-          <app-button :name="'FILTER'" :variant="'colored'"></app-button>
+          <app-button
+            :name="'FILTER'"
+            :variant="'colored'"
+            @btnClick="filterData"
+          ></app-button>
           <app-button
             :name="'Reset Filter'"
             :variant="'orange'"
-            @click="resetFilter"
+            @click="filterReset"
           ></app-button>
         </div>
       </div>
@@ -79,7 +83,7 @@
 import AppDrop from "@/components/AppDrop.vue";
 import AppButton from "@/components/AppButton.vue";
 import AppRange from "@/components/AppRange.vue";
-import { mapGetters, mapActions } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "AppAside",
@@ -102,18 +106,13 @@ export default {
       input1: 250,
       input2: 12000,
     },
-    filter: {
-      brand: "",
-      colors: [],
-      rangeMin: null,
-      rangeMax: null,
-    },
     allSelected: false,
   }),
   computed: {
     ...mapGetters("Colors", ["colors"]),
     ...mapGetters("Brands", ["brands"]),
     ...mapGetters("Products", ["products", "getMinPrice", "getMaxPrice"]),
+    ...mapState("Products", ["filter"]),
     // colors() {
     //   let res = [];
     //   this.products?.forEach((item) => {
@@ -136,39 +135,31 @@ export default {
   },
   methods: {
     ...mapActions("Colors", ["getColors"]),
-    ...mapActions("Products", ["getProducts"]),
     ...mapActions("Brands", ["getBrands"]),
-    chooseColor(e) {
-      if (this.filter.colors.includes(e)) {
-        let i = this.filter.colors.indexOf(e);
-        this.filter.colors.splice(i, 1);
-      } else {
-        this.filter.colors.push(e);
-      }
-    },
-    selectAllColors(arr) {
+    ...mapMutations("Products", [
+      "chooseBrand",
+      "resetFilter",
+      "chooseColor",
+      "selectAll",
+      "resetColors",
+    ]),
+    selectAllColors() {
       this.showColors = true;
       this.allSelected = true;
-      arr.forEach((element) => {
-        if (!this.filter.colors.includes(element)) {
-          this.filter.colors.push(element);
-        }
-      });
+      this.selectAll(this.colors);
+    },
+    filterReset() {
+      this.showColors = false;
+      this.resetFilter();
+      this.$emit("reset-filter");
     },
     clearAllColors() {
-      this.filter.colors.splice(0, this.filter.colors.length);
+      this.resetColors();
       this.allSelected = false;
       this.showColors = false;
     },
-    chooseBrand(e) {
-      this.filter.brand = e;
-    },
-    resetFilter() {
-      this.filter.brand = "";
-      this.showColors = false;
-      this.filter.colors.splice(0, this.filter.colors.length);
-      this.filter.rangeMin = null;
-      this.filter.rangeMax = null;
+    filterData() {
+      this.$emit("filter-data");
     },
   },
 };

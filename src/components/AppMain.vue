@@ -2,7 +2,10 @@
   <section class="products">
     <div class="container">
       <div class="products__wrapper">
-        <app-aside></app-aside>
+        <app-aside
+          @filter-data="filterData"
+          @reset-filter="resetData"
+        ></app-aside>
         <!--      правая колонка -->
         <div class="cards">
           <div class="cards__head">
@@ -45,6 +48,7 @@
                 :picture="imgPrefix + card.imgSrc"
                 :rating="card.rating"
                 @click="handleCardClick(card.category.code, card.id)"
+                @add-to-cart="handleAddToCartClick(card.id)"
               ></app-card>
             </li>
           </ul>
@@ -76,7 +80,7 @@
 import AppDrop from "@/components/AppDrop.vue";
 import AppCard from "@/components/AppCard.vue";
 import AppAside from "@/components/AppAside.vue";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
 
 export default {
   name: "AppMain",
@@ -109,6 +113,7 @@ export default {
   },
   computed: {
     ...mapGetters("Products", ["products", "pagesCount"]),
+    ...mapState("Products", ["filter"]),
   },
   watch: {
     $route() {
@@ -119,11 +124,14 @@ export default {
           direction: this.currentSortField?.direction,
         },
         page: this.$route.query.page,
+        brand: this.filter.brand,
       });
     },
   },
   methods: {
     ...mapActions("Products", ["getProducts"]),
+    ...mapActions("Cart", ["updateCart"]),
+    ...mapMutations("Cart", ["pushToCart"]),
     handleChoose(val) {
       this.currentSortField = val;
       this.getProducts({
@@ -133,12 +141,42 @@ export default {
           direction: this.currentSortField?.direction,
         },
         page: this.$route.query.page,
+        brand: this.filter.brand,
       });
     },
     handleCardClick(category, id) {
       this.$router.push({
         path: `/${category}/${id}`,
       });
+    },
+    filterData() {
+      this.getProducts({
+        category: this.$route.params.categoryCode,
+        sort: {
+          field: this.currentSortField?.value,
+          direction: this.currentSortField?.direction,
+        },
+        page: this.$route.query.page,
+        brand: this.filter.brand,
+        colors: this.filter.colors,
+      });
+    },
+    resetData() {
+      this.getProducts({
+        category: this.$route.params.categoryCode,
+        sort: {
+          field: this.currentSortField?.value,
+          direction: this.currentSortField?.direction,
+        },
+        page: this.$route.query.page,
+      });
+    },
+    handleAddToCartClick(productId) {
+      this.pushToCart({
+        id: productId,
+        quantity: 1,
+      });
+      this.updateCart();
     },
   },
 };
