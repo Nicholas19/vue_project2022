@@ -16,7 +16,7 @@
           @click="choose(item)"
           :class="{ selected: item === default_item }"
         >
-          <span> {{ item }} </span>
+          <span> {{ typeof item === "object" ? item.title : item }} </span>
         </li>
       </ul>
     </div>
@@ -61,7 +61,7 @@ export default {
 
 <style scoped>
 .custom-select-wrapper .input-wrapper {
-  background-color: #fff;
+  background-color: transparent;
 }
 
 .custom-select-wrapper .input-wrapper input[type="text"] {

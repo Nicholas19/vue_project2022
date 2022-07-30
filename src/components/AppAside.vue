@@ -15,6 +15,7 @@
           @choose="chooseBrand"
         ></app-drop>
       </div>
+      <!--   Colors   -->
       <div class="filter">
         <div class="filter_head">
           <span class="range-title">Color</span>
@@ -30,31 +31,13 @@
             class="clear"
           ></app-button>
         </div>
-        <div class="btns" v-if="!showColors">
+        <div class="btns">
           <app-button
-            :name="colors[item - 1]"
+            v-for="(item, index) in colors"
+            v-show="showAllColors || index < 4"
+            :name="item.name"
             :variant="'filter-select'"
-            v-for="item in 4"
-            :key="item"
-            @click="chooseColor(colors[item])"
-            :class="{
-              'filter-select-active': filter.colors.includes(colors[item]),
-            }"
-          ></app-button>
-          <br />
-          <app-button
-            :name="'+ Show More'"
-            :variant="'orange'"
-            v-if="colors.length > 4"
-            @click="showColors = !showColors"
-          ></app-button>
-        </div>
-        <div class="btns" v-else>
-          <app-button
-            :name="item"
-            :variant="'filter-select'"
-            v-for="item in colors"
-            :key="item"
+            :key="item.name"
             @click="chooseColor(item)"
             :class="{
               'filter-select-active': filter.colors.includes(item),
@@ -62,10 +45,9 @@
           ></app-button>
           <br />
           <app-button
-            :name="'+ Show Less'"
+            :name="(showAllColors ? 'Hide' : 'Show') + ' ' + 'Less'"
             :variant="'orange'"
-            @click="showColors = !showColors"
-            v-if="colors.length > 4"
+            @click="showAllColors = !showAllColors"
           ></app-button>
         </div>
         <app-button></app-button>
@@ -96,11 +78,11 @@ export default {
     AppRange,
   },
   created() {
-    this.getProducts();
     this.getBrands();
+    this.getColors();
   },
   data: () => ({
-    showColors: false,
+    showAllColors: false,
     filter: {
       brand: "",
       colors: [],
@@ -110,15 +92,9 @@ export default {
     allSelected: false,
   }),
   computed: {
+    ...mapGetters("Colors", ["colors"]),
     ...mapGetters("Brands", ["brands"]),
     ...mapGetters("Products", ["products"]),
-    colors() {
-      let res = [];
-      this.products?.forEach((item) => {
-        res.push(item.color);
-      });
-      return this.find_uniqums(res.flat(1));
-    },
     brandsArray() {
       let arr = [];
       this.brands?.forEach((item) => {
@@ -128,17 +104,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions("Colors", ["getColors"]),
     ...mapActions("Products", ["getProducts"]),
     ...mapActions("Brands", ["getBrands"]),
-    find_uniqums(arr) {
-      let result = [];
-      for (let str of arr) {
-        if (!result.includes(str)) {
-          result.push(str);
-        }
-      }
-      return result;
-    },
     chooseColor(e) {
       if (this.filter.colors.includes(e)) {
         let i = this.filter.colors.indexOf(e);
@@ -148,7 +116,7 @@ export default {
       }
     },
     selectAllColors(arr) {
-      this.showColors = true;
+      this.showAllColors = true;
       this.allSelected = true;
       arr.forEach((element) => {
         if (!this.filter.colors.includes(element)) {
@@ -159,14 +127,14 @@ export default {
     clearAllColors() {
       this.filter.colors.splice(0, this.filter.colors.length);
       this.allSelected = false;
-      this.showColors = false;
+      this.showAllColors = false;
     },
     chooseBrand(e) {
       this.filter.brand = e;
     },
     resetFilter() {
       this.filter.brand = "";
-      this.showColors = false;
+      this.showAllColors = false;
       this.filter.colors.splice(0, this.filter.colors.length);
       this.filter.rangeMin = null;
       this.filter.rangeMax = null;
@@ -175,7 +143,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .aside {
   margin: 0 60px 0 0;
   width: 350px;
@@ -205,10 +173,6 @@ export default {
   line-height: 24px;
   /* identical to box height */
   color: #575757;
-}
-
-.range .slider {
-  margin-top: 35px;
 }
 
 .drops {
