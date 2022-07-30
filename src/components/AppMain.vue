@@ -43,7 +43,7 @@
                 :price="card.price"
                 :amount="card.amount"
                 :picture="imgPrefix + card.imgSrc"
-                :raiting="card.rating"
+                :rating="card.rating"
                 @click="handleCardClick(card.category.code, card.id)"
               ></app-card>
             </li>

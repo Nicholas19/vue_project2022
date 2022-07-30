@@ -45,7 +45,7 @@
           ></app-button>
           <br />
           <app-button
-            :name="(showAllColors ? 'Hide' : 'Show') + ' ' + 'Less'"
+            :name="showAllColors ? 'Hide' : 'Show more'"
             :variant="'orange'"
             @click="showAllColors = !showAllColors"
           ></app-button>
