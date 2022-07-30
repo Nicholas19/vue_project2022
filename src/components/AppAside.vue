@@ -45,7 +45,7 @@
         <div class="btns">
           <app-button
             v-for="(item, index) in colors"
-            v-show="showAllColors || index < 4"
+            v-show="showColors || index < 4"
             :name="item.name"
             :variant="'filter-select'"
             :key="item.name"
@@ -56,9 +56,9 @@
           ></app-button>
           <br />
           <app-button
-            :name="showAllColors ? 'Hide' : 'Show more'"
+            :name="showColors ? 'Hide' : 'Show more'"
             :variant="'orange'"
-            @click="showAllColors = !showAllColors"
+            @click="showColors = !showColors"
           ></app-button>
         </div>
         <app-button></app-button>
@@ -114,13 +114,13 @@ export default {
     ...mapGetters("Colors", ["colors"]),
     ...mapGetters("Brands", ["brands"]),
     ...mapGetters("Products", ["products", "getMinPrice", "getMaxPrice"]),
-    colors() {
-      let res = [];
-      this.products?.forEach((item) => {
-        res.push(item.color);
-      });
-      return this.find_uniqums(res.flat(1));
-    },
+    // colors() {
+    //   let res = [];
+    //   this.products?.forEach((item) => {
+    //     res.push(item.color);
+    //   });
+    //   return this.find_uniqums(res.flat(1));
+    // },
     brandsArray() {
       let arr = [];
       this.brands?.forEach((item) => {
@@ -147,7 +147,7 @@ export default {
       }
     },
     selectAllColors(arr) {
-      this.showAllColors = true;
+      this.showColors = true;
       this.allSelected = true;
       arr.forEach((element) => {
         if (!this.filter.colors.includes(element)) {
@@ -158,14 +158,14 @@ export default {
     clearAllColors() {
       this.filter.colors.splice(0, this.filter.colors.length);
       this.allSelected = false;
-      this.showAllColors = false;
+      this.showColors = false;
     },
     chooseBrand(e) {
       this.filter.brand = e;
     },
     resetFilter() {
       this.filter.brand = "";
-      this.showAllColors = false;
+      this.showColors = false;
       this.filter.colors.splice(0, this.filter.colors.length);
       this.filter.rangeMin = null;
       this.filter.rangeMax = null;
