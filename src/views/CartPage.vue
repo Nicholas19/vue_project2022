@@ -22,7 +22,7 @@
         </div>
         <div class="cart-items">
           <app-cartitem
-            v-for="(item, index) in items"
+            v-for="(item, index) in productsDetailed"
             :key="item.id"
             :id="item.id"
             :title="item.name"
@@ -69,6 +69,7 @@ import AppButton from "@/components/AppButton.vue";
 import AppAsidecart from "@/components/AppAsidecart.vue";
 import AppCartitem from "@/components/AppCartitem.vue";
 import AppCustomcheck from "@/components/AppCustomcheck.vue";
+import { mapActions, mapState } from "vuex";
 
 export default {
   components: {
@@ -78,20 +79,11 @@ export default {
     AppCustomcheck,
   },
   data: () => ({
-    items: [
-      {
-        name: "tv",
-        id: "tv1",
-        count: 1,
-        price: 500,
-      },
-      { name: "phone", id: "phone1", count: 1, price: 250 },
-      { name: "laptop", id: "laptop1", count: 1, price: 400 },
-    ],
     selected: [],
     mainCheck: false,
   }),
   computed: {
+    ...mapState("Cart", ["productsDetailed"]),
     totalSum() {
       let sum = 0;
       this.items.forEach((item) => {
@@ -100,7 +92,12 @@ export default {
       return sum;
     },
   },
+  created() {
+    this.getCartItems();
+    this.getProductByCart();
+  },
   methods: {
+    ...mapActions("Cart", ["getCartItems", "getProductByCart"]),
     decreaseCount(i) {
       this.items[i].count > 1 ? this.items[i].count-- : -1;
     },
