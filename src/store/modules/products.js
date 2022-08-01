@@ -13,6 +13,7 @@ export default {
       rangeMin: null,
       rangeMax: null,
     },
+    oneProduct: null,
   },
   getters: {
     cartCount(state) {
@@ -39,6 +40,9 @@ export default {
         null,
         getters.products?.map((item) => item.price)
       ),
+    getOneProduct: (state) => {
+      return state.oneProduct;
+    },
   },
   mutations: {
     addToCart(state, id) {
@@ -76,6 +80,10 @@ export default {
     },
     resetColors(state) {
       state.filter.colors = [];
+    },
+    oneProduct(state, product) {
+      state.oneProduct = product;
+      console.log(state);
     },
   },
   actions: {
@@ -142,6 +150,19 @@ export default {
             });
         })
         .catch((e) => console.log(e));
+    },
+
+    productsActive(store, id) {
+      axios
+        .get(`/products/${id}`, {
+          params: {
+            "populate[0]": "images",
+            "populate[1]": "category",
+          },
+        })
+        .then((response) => {
+          store.commit("oneProduct", response?.data?.data);
+        });
     },
   },
 };
