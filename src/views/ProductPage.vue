@@ -27,8 +27,7 @@
 </template>
 
 <script>
-import { defineAsyncComponent, ref } from "vue";
-import { EffectCreative, Navigation, Thumbs } from "swiper";
+import { defineAsyncComponent } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -57,24 +56,6 @@ export default {
       import("@/components/ProductReviews.vue")
     ),
   },
-  setup() {
-    const onSwiper = () => {
-      //console.log(swiper); Нужно убирать за собой
-    };
-    const thumbsSwiper = ref(null);
-    const setThumbsSwiper = (swiper) => {
-      thumbsSwiper.value = swiper;
-    };
-
-    return {
-      EffectCreative,
-      onSwiper,
-      Thumbs,
-      thumbsSwiper,
-      setThumbsSwiper,
-      Navigation,
-    };
-  },
   data: () => ({
     reviewsStat: [
       {
@@ -97,11 +78,6 @@ export default {
         starsCount: 1,
         reviewsCount: 25,
       },
-    ],
-    testImages: [
-      "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_1_aa820bd34d.jpg",
-      "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_2_7827799980.jpg",
-      "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_3_b9a54c371c.jpg",
     ],
     tabList: new Set(["Description", "Specification", "Reviews"]),
     currentTab: "Description",

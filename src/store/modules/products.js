@@ -162,7 +162,6 @@ export default {
         })
         .then((response) => {
           store.commit("oneProduct", response?.data?.data);
-          console.log(response);
         });
     },
   },
