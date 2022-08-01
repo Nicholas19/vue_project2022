@@ -1,10 +1,13 @@
 <template>
   <div class="about">
     <p class="about__subtitle">SKU 12314124124</p>
-    <h2 class="about__title">LED Monitor With High Quality In The World</h2>
+    <h2 class="about__title">{{ getOneProduct?.attributes?.name }}</h2>
     <ul class="about__info">
       <li class="about__item">
-        <app-rating :raiting="4" :amount="223"></app-rating>
+        <app-rating
+          :rating="getOneProduct?.attributes?.rating"
+          :amount="223"
+        ></app-rating>
       </li>
       <li class="about__item">
         <svg
@@ -57,17 +60,18 @@
     </ul>
     <div class="about__wrapper">
       <div class="about__prices">
-        <h3 class="about__price">$976.33</h3>
+        <h3 class="about__price">${{ getOneProduct?.attributes?.price }}</h3>
         <p class="about__oldprice">$1,020.99</p>
-        <div class="about__discount">20%</div>
+        <div class="about__discount">
+          {{ getOneProduct?.attributes?.discount }} %
+        </div>
       </div>
       <img src="@/assets/img/store_logo.svg" alt="manthul logo" />
     </div>
-    <p class="about__text about__description">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-      veniam
-    </p>
+    <p
+      class="about__text about__description"
+      v-html="getOneProduct?.attributes?.description"
+    ></p>
     <ul class="about__text about__list">
       <li class="about__point">- Direct Full Array</li>
       <li class="about__point">- Quantum Dot Technology</li>
@@ -154,6 +158,7 @@
 <script>
 import AppRating from "./AppRating.vue";
 import AppButton from "./AppButton.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "AppAboutProduct",
@@ -165,6 +170,9 @@ export default {
   data: () => ({
     count: 1,
   }),
+  computed: {
+    ...mapGetters("Products", ["getOneProduct"]),
+  },
   methods: {
     decreaseCount() {
       this.count > 1 ? this.count-- : -1;
@@ -179,7 +187,11 @@ export default {
 <style lang="scss" scoped>
 .about {
   padding-left: 80px;
-
+  @media (max-width: 992px) {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding-left: 0 !important;
+  }
   &__subtitle {
     font-family: "Poppins", sans-serif;
     font-style: normal;

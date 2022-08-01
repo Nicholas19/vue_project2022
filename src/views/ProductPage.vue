@@ -2,7 +2,7 @@
   <section class="product">
     <div class="container">
       <div class="product__inner">
-        <app-slider :images="testImages" />
+        <app-slider :images="getOneProduct?.attributes?.images.data" />
         <app-about-product></app-about-product>
       </div>
     </div>
@@ -37,6 +37,7 @@ import RatingBlock from "@/components/RatingBlock";
 import AppTabs from "@/components/AppTabs";
 import AppAboutProduct from "@/components/AppAboutProduct";
 import AppSlider from "@/components/AppSlider.vue";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -106,6 +107,9 @@ export default {
     currentTab: "Description",
   }),
   computed: {
+    getId() {
+      return parseInt(this.$route.params.productId);
+    },
     currentComponent() {
       switch (this.currentTab) {
         case "Description":
@@ -117,21 +121,39 @@ export default {
       }
       return "ProductDescription";
     },
+    ...mapGetters("Products", ["getOneProduct"]),
+  },
+  methods: {
+    ...mapActions("Products", ["productsActive"]),
+  },
+  created() {
+    this.productsActive(this.getId);
   },
 };
 </script>
 
 <style lang="scss">
+.info-section {
+  padding-bottom: 80px;
+}
 .product {
   margin-top: 45px;
+  padding-bottom: 80px;
   &__inner {
     display: flex;
+    @media (max-width: 992px) {
+      flex-direction: column;
+    }
   }
 }
 
 .product-info {
   display: flex;
   gap: 35px;
+
+  @media (max-width: 992px) {
+    flex-direction: column-reverse;
+  }
 }
 
 .product-about {
