@@ -7,6 +7,10 @@ export default {
     cart: [1, 2],
     products: null,
     pagination: null,
+    prices: {
+      min: null,
+      max: null,
+    },
     filter: {
       brand: "",
       colors: [],
@@ -29,16 +33,7 @@ export default {
       });
     },
     pagesCount: (state) => state.pagination?.pageCount,
-    getMinPrice: (_, getters) =>
-      Math.min.apply(
-        null,
-        getters.products?.map((item) => item.price)
-      ),
-    getMaxPrice: (_, getters) =>
-      Math.max.apply(
-        null,
-        getters.products?.map((item) => item.price)
-      ),
+    getPrices: (state) => state.prices,
   },
   mutations: {
     addToCart(state, id) {
@@ -76,6 +71,19 @@ export default {
     },
     resetColors(state) {
       state.filter.colors = [];
+    },
+    setPrices(state, payload) {
+      let res = payload.map((item) => item.attributes.price);
+      state.prices = {
+        min: Math.min.apply(null, res),
+        max: Math.max.apply(null, res),
+      };
+    },
+    setMinPrice(state, value) {
+      state.filter.rangeMin = value;
+    },
+    setMaxPrice(state, value) {
+      state.filter.rangeMax = value;
     },
   },
   actions: {
@@ -142,6 +150,17 @@ export default {
             });
         })
         .catch((e) => console.log(e));
+    },
+    loadMaxMinPrice({ commit }, { category }) {
+      axios
+        .get("/products", {
+          params: {
+            "filters[category][code][$eq]": category,
+            "pagination[limit]": 200,
+            "fields[1]": "price",
+          },
+        })
+        .then((data) => commit("setPrices", data?.data?.data));
     },
   },
 };

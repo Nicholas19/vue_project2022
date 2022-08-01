@@ -4,18 +4,15 @@
       <h2 class="title">Filters</h2>
       <div class="range">
         <span class="range-title">Price range</span>
-        {{ getMinPrice }}
-        {{ getMaxPrice }}
+
         <app-range
-          :min="range.min"
-          :max="range.max"
-          :valueFirst="range.input1"
-          :priceGap="range.gap"
-          :valueSecond="range.input2"
-          v-model:input1="range.input1"
-          v-model:input2="range.input2"
+          :min="getPrices?.min"
+          :max="getPrices?.max"
+          :gap="range.gap"
           :fillColor="fillColor"
-        ></app-range>
+          v-model:input1="range.min"
+          v-model:input2="range.max"
+        />
       </div>
       <div class="drops">
         <app-drop
@@ -95,23 +92,24 @@ export default {
   created() {
     this.getBrands();
     this.getColors();
+    this.loadMaxMinPrice({
+      category: this.$route.params.categoryCode,
+    });
   },
   data: () => ({
     showColors: false,
     /* Дефолтные состояния для тестирования */
     range: {
-      min: 250,
-      max: 12000,
-      gap: 50,
-      input1: 250,
-      input2: 12000,
+      gap: 1,
+      min: null,
+      max: null,
     },
     allSelected: false,
   }),
   computed: {
     ...mapGetters("Colors", ["colors"]),
     ...mapGetters("Brands", ["brands"]),
-    ...mapGetters("Products", ["products", "getMinPrice", "getMaxPrice"]),
+    ...mapGetters("Products", ["products", "getPrices"]),
     ...mapState("Products", ["filter"]),
     // colors() {
     //   let res = [];
@@ -128,12 +126,14 @@ export default {
       return arr;
     },
     fillColor() {
-      let percent1 = (this.range.input1 / this.range.max) * 100;
-      let percent2 = (this.range.input2 / this.range.max) * 100;
-      return `linear-gradient(to right, #dadae5 ${percent1}% , #ff7020 ${percent1}% , #ff7020 ${percent2}%, #dadae5 ${percent2}%)`;
+      let percent1 = (this.range.min / this.getPrices?.max) * 100;
+      let percent2 = (this.range.max / this.getPrices?.max) * 100;
+
+      return `linear-gradient(to right, #dadae5 ${percent1}% , #FF7020 ${percent1}% , #FF7020 ${percent2}%, #dadae5 ${percent2}%)`;
     },
   },
   methods: {
+    ...mapActions("Products", ["loadMaxMinPrice"]),
     ...mapActions("Colors", ["getColors"]),
     ...mapActions("Brands", ["getBrands"]),
     ...mapMutations("Products", [
@@ -142,6 +142,8 @@ export default {
       "chooseColor",
       "selectAll",
       "resetColors",
+      "setMaxPrice",
+      "setMinPrice",
     ]),
     selectAllColors() {
       this.showColors = true;
@@ -161,6 +163,14 @@ export default {
     filterData() {
       this.$emit("filter-data");
     },
+  },
+  mounted() {
+    setTimeout(() => {
+      this.range.min = this.getPrices?.min;
+      this.range.max = this.getPrices?.max;
+      this.setMinPrice(this.getPrices?.min);
+      this.setMaxPrice(this.getPrices?.max);
+    }, 2000);
   },
 };
 </script>

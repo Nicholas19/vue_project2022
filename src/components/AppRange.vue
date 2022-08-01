@@ -7,68 +7,91 @@
       <input
         id="input1"
         type="range"
-        :min="min"
+        min="0"
         :max="max"
-        :step="priceGap"
+        :step="gap"
         :value="input1"
-        @input="$emit('update:input1', parseInt($event.target.value))"
+        @input="setNewMinPrice"
       />
       <input
         id="input2"
         type="range"
-        :min="min"
+        min="0"
         :max="max"
-        :step="priceGap"
+        :step="gap"
         :value="input2"
-        @input="$emit('update:input2', parseInt($event.target.value))"
+        @input="setNewMaxPrice"
       />
     </div>
     <div class="input__values">
-      <span> ${{ input1 }}</span>
-      <span> ${{ input2 }}</span>
+      <span> {{ input1 }}$</span>
+      <span> {{ input2 }}$</span>
     </div>
   </div>
 </template>
 
 <script>
+/* $emit('update:input1', parseInt($event.target.value)) */
+import { mapMutations } from "vuex";
 export default {
   name: "AppRange",
   props: {
-    input1: {
-      type: Number,
-      required: true,
-    },
-    input2: {
-      type: Number,
-      required: true,
-    },
     min: {
       type: Number,
-      required: true,
+      default: 0,
     },
     max: {
       type: Number,
-      required: true,
+      default: 0,
     },
-    priceGap: {
+    input1: {
       type: Number,
-      default: 50,
+      default: 0,
+    },
+    input2: {
+      type: Number,
+      default: 0,
+    },
+    gap: {
+      type: Number,
+      default: 30,
     },
     fillColor: {
       type: String,
-      default: "",
+      required: true,
     },
   },
-  methods: {},
-  computed: {},
+
+  methods: {
+    ...mapMutations("Products", ["setMaxPrice", "setMinPrice"]),
+    setNewMinPrice(e) {
+      this.$emit("update:input1", parseInt(e.target.value));
+      this.setMinPrice(parseInt(e.target.value));
+    },
+    setNewMaxPrice(e) {
+      this.$emit("update:input2", parseInt(e.target.value));
+      this.setMaxPrice(parseInt(e.target.value));
+    },
+    /*   getFirstInput(e) {
+      this.minPrice = parseInt(e.target.value);
+      if (parseInt(this.maxPrice) - parseInt(this.minPrice) <= this.priceGap) {
+        this.minPrice = parseInt(this.maxPrice) - this.priceGap;
+      }
+    },
+    getSecondInput(e) {
+      this.maxPrice = parseInt(e.target.value);
+      if (parseInt(this.maxPrice) - parseInt(this.minPrice) <= this.priceGap) {
+        this.maxPrice = parseInt(this.minPrice) + this.priceGap;
+      }
+    }, */
+  },
 };
 </script>
 
 <style scoped lang="scss">
-.wrapp {
-  margin-top: 30px;
-}
 .slider {
+  margin-top: 30px;
+
   height: 6px;
   position: relative;
   background: #c4c4c4;
@@ -88,6 +111,7 @@ export default {
     position: relative;
 
     input {
+      left: 0;
       position: absolute;
       width: 100%;
       height: 6px;
