@@ -73,7 +73,7 @@
       v-html="getOneProduct?.attributes?.description"
     ></p>
     <ul class="about__text about__list">
-      <li class="about__point">- {{}} Direct Full Array</li>
+      <li class="about__point">- Direct Full Array</li>
       <li class="about__point">- Quantum Dot Technology</li>
       <li class="about__point">- Ambient Mode</li>
       <li class="about__point">- One Remote Control</li>
