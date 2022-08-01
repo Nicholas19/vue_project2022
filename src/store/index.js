@@ -4,6 +4,7 @@ import categories from "@/store/modules/categories";
 import Brands from "./modules/brands";
 import Colors from "./modules/colors";
 import Cart from "./modules/cart";
+import Reviews from "@/store/modules/reviews";
 
 export default createStore({
   strict: process.env.NODE_ENV !== "production",
@@ -13,5 +14,6 @@ export default createStore({
     Brands,
     Colors,
     Cart,
+    Reviews,
   },
 });

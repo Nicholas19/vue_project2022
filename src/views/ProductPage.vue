@@ -11,7 +11,7 @@
     <div class="container">
       <div class="product-info">
         <aside>
-          <rating-block :rating="4.2" :reviews="reviewsStat" />
+          <rating-block :rating="4.2" :reviews="reviewsStat || []" />
         </aside>
         <div class="product-about">
           <app-tabs :tabs="tabList" v-model="currentTab" />
@@ -37,6 +37,7 @@ import RatingBlock from "@/components/RatingBlock";
 import AppTabs from "@/components/AppTabs";
 import AppAboutProduct from "@/components/AppAboutProduct";
 import AppSlider from "@/components/AppSlider.vue";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -75,28 +76,28 @@ export default {
     };
   },
   data: () => ({
-    reviewsStat: [
-      {
-        starsCount: 5,
-        reviewsCount: 12,
-      },
-      {
-        starsCount: 4,
-        reviewsCount: 35,
-      },
-      {
-        starsCount: 3,
-        reviewsCount: 15,
-      },
-      {
-        starsCount: 2,
-        reviewsCount: 1,
-      },
-      {
-        starsCount: 1,
-        reviewsCount: 25,
-      },
-    ],
+    // reviewsStat: [
+    //   {
+    //     starsCount: 5,
+    //     reviewsCount: 12,
+    //   },
+    //   {
+    //     starsCount: 4,
+    //     reviewsCount: 35,
+    //   },
+    //   {
+    //     starsCount: 3,
+    //     reviewsCount: 15,
+    //   },
+    //   {
+    //     starsCount: 2,
+    //     reviewsCount: 1,
+    //   },
+    //   {
+    //     starsCount: 1,
+    //     reviewsCount: 25,
+    //   },
+    // ],
     testImages: [
       "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_1_aa820bd34d.jpg",
       "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_2_7827799980.jpg",
@@ -106,6 +107,7 @@ export default {
     currentTab: "Description",
   }),
   computed: {
+    ...mapGetters("Reviews", ["reviewsStat"]),
     currentComponent() {
       switch (this.currentTab) {
         case "Description":
@@ -117,6 +119,13 @@ export default {
       }
       return "ProductDescription";
     },
+  },
+  methods: {
+    ...mapActions("Reviews", ["getReviewsStat"]),
+  },
+  created() {
+    let productId = this.$route.params.productId;
+    this.getReviewsStat(productId);
   },
 };
 </script>
