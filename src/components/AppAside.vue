@@ -4,7 +4,18 @@
       <h2 class="title">Filters</h2>
       <div class="range">
         <span class="range-title">Price range</span>
-        <app-range></app-range>
+        {{ getMinPrice }}
+        {{ getMaxPrice }}
+        <app-range
+          :min="range.min"
+          :max="range.max"
+          :valueFirst="range.input1"
+          :priceGap="range.gap"
+          :valueSecond="range.input2"
+          v-model:input1="range.input1"
+          v-model:input2="range.input2"
+          :fillColor="fillColor"
+        ></app-range>
       </div>
       <div class="drops">
         <app-drop
@@ -34,7 +45,7 @@
         <div class="btns">
           <app-button
             v-for="(item, index) in colors"
-            v-show="showAllColors || index < 4"
+            v-show="showColors || index < 4"
             :name="item.name"
             :variant="'filter-select'"
             :key="item.name"
@@ -45,18 +56,22 @@
           ></app-button>
           <br />
           <app-button
-            :name="(showAllColors ? 'Hide' : 'Show') + ' ' + 'Less'"
+            :name="showColors ? 'Hide' : 'Show more'"
             :variant="'orange'"
-            @click="showAllColors = !showAllColors"
+            @click="showColors = !showColors"
           ></app-button>
         </div>
         <app-button></app-button>
         <div class="filter_foot">
-          <app-button :name="'FILTER'" :variant="'colored'"></app-button>
+          <app-button
+            :name="'FILTER'"
+            :variant="'colored'"
+            @btnClick="filterData"
+          ></app-button>
           <app-button
             :name="'Reset Filter'"
             :variant="'orange'"
-            @click="resetFilter"
+            @click="filterReset"
           ></app-button>
         </div>
       </div>
@@ -68,7 +83,7 @@
 import AppDrop from "@/components/AppDrop.vue";
 import AppButton from "@/components/AppButton.vue";
 import AppRange from "@/components/AppRange.vue";
-import { mapGetters, mapActions } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "AppAside",
@@ -82,19 +97,29 @@ export default {
     this.getColors();
   },
   data: () => ({
-    showAllColors: false,
-    filter: {
-      brand: "",
-      colors: [],
-      rangeMin: null,
-      rangeMax: null,
+    showColors: false,
+    /* Дефолтные состояния для тестирования */
+    range: {
+      min: 250,
+      max: 12000,
+      gap: 50,
+      input1: 250,
+      input2: 12000,
     },
     allSelected: false,
   }),
   computed: {
     ...mapGetters("Colors", ["colors"]),
     ...mapGetters("Brands", ["brands"]),
-    ...mapGetters("Products", ["products"]),
+    ...mapGetters("Products", ["products", "getMinPrice", "getMaxPrice"]),
+    ...mapState("Products", ["filter"]),
+    // colors() {
+    //   let res = [];
+    //   this.products?.forEach((item) => {
+    //     res.push(item.color);
+    //   });
+    //   return this.find_uniqums(res.flat(1));
+    // },
     brandsArray() {
       let arr = [];
       this.brands?.forEach((item) => {
@@ -102,42 +127,39 @@ export default {
       });
       return arr;
     },
+    fillColor() {
+      let percent1 = (this.range.input1 / this.range.max) * 100;
+      let percent2 = (this.range.input2 / this.range.max) * 100;
+      return `linear-gradient(to right, #dadae5 ${percent1}% , #ff7020 ${percent1}% , #ff7020 ${percent2}%, #dadae5 ${percent2}%)`;
+    },
   },
   methods: {
     ...mapActions("Colors", ["getColors"]),
-    ...mapActions("Products", ["getProducts"]),
     ...mapActions("Brands", ["getBrands"]),
-    chooseColor(e) {
-      if (this.filter.colors.includes(e)) {
-        let i = this.filter.colors.indexOf(e);
-        this.filter.colors.splice(i, 1);
-      } else {
-        this.filter.colors.push(e);
-      }
-    },
-    selectAllColors(arr) {
-      this.showAllColors = true;
+    ...mapMutations("Products", [
+      "chooseBrand",
+      "resetFilter",
+      "chooseColor",
+      "selectAll",
+      "resetColors",
+    ]),
+    selectAllColors() {
+      this.showColors = true;
       this.allSelected = true;
-      arr.forEach((element) => {
-        if (!this.filter.colors.includes(element)) {
-          this.filter.colors.push(element);
-        }
-      });
+      this.selectAll(this.colors);
+    },
+    filterReset() {
+      this.showColors = false;
+      this.resetFilter();
+      this.$emit("reset-filter");
     },
     clearAllColors() {
-      this.filter.colors.splice(0, this.filter.colors.length);
+      this.resetColors();
       this.allSelected = false;
-      this.showAllColors = false;
+      this.showColors = false;
     },
-    chooseBrand(e) {
-      this.filter.brand = e;
-    },
-    resetFilter() {
-      this.filter.brand = "";
-      this.showAllColors = false;
-      this.filter.colors.splice(0, this.filter.colors.length);
-      this.filter.rangeMin = null;
-      this.filter.rangeMax = null;
+    filterData() {
+      this.$emit("filter-data");
     },
   },
 };
@@ -171,7 +193,6 @@ export default {
   font-weight: 600;
   font-size: 20px;
   line-height: 24px;
-  /* identical to box height */
   color: #575757;
 }
 

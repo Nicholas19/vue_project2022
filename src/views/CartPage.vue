@@ -4,19 +4,25 @@
       <div class="cart_wrapper">
         <div class="cart_head">
           <div class="cart_head-left">
-            <app-customcheck name="all"></app-customcheck>
+            <app-customcheck
+              name="all"
+              @cus-input="selAll"
+              :isChecked="mainCheck"
+            ></app-customcheck>
             <span class="sel">Select all</span>
           </div>
           <div class="cart_head-right">
-            <app-button name="UPDATE CART" variant="orange"></app-button>
             <span class="divider"></span>
-            <app-button name="REMOVE" variant="red"></app-button>
+            <app-button
+              name="REMOVE"
+              variant="red"
+              @click="delChoosen"
+            ></app-button>
           </div>
         </div>
-        {{ selected }}
         <div class="cart-items">
           <app-cartitem
-            v-for="(item, index) in items"
+            v-for="(item, index) in productsDetailed"
             :key="item.id"
             :id="item.id"
             :title="item.name"
@@ -25,7 +31,9 @@
             @more="increaseCount(index)"
             @less="decreaseCount(index)"
             @delete-item="deleteItem(index)"
-            @choose="sel"
+            @choose="sel(item.id)"
+            ref="cartcheck"
+            :isCheck="selected.includes(item.id)"
           ></app-cartitem>
         </div>
       </div>
@@ -61,6 +69,7 @@ import AppButton from "@/components/AppButton.vue";
 import AppAsidecart from "@/components/AppAsidecart.vue";
 import AppCartitem from "@/components/AppCartitem.vue";
 import AppCustomcheck from "@/components/AppCustomcheck.vue";
+import { mapActions, mapState } from "vuex";
 
 export default {
   components: {
@@ -70,19 +79,11 @@ export default {
     AppCustomcheck,
   },
   data: () => ({
-    items: [
-      {
-        name: "tv",
-        id: "tv1",
-        count: 1,
-        price: 500,
-      },
-      { name: "phone", id: "phone1", count: 1, price: 250 },
-      { name: "laptop", id: "laptop1", count: 1, price: 400 },
-    ],
     selected: [],
+    mainCheck: false,
   }),
   computed: {
+    ...mapState("Cart", ["productsDetailed"]),
     totalSum() {
       let sum = 0;
       this.items.forEach((item) => {
@@ -91,7 +92,12 @@ export default {
       return sum;
     },
   },
+  created() {
+    this.getCartItems();
+    this.getProductByCart();
+  },
   methods: {
+    ...mapActions("Cart", ["getCartItems", "getProductByCart"]),
     decreaseCount(i) {
       this.items[i].count > 1 ? this.items[i].count-- : -1;
     },
@@ -102,7 +108,35 @@ export default {
       this.items.splice(i, 1);
     },
     sel(e) {
-      this.selected.push(e);
+      if (this.selected.includes(e)) {
+        let i = this.selected.indexOf(e);
+        this.selected.splice(i, 1);
+        this.mainCheck = false;
+      } else {
+        this.selected.push(e);
+      }
+    },
+    selAll() {
+      if (this.mainCheck) {
+        this.selected = [];
+        this.mainCheck = false;
+      } else {
+        this.mainCheck = true;
+        this.items.forEach((item) => {
+          if (!this.selected.includes(item.id)) {
+            this.sel(item.id);
+          }
+        });
+      }
+    },
+    delChoosen() {
+      this.selected.forEach((item) => {
+        this.items.splice(
+          this.items.findIndex((obj) => obj.id === item),
+          1
+        );
+      });
+      this.selected = [];
     },
   },
 };
