@@ -17,6 +17,7 @@ export default {
       rangeMin: null,
       rangeMax: null,
     },
+    oneProduct: null,
   },
   getters: {
     cartCount(state) {
@@ -34,6 +35,19 @@ export default {
     },
     pagesCount: (state) => state.pagination?.pageCount,
     getPrices: (state) => state.prices,
+    getMinPrice: (_, getters) =>
+      Math.min.apply(
+        null,
+        getters.products?.map((item) => item.price)
+      ),
+    getMaxPrice: (_, getters) =>
+      Math.max.apply(
+        null,
+        getters.products?.map((item) => item.price)
+      ),
+    getOneProduct: (state) => {
+      return state.oneProduct;
+    },
   },
   mutations: {
     addToCart(state, id) {
@@ -84,6 +98,9 @@ export default {
     },
     setMaxPrice(state, value) {
       state.filter.rangeMax = value;
+    },
+    oneProduct(state, product) {
+      state.oneProduct = product;
     },
   },
   actions: {
@@ -161,6 +178,18 @@ export default {
           },
         })
         .then((data) => commit("setPrices", data?.data?.data));
+    },
+    productsActive(store, id) {
+      axios
+        .get(`/products/${id}`, {
+          params: {
+            "populate[0]": "images",
+            "populate[1]": "category",
+          },
+        })
+        .then((response) => {
+          store.commit("oneProduct", response?.data?.data);
+        });
     },
   },
 };

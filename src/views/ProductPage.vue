@@ -2,7 +2,7 @@
   <section class="product">
     <div class="container">
       <div class="product__inner">
-        <app-slider :images="testImages" />
+        <app-slider :images="getOneProduct?.attributes?.images.data" />
         <app-about-product></app-about-product>
       </div>
     </div>
@@ -27,8 +27,7 @@
 </template>
 
 <script>
-import { defineAsyncComponent, ref } from "vue";
-import { EffectCreative, Navigation, Thumbs } from "swiper";
+import { defineAsyncComponent } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -37,6 +36,7 @@ import RatingBlock from "@/components/RatingBlock";
 import AppTabs from "@/components/AppTabs";
 import AppAboutProduct from "@/components/AppAboutProduct";
 import AppSlider from "@/components/AppSlider.vue";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -55,24 +55,6 @@ export default {
     ProductReviews: defineAsyncComponent(() =>
       import("@/components/ProductReviews.vue")
     ),
-  },
-  setup() {
-    const onSwiper = () => {
-      //console.log(swiper); Нужно убирать за собой
-    };
-    const thumbsSwiper = ref(null);
-    const setThumbsSwiper = (swiper) => {
-      thumbsSwiper.value = swiper;
-    };
-
-    return {
-      EffectCreative,
-      onSwiper,
-      Thumbs,
-      thumbsSwiper,
-      setThumbsSwiper,
-      Navigation,
-    };
   },
   data: () => ({
     reviewsStat: [
@@ -97,15 +79,13 @@ export default {
         reviewsCount: 25,
       },
     ],
-    testImages: [
-      "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_1_aa820bd34d.jpg",
-      "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_2_7827799980.jpg",
-      "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_3_b9a54c371c.jpg",
-    ],
     tabList: new Set(["Description", "Specification", "Reviews"]),
     currentTab: "Description",
   }),
   computed: {
+    getId() {
+      return parseInt(this.$route.params.productId);
+    },
     currentComponent() {
       switch (this.currentTab) {
         case "Description":
@@ -117,21 +97,39 @@ export default {
       }
       return "ProductDescription";
     },
+    ...mapGetters("Products", ["getOneProduct"]),
+  },
+  methods: {
+    ...mapActions("Products", ["productsActive"]),
+  },
+  created() {
+    this.productsActive(this.getId);
   },
 };
 </script>
 
 <style lang="scss">
+.info-section {
+  padding-bottom: 80px;
+}
 .product {
   margin-top: 45px;
+  padding-bottom: 80px;
   &__inner {
     display: flex;
+    @media (max-width: 992px) {
+      flex-direction: column;
+    }
   }
 }
 
 .product-info {
   display: flex;
   gap: 35px;
+
+  @media (max-width: 992px) {
+    flex-direction: column-reverse;
+  }
 }
 
 .product-about {

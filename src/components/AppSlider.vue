@@ -21,7 +21,7 @@
       }"
     >
       <swiper-slide class="slider__slide" v-for="item in images" :key="item.id">
-        <img :src="item" alt="" />
+        <img :src="imgURL + item.attributes.url" alt="" />
       </swiper-slide>
     </swiper>
     <div class="slider__thumb">
@@ -34,18 +34,18 @@
       <swiper
         class="slider__right"
         :modules="[Thumbs]"
-        :direction="'vertical'"
         :allowTouchMove="false"
         watch-slides-progress
         :slidesPerView="'auto'"
         @swiper="setThumbsSwiper"
+        :direction="'vertical'"
       >
         <swiper-slide
           class="slider__slide"
           v-for="item in images"
           :key="item.id"
         >
-          <img :src="item" alt="" />
+          <img :src="imgURL + item.attributes.url" alt="" />
         </swiper-slide>
       </swiper>
       <button class="slider__btn slider__btn--next" @click="slideNext">
@@ -65,6 +65,7 @@ import { EffectCreative } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-creative";
+
 export default {
   components: {
     Swiper,
@@ -94,19 +95,30 @@ export default {
       require: true,
     },
   },
+  data() {
+    return {
+      imgURL: process.env.VUE_APP_DOMAIN,
+    };
+  },
 };
 </script>
 <style lang="scss" scoped>
 .slider {
   display: flex;
   align-items: center;
+  //@media(max-width: 992px) {
+  //
+  //}
+
   &__slide {
   }
+
   &__left {
     margin: 0;
     padding: 0;
     width: 600px;
     height: 529px;
+
     img {
       width: 100%;
       height: 100%;
@@ -114,10 +126,12 @@ export default {
       display: block;
     }
   }
+
   &__thumb {
     display: flex;
     flex-direction: column;
     align-items: center;
+
     img {
       width: 100%;
       height: 90px;
@@ -125,11 +139,13 @@ export default {
       display: block;
     }
   }
+
   &__btn {
     background-color: transparent;
 
     width: 50px;
     height: 50px;
+
     &.swiper-button-disabled {
       pointer-events: none;
 
@@ -138,32 +154,45 @@ export default {
         stroke: #c4c4c4;
       }
     }
+
     svg {
       transition: 0.2s ease;
       fill: transparent;
       stroke: #ff7020;
     }
+
     &--next {
       transform: rotate(180deg);
     }
   }
+
   &__right {
     margin: 0 10px;
     padding: 0;
     width: 104px;
 
     max-height: 416px;
+    //@media (max-width: 992px) {
+    //  width: 312px;
+    //}
+    //&.swiper-wrapper {
+    //  @media (max-width: 992px) {
+    //    flex-direction: row;
+    //  }
+    //}
     .swiper-slide {
       box-sizing: border-box;
       margin: 0;
       border: 1px solid transparent;
       padding: 6px;
       transition: 0.2s ease;
+
       &.swiper-slide-thumb-active {
         border-color: #ff7020;
       }
     }
   }
+
   @media (max-width: 1400px) {
     &__left {
       width: 450px;
