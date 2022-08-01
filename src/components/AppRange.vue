@@ -7,7 +7,7 @@
       <input
         id="input1"
         type="range"
-        min="0"
+        :min="min"
         :max="max"
         :step="gap"
         :value="input1"
@@ -16,7 +16,7 @@
       <input
         id="input2"
         type="range"
-        min="0"
+        :min="min"
         :max="max"
         :step="gap"
         :value="input2"
@@ -56,21 +56,30 @@ export default {
       type: Number,
       default: 30,
     },
-    fillColor: {
-      type: String,
-      required: true,
+  },
+  computed: {
+    fillColor() {
+      let percent1 = (this.input1 / this.max) * 100;
+      let percent2 = (this.input2 / this.max) * 100;
+
+      return `linear-gradient(to right, #dadae5 ${percent1}% , #FF7020 ${percent1}% , #FF7020 ${percent2}%, #dadae5 ${percent2}%)`;
     },
   },
-
   methods: {
     ...mapMutations("Products", ["setMaxPrice", "setMinPrice"]),
     setNewMinPrice(e) {
-      this.$emit("update:input1", parseInt(e.target.value));
-      this.setMinPrice(parseInt(e.target.value));
+      if (this.input2 - parseInt(e.target.value) <= this.gap) {
+        this.setMinPrice(this.input2 - this.gap);
+      } else {
+        this.setMinPrice(parseInt(e.target.value));
+      }
     },
     setNewMaxPrice(e) {
-      this.$emit("update:input2", parseInt(e.target.value));
-      this.setMaxPrice(parseInt(e.target.value));
+      if (this.input2 - parseInt(e.target.value) <= this.gap) {
+        this.setMaxPrice(this.input1 + this.gap);
+      } else {
+        this.setMaxPrice(parseInt(e.target.value));
+      }
     },
     /*   getFirstInput(e) {
       this.minPrice = parseInt(e.target.value);

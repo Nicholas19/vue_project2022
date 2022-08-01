@@ -9,9 +9,8 @@
           :min="getPrices?.min"
           :max="getPrices?.max"
           :gap="range.gap"
-          :fillColor="fillColor"
-          v-model:input1="range.min"
-          v-model:input2="range.max"
+          :input1="filter.rangeMin"
+          :input2="filter.rangeMax"
         />
       </div>
       <div class="drops">
@@ -89,20 +88,11 @@ export default {
     AppButton,
     AppRange,
   },
-  created() {
-    this.getBrands();
-    this.getColors();
-    this.loadMaxMinPrice({
-      category: this.$route.params.categoryCode,
-    });
-  },
   data: () => ({
     showColors: false,
     /* Дефолтные состояния для тестирования */
     range: {
       gap: 1,
-      min: null,
-      max: null,
     },
     allSelected: false,
   }),
@@ -111,13 +101,6 @@ export default {
     ...mapGetters("Brands", ["brands"]),
     ...mapGetters("Products", ["products", "getPrices"]),
     ...mapState("Products", ["filter"]),
-    // colors() {
-    //   let res = [];
-    //   this.products?.forEach((item) => {
-    //     res.push(item.color);
-    //   });
-    //   return this.find_uniqums(res.flat(1));
-    // },
     brandsArray() {
       let arr = [];
       this.brands?.forEach((item) => {
@@ -125,12 +108,16 @@ export default {
       });
       return arr;
     },
-    fillColor() {
-      let percent1 = (this.range.min / this.getPrices?.max) * 100;
-      let percent2 = (this.range.max / this.getPrices?.max) * 100;
-
-      return `linear-gradient(to right, #dadae5 ${percent1}% , #FF7020 ${percent1}% , #FF7020 ${percent2}%, #dadae5 ${percent2}%)`;
-    },
+  },
+  created() {
+    this.getBrands();
+    this.getColors();
+    this.loadMaxMinPrice("desc").then(() => {
+      this.setMaxPrice(this.getPrices?.max);
+    });
+    this.loadMaxMinPrice("asc").then(() => {
+      this.setMinPrice(this.getPrices?.min);
+    });
   },
   methods: {
     ...mapActions("Products", ["loadMaxMinPrice"]),
@@ -163,14 +150,6 @@ export default {
     filterData() {
       this.$emit("filter-data");
     },
-  },
-  mounted() {
-    setTimeout(() => {
-      this.range.min = this.getPrices?.min;
-      this.range.max = this.getPrices?.max;
-      this.setMinPrice(this.getPrices?.min);
-      this.setMaxPrice(this.getPrices?.max);
-    }, 2000);
   },
 };
 </script>

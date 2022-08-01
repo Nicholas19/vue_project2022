@@ -7,15 +7,15 @@ export default {
     cart: [1, 2],
     products: null,
     pagination: null,
-    prices: {
-      min: null,
-      max: null,
-    },
     filter: {
       brand: "",
       colors: [],
       rangeMin: null,
       rangeMax: null,
+    },
+    prices: {
+      min: null,
+      max: null,
     },
     oneProduct: null,
   },
@@ -35,16 +35,6 @@ export default {
     },
     pagesCount: (state) => state.pagination?.pageCount,
     getPrices: (state) => state.prices,
-    getMinPrice: (_, getters) =>
-      Math.min.apply(
-        null,
-        getters.products?.map((item) => item.price)
-      ),
-    getMaxPrice: (_, getters) =>
-      Math.max.apply(
-        null,
-        getters.products?.map((item) => item.price)
-      ),
     getOneProduct: (state) => {
       return state.oneProduct;
     },
@@ -87,11 +77,7 @@ export default {
       state.filter.colors = [];
     },
     setPrices(state, payload) {
-      let res = payload.map((item) => item.attributes.price);
-      state.prices = {
-        min: Math.min.apply(null, res),
-        max: Math.max.apply(null, res),
-      };
+      state.prices[payload.field] = payload.val;
     },
     setMinPrice(state, value) {
       state.filter.rangeMin = value;
@@ -168,16 +154,22 @@ export default {
         })
         .catch((e) => console.log(e));
     },
-    loadMaxMinPrice({ commit }, { category }) {
-      axios
+    async loadMaxMinPrice({ commit }, direction) {
+      const resp = await axios
         .get("/products", {
           params: {
-            "filters[category][code][$eq]": category,
-            "pagination[limit]": 200,
+            "pagination[limit]": 1,
             "fields[1]": "price",
+            sort: `price:${direction}`,
           },
         })
-        .then((data) => commit("setPrices", data?.data?.data));
+        .then((data) => {
+          commit("setPrices", {
+            field: direction === "desc" ? "max" : "min",
+            val: data?.data?.data?.[0]?.attributes?.price,
+          });
+        });
+      return resp;
     },
     productsActive(store, id) {
       axios
