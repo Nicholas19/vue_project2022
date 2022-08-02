@@ -38,6 +38,20 @@ export default {
     getOneProduct: (state) => {
       return state.oneProduct;
     },
+    specification(state) {
+      const obj = state.oneProduct?.attributes?.specification;
+      return Object.keys(obj).map((key) => {
+        return {
+          title: key,
+          features: Object.keys(obj[key]).map((subkey) => {
+            return {
+              title: subkey,
+              value: obj[key][subkey],
+            };
+          }),
+        };
+      });
+    },
   },
   mutations: {
     addToCart(state, id) {

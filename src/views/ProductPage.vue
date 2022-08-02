@@ -84,7 +84,7 @@ export default {
   }),
   computed: {
     ...mapGetters("Reviews", ["reviewsStat"]),
-    ...mapGetters("Products", ["getOneProduct"]),
+    ...mapGetters("Products", ["getOneProduct", "specification"]),
     getId() {
       return parseInt(this.$route.params.productId);
     },

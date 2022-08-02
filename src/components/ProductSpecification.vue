@@ -1,91 +1,33 @@
 <template>
-  <div class="box">
-    <h3 class="title">Communication standard/Internet</h3>
-    <div class="block">
+  <div class="box" v-for="item in specification" :key="item.title">
+    <h3 class="title">{{ item.title }}</h3>
+    <div class="block" v-for="feature in item.features" :key="feature.title">
       <p class="name">
-        Communicaﬁon standard
+        {{ feature.title }}
         <span class="line"></span>
       </p>
-      <p class="text">
-        2G (GPRS/EDGE)
+      <p class="text" v-if="typeof feature.value === 'object'">
+        <template v-for="value in feature.value" :key="value">
+          <span>{{ value }}</span>
+          <br />
+        </template>
+      </p>
+      <p class="text" v-else>
+        {{ feature.value }}
         <br />
-        3G (WCDMA/UMTS/HSPA)
-        <br />
-        4G (LTE)
-        <br />
-        5G
       </p>
-    </div>
-  </div>
-
-  <div class="box">
-    <h3 class="title">Display</h3>
-    <div class="block">
-      <p class="name">
-        Screen diagonal
-        <span class="line"></span>
-      </p>
-      <p class="text">5.4</p>
-    </div>
-    <div class="block">
-      <p class="name">
-        Display resolution
-        <span class="line"></span>
-      </p>
-      <p class="text">2340 x 1080</p>
-    </div>
-    <div class="block">
-      <p class="name">
-        Matrix type
-        <span class="line"></span>
-      </p>
-      <p class="text">OLED (Super Retina XDR)</p>
-    </div>
-    <div class="block">
-      <p class="name">
-        Screen reﬁesh rate
-        <span class="line"></span>
-      </p>
-      <p class="text">60 HZ</p>
-    </div>
-    <div class="block">
-      <p class="name">
-        Number of touch points
-        <span class="line"></span>
-      </p>
-      <p class="text">10</p>
-    </div>
-    <div class="block">
-      <p class="name">
-        Screen material
-        <span class="line"></span>
-      </p>
-      <p class="text">Ceramic Shield</p>
-    </div>
-  </div>
-
-  <div class="box">
-    <h3 class="title">SIM cards</h3>
-    <div class="block">
-      <p class="name">
-        Number of SIM cards
-        <span class="line"></span>
-      </p>
-      <p class="text">Nano-SIM</p>
-    </div>
-    <div class="block">
-      <p class="name">
-        SIM card dimensions
-        <span class="line"></span>
-      </p>
-      <p class="text">eSIM</p>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "ProductSpecification",
+  computed: {
+    ...mapGetters("Products", ["specification"]),
+  },
 };
 </script>
 
