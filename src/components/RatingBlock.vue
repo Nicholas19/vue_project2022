@@ -11,7 +11,7 @@
       <span class="reviews-count">{{ reviewsQuantity }}</span>
       <span>Reviews</span>
     </div>
-    <div class="statistic">
+    <div class="statistic" v-if="reviews">
       <div
         v-for="review in reviews"
         :key="review.starsCount"
@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     reviewsQuantity() {
-      return this.reviews.reduce((acm, val) => acm + val.reviewsCount, 0);
+      return this.reviews?.reduce((acm, val) => acm + val.reviewsCount, 0);
     },
   },
 };
