@@ -52,6 +52,9 @@ export default {
         };
       });
     },
+    description: (state) => state.oneProduct?.attributes?.description,
+    descriptionShort: (state) =>
+      state.oneProduct?.attributes?.description.substr(0, 150),
   },
   mutations: {
     addToCart(state, id) {

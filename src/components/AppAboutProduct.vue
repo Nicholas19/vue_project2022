@@ -68,10 +68,7 @@
       </div>
       <img src="@/assets/img/store_logo.svg" alt="manthul logo" />
     </div>
-    <p
-      class="about__text about__description"
-      v-html="getOneProduct?.attributes?.description"
-    ></p>
+    <p class="about__text about__description" v-html="descriptionShort"></p>
     <ul class="about__text about__list">
       <li class="about__point">- Direct Full Array</li>
       <li class="about__point">- Quantum Dot Technology</li>
@@ -171,7 +168,7 @@ export default {
     count: 1,
   }),
   computed: {
-    ...mapGetters("Products", ["getOneProduct"]),
+    ...mapGetters("Products", ["getOneProduct", "descriptionShort"]),
   },
   methods: {
     decreaseCount() {
