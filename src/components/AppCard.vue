@@ -8,9 +8,14 @@
       <div class="card__info">
         <div class="card__price-wrapper">
           <p class="card__price">{{ "$" + price }}</p>
-          <app-rating :amount="amount" :raiting="raiting"></app-rating>
+          <app-rating :amount="amount" :rating="rating"></app-rating>
         </div>
-        <button class="btn" @click.stop="handleClick">Add to cart</button>
+        <button class="btn" @click.stop="handleClick" v-if="!inCart(id)">
+          Add to cart
+        </button>
+        <button class="btn" @click.stop="handleRemoveClick" v-else>
+          Remove from cart
+        </button>
       </div>
     </div>
   </div>
@@ -18,6 +23,7 @@
 
 <script>
 import AppRating from "@/components/AppRating.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "AppCard",
@@ -25,6 +31,10 @@ export default {
     AppRating,
   },
   props: {
+    id: {
+      type: Number,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
@@ -33,7 +43,7 @@ export default {
       type: Number,
       required: true,
     },
-    raiting: {
+    rating: {
       type: Number,
       default: 0,
     },
@@ -46,9 +56,15 @@ export default {
       default: require("@/assets/img/card-default.jpg"),
     },
   },
+  computed: {
+    ...mapGetters("Cart", ["inCart"]),
+  },
   methods: {
     handleClick() {
       this.$emit("add-to-cart");
+    },
+    handleRemoveClick() {
+      this.$emit("remove-from-cart");
     },
   },
 };

@@ -11,7 +11,7 @@
           </div>
           <header-search />
           <div class="header__right">
-            <router-link to="/" class="header__cart">
+            <router-link to="/cart" class="header__cart">
               <svg width="25" height="25">
                 <use xlink:href="@/assets/images/svg/sprites.svg#basket"></use>
               </svg>
@@ -66,7 +66,7 @@ export default {
     email: "vitaliy.gojda@gmail.com",
   }),
   computed: {
-    ...mapGetters("Products", ["cartCount"]),
+    ...mapGetters("Cart", ["cartCount"]),
   },
   methods: {
     showInfo() {

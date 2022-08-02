@@ -87,7 +87,7 @@ export default {
       default: "Product Title",
     },
     id: {
-      type: String,
+      type: [String, Number],
       default: "SKU 12314124124",
     },
     price: {
