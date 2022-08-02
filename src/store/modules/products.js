@@ -8,7 +8,7 @@ export default {
     products: null,
     pagination: null,
     filter: {
-      brand: "",
+      brand: null,
       colors: [],
       rangeMin: null,
       rangeMax: null,
@@ -40,17 +40,21 @@ export default {
     },
     specification(state) {
       const obj = state.oneProduct?.attributes?.specification;
-      return Object.keys(obj).map((key) => {
-        return {
-          title: key,
-          features: Object.keys(obj[key]).map((subkey) => {
-            return {
-              title: subkey,
-              value: obj[key][subkey],
-            };
-          }),
-        };
-      });
+      if (obj) {
+        return Object.keys(obj).map((key) => {
+          return {
+            title: key,
+            features: Object.keys(obj[key]).map((subkey) => {
+              return {
+                title: subkey,
+                value: obj[key][subkey],
+              };
+            }),
+          };
+        });
+      } else {
+        return null;
+      }
     },
     description: (state) => state.oneProduct?.attributes?.description,
     descriptionShort: (state) =>
@@ -70,7 +74,7 @@ export default {
       state.filter.brand = val;
     },
     resetFilter(state) {
-      state.filter.brand = "";
+      state.filter.brand = null;
       state.filter.colors = [];
       state.filter.rangeMin = null;
       state.filter.rangeMax = null;
@@ -113,7 +117,7 @@ export default {
         category,
         sort = { field: "id", direction: "asc" },
         page = 1,
-        brand,
+        brand = null,
         colors,
       }
     ) {
