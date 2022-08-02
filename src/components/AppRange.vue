@@ -10,8 +10,7 @@
         :min="min"
         :max="max"
         :step="gap"
-        :value="input1"
-        @input="setNewMinPrice"
+        v-model="value1"
       />
       <input
         id="input2"
@@ -19,8 +18,7 @@
         :min="min"
         :max="max"
         :step="gap"
-        :value="input2"
-        @input="setNewMaxPrice"
+        v-model="value2"
       />
     </div>
     <div class="input__values">
@@ -57,6 +55,12 @@ export default {
       default: 30,
     },
   },
+  data() {
+    return {
+      value1: this.input1,
+      value2: this.input2,
+    };
+  },
   computed: {
     fillColor() {
       let percent1 = (this.input1 / this.max) * 100;
@@ -65,34 +69,34 @@ export default {
       return `linear-gradient(to right, #dadae5 ${percent1}% , #FF7020 ${percent1}% , #FF7020 ${percent2}%, #dadae5 ${percent2}%)`;
     },
   },
+  watch: {
+    value1() {
+      this.setNewMinPrice();
+    },
+    value2() {
+      this.setNewMaxPrice();
+    },
+  },
   methods: {
     ...mapMutations("Products", ["setMaxPrice", "setMinPrice"]),
-    setNewMinPrice(e) {
-      if (this.input2 - parseInt(e.target.value) <= this.gap) {
-        this.setMinPrice(this.input2 - this.gap);
+    setNewMinPrice() {
+      if (parseInt(this.value2) - parseInt(this.value1) <= this.gap) {
+        this.setMinPrice(parseInt(this.value2) - this.gap);
+        this.value1 = parseInt(this.value2) - this.gap;
       } else {
-        this.setMinPrice(parseInt(e.target.value));
+        this.setMinPrice(parseInt(this.value1));
+        this.value1 = parseInt(this.value1);
       }
     },
-    setNewMaxPrice(e) {
-      if (this.input2 - parseInt(e.target.value) <= this.gap) {
-        this.setMaxPrice(this.input1 + this.gap);
+    setNewMaxPrice() {
+      if (parseInt(this.value2) - parseInt(this.value1) <= this.gap) {
+        this.setMaxPrice(parseInt(this.value1) + this.gap);
+        this.value2 = parseInt(this.value1) + this.gap;
       } else {
-        this.setMaxPrice(parseInt(e.target.value));
+        this.setMaxPrice(parseInt(this.value2));
+        this.value2 = parseInt(this.value2);
       }
     },
-    /*   getFirstInput(e) {
-      this.minPrice = parseInt(e.target.value);
-      if (parseInt(this.maxPrice) - parseInt(this.minPrice) <= this.priceGap) {
-        this.minPrice = parseInt(this.maxPrice) - this.priceGap;
-      }
-    },
-    getSecondInput(e) {
-      this.maxPrice = parseInt(e.target.value);
-      if (parseInt(this.maxPrice) - parseInt(this.minPrice) <= this.priceGap) {
-        this.maxPrice = parseInt(this.minPrice) + this.priceGap;
-      }
-    }, */
   },
 };
 </script>
