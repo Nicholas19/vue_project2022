@@ -13,6 +13,10 @@ export default {
       rangeMin: null,
       rangeMax: null,
     },
+    prices: {
+      min: null,
+      max: null,
+    },
     oneProduct: null,
   },
   getters: {
@@ -30,16 +34,7 @@ export default {
       });
     },
     pagesCount: (state) => state.pagination?.pageCount,
-    getMinPrice: (_, getters) =>
-      Math.min.apply(
-        null,
-        getters.products?.map((item) => item.price)
-      ),
-    getMaxPrice: (_, getters) =>
-      Math.max.apply(
-        null,
-        getters.products?.map((item) => item.price)
-      ),
+    getPrices: (state) => state.prices,
     getOneProduct: (state) => {
       return state.oneProduct;
     },
@@ -81,9 +76,17 @@ export default {
     resetColors(state) {
       state.filter.colors = [];
     },
+    setPrices(state, payload) {
+      state.prices[payload.field] = payload.val;
+    },
+    setMinPrice(state, value) {
+      state.filter.rangeMin = value;
+    },
+    setMaxPrice(state, value) {
+      state.filter.rangeMax = value;
+    },
     oneProduct(state, product) {
       state.oneProduct = product;
-      console.log(state);
     },
   },
   actions: {
@@ -151,7 +154,23 @@ export default {
         })
         .catch((e) => console.log(e));
     },
-
+    async loadMaxMinPrice({ commit }, direction) {
+      const resp = await axios
+        .get("/products", {
+          params: {
+            "pagination[limit]": 1,
+            "fields[1]": "price",
+            sort: `price:${direction}`,
+          },
+        })
+        .then((data) => {
+          commit("setPrices", {
+            field: direction === "desc" ? "max" : "min",
+            val: data?.data?.data?.[0]?.attributes?.price,
+          });
+        });
+      return resp;
+    },
     productsActive(store, id) {
       axios
         .get(`/products/${id}`, {
