@@ -9,66 +9,102 @@
         type="range"
         :min="min"
         :max="max"
-        :step="priceGap"
-        :value="input1"
-        @input="$emit('update:input1', parseInt($event.target.value))"
+        :step="gap"
+        v-model="value1"
       />
       <input
         id="input2"
         type="range"
         :min="min"
         :max="max"
-        :step="priceGap"
-        :value="input2"
-        @input="$emit('update:input2', parseInt($event.target.value))"
+        :step="gap"
+        v-model="value2"
       />
     </div>
     <div class="input__values">
-      <span> ${{ input1 }}</span>
-      <span> ${{ input2 }}</span>
+      <span> {{ input1 }}$</span>
+      <span> {{ input2 }}$</span>
     </div>
   </div>
 </template>
 
 <script>
+/* $emit('update:input1', parseInt($event.target.value)) */
+import { mapMutations } from "vuex";
 export default {
   name: "AppRange",
   props: {
-    input1: {
-      type: Number,
-      required: true,
-    },
-    input2: {
-      type: Number,
-      required: true,
-    },
     min: {
       type: Number,
-      required: true,
+      default: 0,
     },
     max: {
       type: Number,
-      required: true,
+      default: 0,
     },
-    priceGap: {
+    input1: {
       type: Number,
-      default: 50,
+      default: 0,
     },
-    fillColor: {
-      type: String,
-      default: "",
+    input2: {
+      type: Number,
+      default: 0,
+    },
+    gap: {
+      type: Number,
+      default: 30,
     },
   },
-  methods: {},
-  computed: {},
+  data() {
+    return {
+      value1: this.input1,
+      value2: this.input2,
+    };
+  },
+  computed: {
+    fillColor() {
+      let percent1 = (this.input1 / this.max) * 100;
+      let percent2 = (this.input2 / this.max) * 100;
+
+      return `linear-gradient(to right, #dadae5 ${percent1}% , #FF7020 ${percent1}% , #FF7020 ${percent2}%, #dadae5 ${percent2}%)`;
+    },
+  },
+  watch: {
+    value1() {
+      this.setNewMinPrice();
+    },
+    value2() {
+      this.setNewMaxPrice();
+    },
+  },
+  methods: {
+    ...mapMutations("Products", ["setMaxPrice", "setMinPrice"]),
+    setNewMinPrice() {
+      if (parseInt(this.value2) - parseInt(this.value1) <= this.gap) {
+        this.setMinPrice(parseInt(this.value2) - this.gap);
+        this.value1 = parseInt(this.value2) - this.gap;
+      } else {
+        this.setMinPrice(parseInt(this.value1));
+        this.value1 = parseInt(this.value1);
+      }
+    },
+    setNewMaxPrice() {
+      if (parseInt(this.value2) - parseInt(this.value1) <= this.gap) {
+        this.setMaxPrice(parseInt(this.value1) + this.gap);
+        this.value2 = parseInt(this.value1) + this.gap;
+      } else {
+        this.setMaxPrice(parseInt(this.value2));
+        this.value2 = parseInt(this.value2);
+      }
+    },
+  },
 };
 </script>
 
 <style scoped lang="scss">
-.wrapp {
-  margin-top: 30px;
-}
 .slider {
+  margin-top: 30px;
+
   height: 6px;
   position: relative;
   background: #c4c4c4;
@@ -88,6 +124,7 @@ export default {
     position: relative;
 
     input {
+      left: 0;
       position: absolute;
       width: 100%;
       height: 6px;

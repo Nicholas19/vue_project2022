@@ -2,7 +2,7 @@
   <section class="product">
     <div class="container">
       <div class="product__inner">
-        <app-slider :images="testImages" />
+        <app-slider :images="getOneProduct?.attributes?.images.data" />
         <app-about-product></app-about-product>
       </div>
     </div>
@@ -11,7 +11,7 @@
     <div class="container">
       <div class="product-info">
         <aside>
-          <rating-block :rating="4.2" :reviews="reviewsStat" />
+          <rating-block :rating="4.2" :reviews="reviewsStat || []" />
         </aside>
         <div class="product-about">
           <app-tabs :tabs="tabList" v-model="currentTab" />
@@ -27,8 +27,7 @@
 </template>
 
 <script>
-import { defineAsyncComponent, ref } from "vue";
-import { EffectCreative, Navigation, Thumbs } from "swiper";
+import { defineAsyncComponent } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -37,6 +36,7 @@ import RatingBlock from "@/components/RatingBlock";
 import AppTabs from "@/components/AppTabs";
 import AppAboutProduct from "@/components/AppAboutProduct";
 import AppSlider from "@/components/AppSlider.vue";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -56,56 +56,38 @@ export default {
       import("@/components/ProductReviews.vue")
     ),
   },
-  setup() {
-    const onSwiper = () => {
-      //console.log(swiper); Нужно убирать за собой
-    };
-    const thumbsSwiper = ref(null);
-    const setThumbsSwiper = (swiper) => {
-      thumbsSwiper.value = swiper;
-    };
-
-    return {
-      EffectCreative,
-      onSwiper,
-      Thumbs,
-      thumbsSwiper,
-      setThumbsSwiper,
-      Navigation,
-    };
-  },
   data: () => ({
-    reviewsStat: [
-      {
-        starsCount: 5,
-        reviewsCount: 12,
-      },
-      {
-        starsCount: 4,
-        reviewsCount: 35,
-      },
-      {
-        starsCount: 3,
-        reviewsCount: 15,
-      },
-      {
-        starsCount: 2,
-        reviewsCount: 1,
-      },
-      {
-        starsCount: 1,
-        reviewsCount: 25,
-      },
-    ],
-    testImages: [
-      "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_1_aa820bd34d.jpg",
-      "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_2_7827799980.jpg",
-      "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_3_b9a54c371c.jpg",
-    ],
+    // reviewsStat: [
+    //   {
+    //     starsCount: 5,
+    //     reviewsCount: 12,
+    //   },
+    //   {
+    //     starsCount: 4,
+    //     reviewsCount: 35,
+    //   },
+    //   {
+    //     starsCount: 3,
+    //     reviewsCount: 15,
+    //   },
+    //   {
+    //     starsCount: 2,
+    //     reviewsCount: 1,
+    //   },
+    //   {
+    //     starsCount: 1,
+    //     reviewsCount: 25,
+    //   },
+    // ],
     tabList: new Set(["Description", "Specification", "Reviews"]),
     currentTab: "Description",
   }),
   computed: {
+    ...mapGetters("Reviews", ["reviewsStat"]),
+    ...mapGetters("Products", ["getOneProduct", "specification"]),
+    getId() {
+      return parseInt(this.$route.params.productId);
+    },
     currentComponent() {
       switch (this.currentTab) {
         case "Description":
@@ -118,20 +100,40 @@ export default {
       return "ProductDescription";
     },
   },
+  created() {
+    this.productsActive(this.getId);
+    let productId = this.$route.params.productId;
+    this.getReviewsStat(productId);
+  },
+  methods: {
+    ...mapActions("Products", ["productsActive"]),
+    ...mapActions("Reviews", ["getReviewsStat"]),
+  },
 };
 </script>
 
 <style lang="scss">
+.info-section {
+  padding-bottom: 80px;
+}
 .product {
   margin-top: 45px;
+  padding-bottom: 80px;
   &__inner {
     display: flex;
+    @media (max-width: 992px) {
+      flex-direction: column;
+    }
   }
 }
 
 .product-info {
   display: flex;
   gap: 35px;
+
+  @media (max-width: 992px) {
+    flex-direction: column-reverse;
+  }
 }
 
 .product-about {

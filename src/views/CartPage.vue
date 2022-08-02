@@ -46,16 +46,18 @@
           </div>
         </template>
         <template v-slot:button>
-          <app-button
-            name="CHECKOUT"
-            variant="colored"
-            class="fw_btn"
-          ></app-button>
+          <router-link to="/checkout" class="aside_link">
+            <app-button
+              name="CHECKOUT"
+              variant="colored"
+              class="fw_btn"
+            ></app-button>
+          </router-link>
         </template>
         <template v-slot:footer>
           <div class="footer_btn">
-            <router-link to="/" class="aside_link"
-              >Back to Shopping
+            <router-link to="/" class="aside_link">
+              Back to Shopping
             </router-link>
           </div>
         </template>

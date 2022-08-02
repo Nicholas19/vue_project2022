@@ -1,5 +1,5 @@
 <template>
-  <div class="desc__block">
+  <!-- <div class="desc__block">
     <h4 class="desc__title">See the best picture no matter where you sit</h4>
     <p class="desc__text">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -44,12 +44,18 @@
       tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias
       consequatur aut perferendis doloribus asperiores repellat est laborum
     </p>
-  </div>
+  </div> -->
+  <div class="desc_block" v-html="description"></div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "ProductDescription",
+  computed: {
+    ...mapGetters("Products", ["description"]),
+  },
 };
 </script>
 

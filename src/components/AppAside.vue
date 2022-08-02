@@ -4,18 +4,15 @@
       <h2 class="title">Filters</h2>
       <div class="range">
         <span class="range-title">Price range</span>
-        {{ getMinPrice }}
-        {{ getMaxPrice }}
+
         <app-range
-          :min="range.min"
-          :max="range.max"
-          :valueFirst="range.input1"
-          :priceGap="range.gap"
-          :valueSecond="range.input2"
-          v-model:input1="range.input1"
-          v-model:input2="range.input2"
-          :fillColor="fillColor"
-        ></app-range>
+          :min="getPrices?.min"
+          :max="getPrices?.max"
+          :gap="range.gap"
+          :input1="filter.rangeMin"
+          :input2="filter.rangeMax"
+          v-if="filter.rangeMin && filter.rangeMax"
+        />
       </div>
       <div class="drops">
         <app-drop
@@ -92,34 +89,19 @@ export default {
     AppButton,
     AppRange,
   },
-  created() {
-    this.getBrands();
-    this.getColors();
-  },
   data: () => ({
     showColors: false,
     /* Дефолтные состояния для тестирования */
     range: {
-      min: 250,
-      max: 12000,
-      gap: 50,
-      input1: 250,
-      input2: 12000,
+      gap: 1,
     },
     allSelected: false,
   }),
   computed: {
     ...mapGetters("Colors", ["colors"]),
     ...mapGetters("Brands", ["brands"]),
-    ...mapGetters("Products", ["products", "getMinPrice", "getMaxPrice"]),
+    ...mapGetters("Products", ["products", "getPrices"]),
     ...mapState("Products", ["filter"]),
-    // colors() {
-    //   let res = [];
-    //   this.products?.forEach((item) => {
-    //     res.push(item.color);
-    //   });
-    //   return this.find_uniqums(res.flat(1));
-    // },
     brandsArray() {
       let arr = [];
       this.brands?.forEach((item) => {
@@ -127,13 +109,19 @@ export default {
       });
       return arr;
     },
-    fillColor() {
-      let percent1 = (this.range.input1 / this.range.max) * 100;
-      let percent2 = (this.range.input2 / this.range.max) * 100;
-      return `linear-gradient(to right, #dadae5 ${percent1}% , #ff7020 ${percent1}% , #ff7020 ${percent2}%, #dadae5 ${percent2}%)`;
-    },
+  },
+  created() {
+    this.getBrands();
+    this.getColors();
+    this.loadMaxMinPrice("desc").then(() => {
+      this.setMaxPrice(this.getPrices?.max);
+    });
+    this.loadMaxMinPrice("asc").then(() => {
+      this.setMinPrice(this.getPrices?.min);
+    });
   },
   methods: {
+    ...mapActions("Products", ["loadMaxMinPrice"]),
     ...mapActions("Colors", ["getColors"]),
     ...mapActions("Brands", ["getBrands"]),
     ...mapMutations("Products", [
@@ -142,6 +130,8 @@ export default {
       "chooseColor",
       "selectAll",
       "resetColors",
+      "setMaxPrice",
+      "setMinPrice",
     ]),
     selectAllColors() {
       this.showColors = true;
