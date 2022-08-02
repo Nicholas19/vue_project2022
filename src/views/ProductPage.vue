@@ -79,11 +79,6 @@ export default {
     //     reviewsCount: 25,
     //   },
     // ],
-    testImages: [
-      "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_1_aa820bd34d.jpg",
-      "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_2_7827799980.jpg",
-      "http://strapi.elextra.pp.ua/uploads/Apple_i_Phone_13_mini_3_b9a54c371c.jpg",
-    ],
     tabList: new Set(["Description", "Specification", "Reviews"]),
     currentTab: "Description",
   }),
@@ -105,18 +100,14 @@ export default {
       return "ProductDescription";
     },
   },
-  methods: {
-    ...mapActions("Products", ["productsActive"]),
-  },
   created() {
     this.productsActive(this.getId);
-  },
-  methods: {
-    ...mapActions("Reviews", ["getReviewsStat"]),
-  },
-  created() {
     let productId = this.$route.params.productId;
     this.getReviewsStat(productId);
+  },
+  methods: {
+    ...mapActions("Products", ["productsActive"]),
+    ...mapActions("Reviews", ["getReviewsStat"]),
   },
 };
 </script>
