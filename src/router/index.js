@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import ViewHome from "@/views/ViewHome";
 import ProductPage from "@/views/ProductPage";
 import CartPage from "@/views/CartPage";
+import CheckoutPage from "@/views/CheckoutPage";
 
 const routes = [
   {
@@ -23,6 +24,11 @@ const routes = [
     path: "/cart",
     name: "cart",
     component: CartPage,
+  },
+  {
+    path: "/checkout",
+    name: "checkout",
+    component: CheckoutPage,
   },
   // {
   //   path: "/about",

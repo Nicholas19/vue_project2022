@@ -10,7 +10,7 @@
       @change="updatedInput"
       :checked="isChecked"
     />
-    <label :for="name"></label>
+    <label :for="name"> {{ lbl }}</label>
   </div>
 </template>
 
@@ -25,6 +25,10 @@ export default {
     isChecked: {
       type: Boolean,
       default: false,
+    },
+    lbl: {
+      type: String,
+      default: "",
     },
   },
   methods: {
@@ -65,6 +69,20 @@ div {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 50% 50%;
+}
+
+.aside .custom-checkbox + label::before {
+  margin-right: 33px;
+}
+
+.aside label {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  /* identical to box height */
+  color: #000000;
 }
 
 .custom-checkbox.checked + label::before {
