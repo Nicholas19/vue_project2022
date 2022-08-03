@@ -47,8 +47,10 @@
                 :amount="card.amount"
                 :picture="imgPrefix + card.imgSrc"
                 :rating="card.rating"
+                :id="card.id"
                 @click="handleCardClick(card.category.code, card.id)"
                 @add-to-cart="handleAddToCartClick(card.id)"
+                @remove-from-cart="handleRemoveFromCartClick(card.id)"
               ></app-card>
             </li>
           </ul>
@@ -131,7 +133,7 @@ export default {
   methods: {
     ...mapActions("Products", ["getProducts"]),
     ...mapActions("Cart", ["updateCart"]),
-    ...mapMutations("Cart", ["pushToCart"]),
+    ...mapMutations("Cart", ["pushToCart", "removeFromCart"]),
     handleChoose(val) {
       this.currentSortField = val;
       this.getProducts({
@@ -176,6 +178,10 @@ export default {
         id: productId,
         quantity: 1,
       });
+      this.updateCart();
+    },
+    handleRemoveFromCartClick(productId) {
+      this.removeFromCart(productId);
       this.updateCart();
     },
   },

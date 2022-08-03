@@ -22,15 +22,15 @@
         </div>
         <div class="cart-items">
           <app-cartitem
-            v-for="(item, index) in productsDetailed"
+            v-for="item in productsDetailed"
             :key="item.id"
             :id="item.id"
             :title="item.name"
             :price="item.price"
-            :count="item.count"
-            @more="increaseCount(index)"
-            @less="decreaseCount(index)"
-            @delete-item="deleteItem(index)"
+            :count="quantityById(item.id)"
+            @more="increaseCount(item.id)"
+            @less="decreaseCount(item.id)"
+            @delete-item="deleteItem(item.id)"
             @choose="sel(item.id)"
             ref="cartcheck"
             :isCheck="selected.includes(item.id)"
@@ -71,7 +71,7 @@ import AppButton from "@/components/AppButton.vue";
 import AppAsidecart from "@/components/AppAsidecart.vue";
 import AppCartitem from "@/components/AppCartitem.vue";
 import AppCustomcheck from "@/components/AppCustomcheck.vue";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapMutations, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -85,13 +85,16 @@ export default {
     mainCheck: false,
   }),
   computed: {
-    ...mapState("Cart", ["productsDetailed"]),
+    ...mapState("Cart", ["productsDetailed", "items"]),
+    ...mapGetters("Cart", ["quantityById"]),
     totalSum() {
-      let sum = 0;
-      this.items.forEach((item) => {
-        sum += item.count * item.price;
-      });
-      return sum;
+      return this.items?.reduce((acc, item) => {
+        return (
+          acc +
+          item?.quantity *
+            this.productsDetailed?.find((obj) => obj.id === item.id)?.price
+        );
+      }, 0);
     },
   },
   created() {
@@ -99,15 +102,23 @@ export default {
     this.getProductByCart();
   },
   methods: {
-    ...mapActions("Cart", ["getCartItems", "getProductByCart"]),
-    decreaseCount(i) {
-      this.items[i].count > 1 ? this.items[i].count-- : -1;
+    ...mapActions("Cart", ["getCartItems", "getProductByCart", "updateCart"]),
+    ...mapMutations("Cart", [
+      "removeFromCart",
+      "increaseProductQuantity",
+      "decreaseProductQuantity",
+    ]),
+    decreaseCount(id) {
+      this.decreaseProductQuantity(id);
+      this.updateCart();
     },
-    increaseCount(i) {
-      this.items[i].count++;
+    increaseCount(id) {
+      this.increaseProductQuantity(id);
+      this.updateCart();
     },
-    deleteItem(i) {
-      this.items.splice(i, 1);
+    deleteItem(id) {
+      this.removeFromCart(id);
+      this.updateCart();
     },
     sel(e) {
       if (this.selected.includes(e)) {
@@ -132,11 +143,9 @@ export default {
       }
     },
     delChoosen() {
+      if (this.selected.length === 0) return;
       this.selected.forEach((item) => {
-        this.items.splice(
-          this.items.findIndex((obj) => obj.id === item),
-          1
-        );
+        this.deleteItem(item);
       });
       this.selected = [];
     },

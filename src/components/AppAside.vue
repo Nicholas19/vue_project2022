@@ -11,7 +11,6 @@
           :gap="range.gap"
           :input1="filter.rangeMin"
           :input2="filter.rangeMax"
-          v-if="filter.rangeMin && filter.rangeMax"
         />
       </div>
       <div class="drops">

@@ -29,7 +29,6 @@
 </template>
 
 <script>
-/* $emit('update:input1', parseInt($event.target.value)) */
 import { mapMutations } from "vuex";
 export default {
   name: "AppRange",

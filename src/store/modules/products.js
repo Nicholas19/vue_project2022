@@ -134,6 +134,8 @@ export default {
             "populate[1]": "category",
             "filters[category][code][$eq]": category,
             "filters[brand][name][$eq]": brand,
+            "filters[price][$gte]": store.state.filter.rangeMin,
+            "filters[price][$lte]": store.state.filter.rangeMax,
             ...additionalParams,
             sort: `${sort?.field}:${sort?.direction}`,
             "pagination[page]": page,
