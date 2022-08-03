@@ -46,12 +46,12 @@
           </div>
           <div class="row">
             <div class="form-group">
-              <label for="adress">Address</label>
+              <label for="address">Address</label>
               <input
                 type="text"
                 class="form-control"
-                id="adress"
-                v-model="userInfo.adress"
+                id="address"
+                v-model="userInfo.address"
               />
             </div>
             <div class="form-group">
@@ -99,13 +99,13 @@
         <template v-slot:header>My Orders</template>
         <template v-slot:main_content>
           <div class="items unl">
-            <div class="row">
-              <div class="item_count">x</div>
-              <div class="item_name">Name</div>
-              <div class="item_price">$</div>
+            <div class="row" v-for="item in productsDetailed" :key="item.id">
+              <div class="item_count">{{ quantityById(item.id) }}x</div>
+              <div class="item_name">{{ item.name }}</div>
+              <div class="item_price">${{ item.price }}</div>
             </div>
           </div>
-          <div class="summary unl">
+          <!--          <div class="summary unl">
             <div class="row">
               <div class="label">Subtotal</div>
               <div class="value">$0</div>
@@ -121,22 +121,22 @@
               <div class="label">Tax</div>
               <div class="value">$0</div>
             </div>
-          </div>
+          </div>-->
           <div class="total unl">
             <div class="title">Order Total</div>
-            <div class="total_price">$</div>
+            <div class="total_price">$ {{ totalSum }}</div>
           </div>
           <div class="payment">
             <h2 class="title">Payment</h2>
             <div class="checks">
               <app-customcheck
-                v-for="(item, i) in delivery"
+                v-for="(item, i) in paymentMethods"
                 :key="i"
                 class="aside"
                 @cus-input="checkDelivery(item)"
                 :name="item"
                 :lbl="item"
-                :isChecked="userInfo.delivery === item"
+                :isChecked="userInfo.payment === item"
               ></app-customcheck>
             </div>
           </div>
@@ -146,6 +146,7 @@
             name="PLACE ORDER"
             variant="colored"
             class="fw_btn"
+            @btnClick="sendOrder"
           ></app-button>
         </template>
         <template v-slot:footer>
@@ -163,6 +164,7 @@
 import AppAsidecart from "@/components/AppAsidecart.vue";
 import AppButton from "@/components/AppButton.vue";
 import AppCustomcheck from "@/components/AppCustomcheck.vue";
+import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 
 export default {
   components: {
@@ -176,20 +178,50 @@ export default {
       lastName: "",
       email: "",
       phone: "",
-      adress: "",
+      address: "",
       city: "",
       country: "",
       zip: "",
       note: "",
-      delivery: "",
+      payment: "",
     },
-    delivery: ["Direct Bank Transfer", "Paypol", "Cash On Delivery"],
+    paymentMethods: ["Visa", "MasterCard", "PayPal", "Bitcoin"],
     check: false,
   }),
-  methods: {
-    checkDelivery(e) {
-      this.userInfo.delivery = e;
+  computed: {
+    ...mapState("Cart", ["productsDetailed", "items"]),
+    ...mapGetters("Cart", ["quantityById"]),
+    totalSum() {
+      return this.items?.reduce((acc, item) => {
+        return (
+          acc +
+          item?.quantity *
+            this.productsDetailed?.find((obj) => obj.id === item.id)?.price
+        );
+      }, 0);
     },
+  },
+  methods: {
+    ...mapActions("Cart", [
+      "getCartItems",
+      "getProductByCart",
+      "updateCart",
+      "makeOrder",
+    ]),
+    ...mapMutations("Cart", ["removeFromCart"]),
+    checkDelivery(e) {
+      this.userInfo.payment = e;
+    },
+    sendOrder() {
+      this.makeOrder(this.userInfo, this.items);
+      this.items.forEach((item) => {
+        this.removeFromCart(item.id);
+      });
+    },
+  },
+  created() {
+    this.getCartItems();
+    this.getProductByCart();
   },
 };
 </script>
