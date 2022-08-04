@@ -1,6 +1,6 @@
 <template>
   <section class="checkout">
-    <div class="container">
+    <div class="container" v-if="!success">
       <div class="checkout_wrapper">
         <h1 class="sect_title">Shipping Details</h1>
         <form class="user_form">
@@ -105,23 +105,6 @@
               <div class="item_price">${{ item.price }}</div>
             </div>
           </div>
-          <!--          <div class="summary unl">
-            <div class="row">
-              <div class="label">Subtotal</div>
-              <div class="value">$0</div>
-            </div>
-            <div class="row">
-              <div class="label">Shipping</div>
-              <div class="value">
-                <span class="label">Free Shipping</span>
-                $0
-              </div>
-            </div>
-            <div class="row">
-              <div class="label">Tax</div>
-              <div class="value">$0</div>
-            </div>
-          </div>-->
           <div class="total unl">
             <div class="title">Order Total</div>
             <div class="total_price">$ {{ totalSum }}</div>
@@ -147,6 +130,7 @@
             variant="colored"
             class="fw_btn"
             @btnClick="sendOrder"
+            :disabled="items.length === 0"
           ></app-button>
         </template>
         <template v-slot:footer>
@@ -156,6 +140,10 @@
           </span>
         </template>
       </app-asidecart>
+    </div>
+    <div class="container" v-else>
+      <h1 class="sect_title">Your order was send successfully</h1>
+      <router-link to="/" class="aside_link"> Back to Shopping</router-link>
     </div>
   </section>
 </template>
@@ -187,6 +175,7 @@ export default {
     },
     paymentMethods: ["Visa", "MasterCard", "PayPal", "Bitcoin"],
     check: false,
+    success: false,
   }),
   computed: {
     ...mapState("Cart", ["productsDetailed", "items"]),
@@ -213,10 +202,18 @@ export default {
       this.userInfo.payment = e;
     },
     sendOrder() {
-      this.makeOrder(this.userInfo, this.items);
-      this.items.forEach((item) => {
-        this.removeFromCart(item.id);
-      });
+      if (this.items.length > 0) {
+        this.makeOrder(this.userInfo, this.items);
+        this.items.forEach((item) => {
+          this.removeFromCart(item.id);
+        });
+        this.updateCart();
+        this.success = true;
+        /* очищаем поля формы */
+        for (const [key] of Object.entries(this.userInfo)) {
+          this.userInfo[key] = "";
+        }
+      } else return;
     },
   },
   created() {
@@ -433,5 +430,24 @@ span.footer {
 
 .payment .checks div {
   margin: 15px 0;
+}
+
+.aside_link {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+
+  color: #ff7020;
+}
+
+.aside_link:hover {
+  color: #7b7b7b;
+}
+
+.fw_btn:disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
 </style>

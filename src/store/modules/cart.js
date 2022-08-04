@@ -96,7 +96,7 @@ export default {
         })
         .catch((e) => console.log(e));
     },
-    makeOrder(info, items) {
+    makeOrder(store, info) {
       let axios = require("axios");
       let data = JSON.stringify({
         data: {
@@ -109,7 +109,7 @@ export default {
           postcode: info.zip,
           city: info.city,
           payment: info.payment,
-          products: items,
+          products: store.state.items,
         },
       });
 
