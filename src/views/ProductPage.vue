@@ -11,7 +11,10 @@
     <div class="container">
       <div class="product-info">
         <aside>
-          <rating-block :rating="4.2" :reviews="reviewsStat || []" />
+          <rating-block
+            :rating="getOneProduct?.attributes?.rating || 0"
+            :reviews="reviewsStat || []"
+          />
         </aside>
         <div class="product-about">
           <app-tabs :tabs="tabList" v-model="currentTab" />
@@ -57,28 +60,6 @@ export default {
     ),
   },
   data: () => ({
-    // reviewsStat: [
-    //   {
-    //     starsCount: 5,
-    //     reviewsCount: 12,
-    //   },
-    //   {
-    //     starsCount: 4,
-    //     reviewsCount: 35,
-    //   },
-    //   {
-    //     starsCount: 3,
-    //     reviewsCount: 15,
-    //   },
-    //   {
-    //     starsCount: 2,
-    //     reviewsCount: 1,
-    //   },
-    //   {
-    //     starsCount: 1,
-    //     reviewsCount: 25,
-    //   },
-    // ],
     tabList: new Set(["Description", "Specification", "Reviews"]),
     currentTab: "Description",
   }),
