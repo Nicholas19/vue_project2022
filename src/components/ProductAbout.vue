@@ -61,8 +61,16 @@
     <div class="about__wrapper">
       <div class="about__prices">
         <h3 class="about__price">${{ getOneProduct?.attributes?.price }}</h3>
-        <p class="about__oldprice">$1,020.99</p>
-        <div class="about__discount">
+        <p
+          class="about__oldprice"
+          v-show="getOneProduct?.attributes?.discount > 0"
+        >
+          ${{ oldPrice }}
+        </p>
+        <div
+          class="about__discount"
+          v-show="getOneProduct?.attributes?.discount > 0"
+        >
           {{ getOneProduct?.attributes?.discount }} %
         </div>
       </div>
@@ -169,6 +177,13 @@ export default {
   }),
   computed: {
     ...mapGetters("Products", ["getOneProduct", "descriptionShort"]),
+    oldPrice() {
+      return (
+        this.getOneProduct?.attributes?.price +
+        (this.getOneProduct?.attributes?.discount / 100) *
+          this.getOneProduct?.attributes?.price
+      );
+    },
   },
   methods: {
     decreaseCount() {
