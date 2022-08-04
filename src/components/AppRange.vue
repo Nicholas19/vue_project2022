@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   name: "AppRange",
   props: {
@@ -54,16 +54,26 @@ export default {
       default: 30,
     },
   },
+  created() {
+    this.loadMaxMinPrice("desc").then(() => {
+      this.value2 = this.filter?.rangeMax;
+    });
+    this.loadMaxMinPrice("asc").then(() => {
+      this.value1 = this.filter?.rangeMin;
+    });
+  },
   data() {
     return {
-      value1: this.input1,
-      value2: this.input2,
+      value1: null,
+      value2: null,
     };
   },
+
   computed: {
+    ...mapState("Products", ["filter"]),
     fillColor() {
-      let percent1 = (this.input1 / this.max) * 100;
-      let percent2 = (this.input2 / this.max) * 100;
+      let percent1 = (this.value1 / this.max) * 100;
+      let percent2 = (this.value2 / this.max) * 100;
 
       return `linear-gradient(to right, #dadae5 ${percent1}% , #FF7020 ${percent1}% , #FF7020 ${percent2}%, #dadae5 ${percent2}%)`;
     },
@@ -78,6 +88,7 @@ export default {
   },
   methods: {
     ...mapMutations("Products", ["setMaxPrice", "setMinPrice"]),
+    ...mapActions("Products", ["loadMaxMinPrice"]),
     setNewMinPrice() {
       if (parseInt(this.value2) - parseInt(this.value1) <= this.gap) {
         this.setMinPrice(parseInt(this.value2) - this.gap);
