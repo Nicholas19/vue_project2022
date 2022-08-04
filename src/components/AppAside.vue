@@ -90,7 +90,6 @@ export default {
   },
   data: () => ({
     showColors: false,
-    /* Дефолтные состояния для тестирования */
     range: {
       gap: 1,
     },
