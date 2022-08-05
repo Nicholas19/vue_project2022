@@ -5,7 +5,6 @@
       :modules="[Thumbs, EffectCreative, Navigation]"
       :thumbs="{ swiper: thumbsSwiper }"
       :spaceBetween="20"
-      @swiper="onSwiper"
       :navigation="{
         nextEl: '.slider__btn--next',
         prevEl: '.slider__btn--prev',
@@ -72,9 +71,6 @@ export default {
     SwiperSlide,
   },
   setup() {
-    const onSwiper = (swiper) => {
-      console.log(swiper);
-    };
     const thumbsSwiper = ref(null);
     const setThumbsSwiper = (swiper) => {
       thumbsSwiper.value = swiper;
@@ -82,7 +78,6 @@ export default {
 
     return {
       EffectCreative,
-      onSwiper,
       Thumbs,
       thumbsSwiper,
       setThumbsSwiper,
@@ -106,12 +101,6 @@ export default {
 .slider {
   display: flex;
   align-items: center;
-  //@media(max-width: 992px) {
-  //
-  //}
-
-  &__slide {
-  }
 
   &__left {
     margin: 0;

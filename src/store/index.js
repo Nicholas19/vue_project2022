@@ -4,6 +4,7 @@ import categories from "@/store/modules/categories";
 import Brands from "./modules/brands";
 import Colors from "./modules/colors";
 import Cart from "./modules/cart";
+import Comments from "./modules/comments";
 import Reviews from "@/store/modules/reviews";
 
 export default createStore({
@@ -14,6 +15,7 @@ export default createStore({
     Brands,
     Colors,
     Cart,
+    Comments,
     Reviews,
   },
 });

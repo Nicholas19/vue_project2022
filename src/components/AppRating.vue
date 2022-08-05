@@ -1,7 +1,7 @@
 <template>
   <div class="rating">
     <ul class="rating__stars">
-      <li v-for="(star, i) in 5" :key="i">
+      <li class="rating__item" v-for="(star, i) in 5" :key="i">
         <svg
           v-if="showEmptyStar || star <= rating"
           :height="starSize"
@@ -69,19 +69,8 @@ export default {
     }
   }
 
-  &__current-stars {
+  &__item {
     display: flex;
-    align-items: center;
-    gap: 0 5px;
-
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 10;
-
-    & svg {
-      fill: #ff7020;
-    }
   }
 
   &__amount {
