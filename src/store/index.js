@@ -1,9 +1,19 @@
 import { createStore } from "vuex";
+import Products from "./modules/products";
+import categories from "@/store/modules/categories";
+import Brands from "./modules/brands";
+import Colors from "./modules/colors";
+import Cart from "./modules/cart";
+import Reviews from "@/store/modules/reviews";
 
 export default createStore({
-  state: {},
-  getters: {},
-  mutations: {},
-  actions: {},
-  modules: {},
+  strict: process.env.NODE_ENV !== "production",
+  modules: {
+    Products,
+    categories,
+    Brands,
+    Colors,
+    Cart,
+    Reviews,
+  },
 });

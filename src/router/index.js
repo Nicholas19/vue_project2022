@@ -1,11 +1,34 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "@/views/HomeView.vue";
+import ViewHome from "@/views/ViewHome";
+import ProductPage from "@/views/ProductPage";
+import CartPage from "@/views/CartPage";
+import CheckoutPage from "@/views/CheckoutPage";
 
 const routes = [
   {
-    path: "/",
     name: "home",
-    component: HomeView,
+    path: "/",
+    component: ViewHome,
+  },
+  {
+    path: "/:categoryCode",
+    name: "category",
+    component: ViewHome,
+  },
+  {
+    path: "/:categoryCode/:productId",
+    name: "product",
+    component: ProductPage,
+  },
+  {
+    path: "/cart",
+    name: "cart",
+    component: CartPage,
+  },
+  {
+    path: "/checkout",
+    name: "checkout",
+    component: CheckoutPage,
   },
   // {
   //   path: "/about",
@@ -20,6 +43,9 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
+  scrollBehavior() {
+    return { top: 0, behavior: "smooth" };
+  },
   routes,
 });
 

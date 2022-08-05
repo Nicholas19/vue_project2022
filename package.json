@@ -8,9 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "core-js": "^3.8.3",
+    "qs": "^6.11.0",
     "sass": "^1.53.0",
     "sass-loader": "^13.0.2",
+    "swiper": "^8.3.1",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"
@@ -46,7 +49,9 @@
       "prettier/prettier": [
         "error",
         {
-          "endOfLine": "auto"
+          "endOfLine": "auto",
+          "generator-star-spacing": "off",
+          "useTabs": false
         }
       ]
     }

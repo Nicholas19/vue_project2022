@@ -1,10 +1,16 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-  </nav>
+  <app-header />
   <router-view />
+  <app-footer></app-footer>
 </template>
 
-<style>
+<script>
+import AppHeader from "@/components/AppHeader";
+import AppFooter from "@/components/AppFooter.vue";
 
-</style>
+export default {
+  components: { AppHeader, AppFooter },
+};
+</script>
+
+<style></style>
