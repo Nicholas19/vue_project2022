@@ -34,7 +34,7 @@ import "swiper/css/navigation";
 import "swiper/css/effect-creative";
 import RatingBlock from "@/components/RatingBlock";
 import AppTabs from "@/components/AppTabs";
-import AppAboutProduct from "@/components/AppAboutProduct";
+import AppAboutProduct from "@/components/ProductAbout";
 import AppSlider from "@/components/AppSlider.vue";
 import { mapActions, mapGetters } from "vuex";
 
