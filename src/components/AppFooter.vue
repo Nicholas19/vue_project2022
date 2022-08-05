@@ -260,9 +260,6 @@ export default {
     gap: 120px;
   }
 
-  &__list {
-  }
-
   &__item {
     &:not(:last-child) {
       margin-bottom: 30px;

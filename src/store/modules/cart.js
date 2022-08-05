@@ -15,7 +15,7 @@ export default {
     },
     quantityById(state) {
       return function (id) {
-        return state.items?.find((obj) => obj.id === id).quantity;
+        return state.items?.find((obj) => obj.id === id)?.quantity;
       };
     },
     cartCount: (state) => state.items.length,
