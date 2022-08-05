@@ -1,11 +1,11 @@
 <template>
   <div class="rating-block">
     <div class="rating">
-      <span class="average-rating">{{ rating }}</span>
+      <span class="average-rating">{{ rating.toFixed(1) }}</span>
       <span class="max-rating">5</span>
     </div>
     <div class="average-stars">
-      <app-rating :rating="4" fill-star-color="#EBFF00" star-size="30" />
+      <app-rating :rating="rating" fill-star-color="#EBFF00" star-size="30" />
     </div>
     <div class="reviews">
       <span class="reviews-count">{{ reviewsQuantity }}</span>

@@ -15,7 +15,7 @@ export default {
     },
     quantityById(state) {
       return function (id) {
-        return state.items?.find((obj) => obj.id === id).quantity;
+        return state.items?.find((obj) => obj.id === id)?.quantity;
       };
     },
     cartCount: (state) => state.items.length,
@@ -95,6 +95,40 @@ export default {
           store.commit("setProductsDetailed", resp.data?.products);
         })
         .catch((e) => console.log(e));
+    },
+    makeOrder(store, info) {
+      let axios = require("axios");
+      let data = JSON.stringify({
+        data: {
+          firstName: info.firstName,
+          lastName: info.lastName,
+          email: info.email,
+          mobile: info.phone,
+          addres: info.address,
+          country: info.country,
+          postcode: info.zip,
+          city: info.city,
+          payment: info.payment,
+          products: store.state.items,
+        },
+      });
+
+      let config = {
+        method: "post",
+        url: "http://strapi.elextra.pp.ua/api/orders",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+
+      axios(config)
+        .then(function (response) {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
 };

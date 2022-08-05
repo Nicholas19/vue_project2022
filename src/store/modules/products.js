@@ -144,6 +144,7 @@ export default {
         .then((resp) => {
           store.commit("setProducts", resp.data?.data);
           store.commit("setPagination", resp?.data?.meta?.pagination);
+          console.log(resp);
         })
         .catch((e) => console.log(e));
     },
