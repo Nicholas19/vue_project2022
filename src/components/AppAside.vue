@@ -8,9 +8,9 @@
         <app-range
           :min="getPrices?.min"
           :max="getPrices?.max"
-          :gap="range.gap"
-          :input1="filter.rangeMin"
-          :input2="filter.rangeMax"
+          :gap="range?.gap"
+          :input1="filter?.rangeMin"
+          :input2="filter?.rangeMax"
         />
       </div>
       <div class="drops">
@@ -18,7 +18,7 @@
           style="margin-bottom: 20px"
           :placeholder="'Choose Brand'"
           :values="brandsArray"
-          :default_item="filter.brand"
+          :default_item="filter?.brand"
           @choose="chooseBrand"
         ></app-drop>
       </div>
@@ -47,7 +47,7 @@
             :key="item.name"
             @click="chooseColor(item)"
             :class="{
-              'filter-select-active': filter.colors.includes(item),
+              'filter-select-active': filter?.colors.includes(item),
             }"
           ></app-button>
           <br />
@@ -74,11 +74,99 @@
   </div>
 </template>
 
+<!--
+//Composition API script
+<script setup>
+// import { ref, computed, onMounted, defineEmits } from "vue";
+// import { useStore } from "vuex";
+// import AppDrop from "@/components/AppDrop.vue";
+// import AppButton from "@/components/AppButton.vue";
+// import AppRange from "@/components/AppRange.vue";
+// const emit = defineEmits(["change", "delete"]);
+
+// const store = useStore();
+// store.dispatch("Brands/getBrands");
+// store.dispatch("Colors/getColors");
+
+// const range = ref({
+//   gap: 1,
+// });
+// let allSelected = ref(false);
+
+// const brands = computed(() => {
+//   return store.getters["Brands/brands"];
+// });
+
+// const brandsArray = computed(() => {
+//   let arr = [];
+//   brands?.value?.forEach((item) => {
+//     arr.push(item.name);
+//   });
+//   return arr;
+// });
+
+// function chooseBrand(brand) {
+//   store.commit("Products/chooseBrand", brand);
+// }
+
+// const getPrices = computed(() => {
+//   return store.getters["Products/getPrices"];
+// });
+// const filter = computed(() => {
+//   return store.state.Products.filter;
+// });
+
+// store.dispatch("Products/loadMaxMinPrice", "desc").then(() => {
+//   store.commit("Products/setMaxPrice", getPrices?.value.max);
+// });
+
+// store.dispatch("Products/loadMaxMinPrice", "asc").then(() => {
+//   store.commit("Products/setMinPrice", getPrices?.value.min);
+// });
+
+// onMounted(() => {
+//   console.log("MOUNTED EXAMPLE");
+// });
+
+// let showColors = ref(false);
+// const colors = computed(() => {
+//   return store.getters["Colors/colors"];
+// });
+// function selectAllColors() {
+//   showColors.value = true;
+//   allSelected.value = true;
+//   store.commit("Products/selectAll", colors?.value);
+// }
+
+// function clearAllColors() {
+//   store.commit("Products/resetColors");
+//   allSelected.value = false;
+//   showColors.value = false;
+// }
+
+// function chooseColor(color) {
+//   store.commit("Products/chooseColor", color);
+// }
+
+// function filterReset() {
+//   showColors.value = false;
+//   store.commit("Products/resetFilter");
+//   emit("reset-filter");
+// }
+
+// function filterData() {
+//   emit("filter-data");
+// }
+// </script>
+-->
+
 <script>
 import AppDrop from "@/components/AppDrop.vue";
 import AppButton from "@/components/AppButton.vue";
 import AppRange from "@/components/AppRange.vue";
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+// import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { ref, computed, onMounted } from "vue";
+import { useStore } from "vuex";
 
 export default {
   name: "AppAside",
@@ -87,70 +175,162 @@ export default {
     AppButton,
     AppRange,
   },
-  data: () => ({
-    showColors: false,
-    /* Дефолтные состояния для тестирования */
-    range: {
+  //Composition API
+  setup(props, { emit }) {
+    const store = useStore();
+    store.dispatch("Brands/getBrands");
+    store.dispatch("Colors/getColors");
+
+    const range = ref({
       gap: 1,
-    },
-    allSelected: false,
-  }),
-  computed: {
-    ...mapGetters("Colors", ["colors"]),
-    ...mapGetters("Brands", ["brands"]),
-    ...mapGetters("Products", ["products", "getPrices"]),
-    ...mapState("Products", ["filter"]),
-    brandsArray() {
+    });
+    let allSelected = ref(false);
+
+    const brands = computed(() => {
+      return store.getters["Brands/brands"];
+    });
+
+    const brandsArray = computed(() => {
       let arr = [];
-      this.brands?.forEach((item) => {
+      brands?.value?.forEach((item) => {
         arr.push(item.name);
       });
       return arr;
-    },
-  },
-  created() {
-    this.getBrands();
-    this.getColors();
-    this.loadMaxMinPrice("desc").then(() => {
-      this.setMaxPrice(this.getPrices?.max);
     });
-    this.setMaxPrice(this.getPrices?.max);
-    this.loadMaxMinPrice("asc").then(() => {
-      this.setMinPrice(this.getPrices?.min);
+
+    function chooseBrand(brand) {
+      store.commit("Products/chooseBrand", brand);
+    }
+
+    const getPrices = computed(() => {
+      return store.getters["Products/getPrices"];
     });
+    const filter = computed(() => {
+      return store.state.Products.filter;
+    });
+
+    store.dispatch("Products/loadMaxMinPrice", "desc").then(() => {
+      store.commit("Products/setMaxPrice", getPrices?.value.max);
+    });
+
+    store.dispatch("Products/loadMaxMinPrice", "asc").then(() => {
+      store.commit("Products/setMinPrice", getPrices?.value.min);
+    });
+
+    onMounted(() => {
+      console.log("MOUNTED EXAMPLE");
+    });
+
+    let showColors = ref(false);
+    const colors = computed(() => {
+      return store.getters["Colors/colors"];
+    });
+    const selectAllColors = () => {
+      showColors.value = true;
+      allSelected.value = true;
+      store.commit("Products/selectAll", colors?.value);
+    };
+
+    function clearAllColors() {
+      store.commit("Products/resetColors");
+      allSelected.value = false;
+      showColors.value = false;
+    }
+
+    function chooseColor(color) {
+      store.commit("Products/chooseColor", color);
+    }
+
+    function filterReset() {
+      showColors.value = false;
+      store.commit("Products/resetFilter");
+      emit("reset-filter");
+    }
+
+    function filterData() {
+      emit("filter-data");
+    }
+
+    return {
+      showColors,
+      range,
+      allSelected,
+      brandsArray,
+      colors,
+      getPrices,
+      filter,
+      selectAllColors,
+      clearAllColors,
+      chooseColor,
+      chooseBrand,
+      filterReset,
+      filterData,
+    };
   },
-  methods: {
-    ...mapActions("Products", ["loadMaxMinPrice"]),
-    ...mapActions("Colors", ["getColors"]),
-    ...mapActions("Brands", ["getBrands"]),
-    ...mapMutations("Products", [
-      "chooseBrand",
-      "resetFilter",
-      "chooseColor",
-      "selectAll",
-      "resetColors",
-      "setMaxPrice",
-      "setMinPrice",
-    ]),
-    selectAllColors() {
-      this.showColors = true;
-      this.allSelected = true;
-      this.selectAll(this.colors);
-    },
-    filterReset() {
-      this.showColors = false;
-      this.resetFilter();
-      this.$emit("reset-filter");
-    },
-    clearAllColors() {
-      this.resetColors();
-      this.allSelected = false;
-      this.showColors = false;
-    },
-    filterData() {
-      this.$emit("filter-data");
-    },
-  },
+  // data: () => ({
+  //   showColors: false,
+  //   /* Дефолтные состояния для тестирования */
+  //   range: {
+  //     gap: 1,
+  //   },
+  //   allSelected: false,
+  // }),
+  // computed: {
+  //   ...mapGetters("Colors", ["colors"]),
+  //   ...mapGetters("Brands", ["brands"]),
+  //   ...mapGetters("Products", ["products", "getPrices"]),
+  //   ...mapState("Products", ["filter"]),
+  //   brandsArray() {
+  //     let arr = [];
+  //     this.brands?.forEach((item) => {
+  //       arr.push(item.name);
+  //     });
+  //     return arr;
+  //   },
+  // },
+  // created() {
+  //   this.getBrands();
+  //   this.getColors();
+  //   this.loadMaxMinPrice("desc").then(() => {
+  //     this.setMaxPrice(this.getPrices?.max);
+  //   });
+  //   this.setMaxPrice(this.getPrices?.max);
+  //   this.loadMaxMinPrice("asc").then(() => {
+  //     this.setMinPrice(this.getPrices?.min);
+  //   });
+  // },
+  // methods: {
+  //   ...mapActions("Products", ["loadMaxMinPrice"]),
+  //   ...mapActions("Colors", ["getColors"]),
+  //   ...mapActions("Brands", ["getBrands"]),
+  //   ...mapMutations("Products", [
+  //     "chooseBrand",
+  //     "resetFilter",
+  //     "chooseColor",
+  //     "selectAll",
+  //     "resetColors",
+  //     "setMaxPrice",
+  //     "setMinPrice",
+  //   ]),
+  //   selectAllColors() {
+  //     this.showColors = true;
+  //     this.allSelected = true;
+  //     this.selectAll(this.colors);
+  //   },
+  //   filterReset() {
+  //     this.showColors = false;
+  //     this.resetFilter();
+  //     this.$emit("reset-filter");
+  //   },
+  //   clearAllColors() {
+  //     this.resetColors();
+  //     this.allSelected = false;
+  //     this.showColors = false;
+  //   },
+  //   filterData() {
+  //     this.$emit("filter-data");
+  //   },
+  // },
 };
 </script>
 
