@@ -57,7 +57,6 @@
             @click="showColors = !showColors"
           ></app-button>
         </div>
-        <app-button></app-button>
         <div class="filter_foot">
           <app-button
             :name="'FILTER'"
@@ -115,6 +114,7 @@ export default {
     this.loadMaxMinPrice("desc").then(() => {
       this.setMaxPrice(this.getPrices?.max);
     });
+    this.setMaxPrice(this.getPrices?.max);
     this.loadMaxMinPrice("asc").then(() => {
       this.setMinPrice(this.getPrices?.min);
     });
