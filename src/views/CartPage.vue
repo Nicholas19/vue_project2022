@@ -230,7 +230,8 @@ export default {
   margin-top: 30px;
 }
 
-.fw_btn:disabled {
+.fw_btn:disabled,
+a.aside_link:disabled {
   pointer-events: none;
   opacity: 0.5;
 }
