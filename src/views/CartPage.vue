@@ -90,16 +90,7 @@ export default {
   }),
   computed: {
     ...mapState("Cart", ["productsDetailed", "items"]),
-    ...mapGetters("Cart", ["quantityById"]),
-    totalSum() {
-      return this.items?.reduce((acc, item) => {
-        return (
-          acc +
-          item?.quantity *
-            this.productsDetailed?.find((obj) => obj.id === item.id)?.price
-        );
-      }, 0);
-    },
+    ...mapGetters("Cart", ["quantityById", "totalSum"]),
   },
   created() {
     this.getCartItems();

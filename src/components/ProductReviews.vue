@@ -100,8 +100,19 @@ export default {
   computed: {
     ...mapGetters("Comments", ["comments", "pagesCount", "pagesSize", "total"]),
   },
+  watch: {
+    $route() {
+      this.getComments({
+        productId: this.productId,
+        page: this.$route.query.page,
+      });
+    },
+  },
   created() {
-    this.getComments(this.productId);
+    this.getComments({
+      productId: this.productId,
+      page: this.$route.query.page,
+    });
   },
   methods: {
     ...mapActions("Comments", ["getComments", "createComment"]),

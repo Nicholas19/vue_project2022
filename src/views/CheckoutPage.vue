@@ -130,7 +130,7 @@
             variant="colored"
             class="fw_btn"
             @btnClick="sendOrder"
-            :disabled="items.length === 0"
+            :disabled="items.length === 0 || !btnEnabled"
           ></app-button>
         </template>
         <template v-slot:footer>
@@ -179,15 +179,11 @@ export default {
   }),
   computed: {
     ...mapState("Cart", ["productsDetailed", "items"]),
-    ...mapGetters("Cart", ["quantityById"]),
-    totalSum() {
-      return this.items?.reduce((acc, item) => {
-        return (
-          acc +
-          item?.quantity *
-            this.productsDetailed?.find((obj) => obj.id === item.id)?.price
-        );
-      }, 0);
+    ...mapGetters("Cart", ["quantityById", "totalSum"]),
+    btnEnabled() {
+      return Object.keys(this.userInfo).every((key) => {
+        return key === "note" || this.userInfo[key].length > 0;
+      });
     },
   },
   methods: {
@@ -202,17 +198,18 @@ export default {
       this.userInfo.payment = e;
     },
     sendOrder() {
-      if (this.items.length > 0) {
-        this.makeOrder(this.userInfo, this.items);
-        this.items.forEach((item) => {
-          this.removeFromCart(item.id);
+      if (this.items.length > 0 && this.btnEnabled) {
+        this.makeOrder(this.userInfo, this.items).then(() => {
+          this.items.forEach((item) => {
+            this.removeFromCart(item.id);
+          });
+          this.updateCart();
+          this.success = true;
+          /* очищаем поля формы */
+          for (const [key] of Object.entries(this.userInfo)) {
+            this.userInfo[key] = "";
+          }
         });
-        this.updateCart();
-        this.success = true;
-        /* очищаем поля формы */
-        for (const [key] of Object.entries(this.userInfo)) {
-          this.userInfo[key] = "";
-        }
       } else return;
     },
   },

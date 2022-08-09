@@ -29,11 +29,13 @@ export default {
     },
   },
   actions: {
-    getComments(store, productId) {
+    getComments(store, { productId, page = 1 }) {
       axios
         .get("/reviews", {
           params: {
-            "filter[product][id][$eq]": productId,
+            "filters[product][id][$eq]": productId,
+            "pagination[pageSize]": 5,
+            "pagination[page]": page,
           },
         })
         .then((resp) => {

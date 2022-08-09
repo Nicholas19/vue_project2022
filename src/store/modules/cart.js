@@ -19,6 +19,15 @@ export default {
       };
     },
     cartCount: (state) => state.items.length,
+    totalSum(state) {
+      return state.items?.reduce((acc, item) => {
+        return (
+          acc +
+          item?.quantity *
+            state.productsDetailed?.find((obj) => obj.id === item.id)?.price
+        );
+      }, 0);
+    },
   },
   mutations: {
     setCartItems(state, items) {
@@ -97,7 +106,6 @@ export default {
         .catch((e) => console.log(e));
     },
     makeOrder(store, info) {
-      let axios = require("axios");
       let data = JSON.stringify({
         data: {
           firstName: info.firstName,
@@ -115,20 +123,23 @@ export default {
 
       let config = {
         method: "post",
-        url: "http://strapi.elextra.pp.ua/api/orders",
+        url: "/orders",
         headers: {
           "Content-Type": "application/json",
         },
         data: data,
       };
 
-      axios(config)
-        .then(function (response) {
-          console.log(JSON.stringify(response.data));
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      return new Promise((resolve) => {
+        axios(config)
+          .then(function (response) {
+            console.log(JSON.stringify(response.data));
+            resolve(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      });
     },
   },
 };

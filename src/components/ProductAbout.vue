@@ -184,7 +184,6 @@ export default {
   },
   props: {},
   data: () => ({
-    count: 1,
     quantity: 1,
   }),
   computed: {
@@ -205,13 +204,12 @@ export default {
     ...mapMutations("Cart", ["pushToCart", "removeFromCart"]),
     ...mapActions("Cart", ["updateCart", "getCartItems"]),
     decreaseCount() {
-      this.quantity > 1 ? this.count-- : -1;
+      this.quantity > 1 ? this.quantity-- : -1;
     },
     increaseCount() {
       this.quantity++;
     },
     handleAddToCart() {
-      console.log(this.getOneProduct?.id);
       this.pushToCart({
         id: this.getOneProduct?.id,
         quantity: this.quantity,
