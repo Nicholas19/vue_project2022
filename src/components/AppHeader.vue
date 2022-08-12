@@ -37,7 +37,7 @@
           </div>
         </div>
         <div class="header__bottom">
-          <header-nav />
+          <!-- <header-nav /> -->
         </div>
       </div>
     </div>
@@ -46,16 +46,18 @@
 
 <script>
 import AppButton from "@/components/AppButton.vue";
-import HeaderNav from "@/components/HeaderNav";
+// import HeaderNav from "@/components/HeaderNav";
 import HeaderSearch from "@/components/HeaderSearch";
 import HeaderToolbar from "@/components/HeaderToolbar";
-import { mapGetters } from "vuex";
+// import { mapGetters } from "vuex";
+import { mapState } from "pinia";
+import { useCartStore } from "@/store/pinia/cart";
 
 export default {
   name: "AppHeader",
   components: {
     AppButton,
-    HeaderNav,
+    // HeaderNav,
     HeaderSearch,
     HeaderToolbar,
   },
@@ -66,7 +68,7 @@ export default {
     email: "vitaliy.gojda@gmail.com",
   }),
   computed: {
-    ...mapGetters("Cart", ["cartCount"]),
+    ...mapState(useCartStore, ["cartCount"]),
   },
   methods: {
     showInfo() {

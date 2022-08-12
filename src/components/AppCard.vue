@@ -23,7 +23,9 @@
 
 <script>
 import AppRating from "@/components/AppRating.vue";
-import { mapGetters } from "vuex";
+// import { mapGetters } from "vuex";
+import { mapState } from "pinia";
+import { useCartStore } from "@/store/pinia/cart";
 
 export default {
   name: "AppCard",
@@ -57,7 +59,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters("Cart", ["inCart"]),
+    ...mapState(useCartStore, ["inCart"]),
   },
   methods: {
     handleClick() {

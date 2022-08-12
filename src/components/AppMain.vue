@@ -2,10 +2,10 @@
   <section class="products">
     <div class="container">
       <div class="products__wrapper">
-        <app-aside
+        <!-- <app-aside
           @filter-data="filterData"
           @reset-filter="resetData"
-        ></app-aside>
+        ></app-aside> -->
         <!--      правая колонка -->
         <div class="cards">
           <div class="cards__head">
@@ -40,7 +40,11 @@
             </div>
           </div>
           <ul class="cards__list">
-            <li class="cards__item" v-for="card in products" :key="card.id">
+            <li
+              class="cards__item"
+              v-for="card in productsGetter"
+              :key="card.id"
+            >
               <app-card
                 :name="card.name"
                 :price="card.price"
@@ -81,15 +85,17 @@
 <script>
 import AppDrop from "@/components/AppDrop.vue";
 import AppCard from "@/components/AppCard.vue";
-import AppAside from "@/components/AppAside.vue";
-import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
+// import AppAside from "@/components/AppAside.vue";
+// import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
+import { mapState, mapActions } from "pinia";
+import { useProductsStore } from "@/store/pinia/products";
 
 export default {
   name: "AppMain",
   components: {
     AppDrop,
     AppCard,
-    AppAside,
+    // AppAside,
   },
   data: () => ({
     sortValues: [
@@ -114,8 +120,8 @@ export default {
     });
   },
   computed: {
-    ...mapGetters("Products", ["products", "pagesCount"]),
-    ...mapState("Products", ["filter"]),
+    ...mapState(useProductsStore, ["productsGetter", "pagesCount"]),
+    ...mapState(useProductsStore, ["filter"]),
   },
   watch: {
     $route() {
@@ -131,9 +137,9 @@ export default {
     },
   },
   methods: {
-    ...mapActions("Products", ["getProducts"]),
-    ...mapActions("Cart", ["updateCart"]),
-    ...mapMutations("Cart", ["pushToCart", "removeFromCart"]),
+    ...mapActions(useProductsStore, ["getProducts"]),
+    // ...mapActions("Cart", ["updateCart"]),
+    // ...mapMutations("Cart", ["pushToCart", "removeFromCart"]),
     handleChoose(val) {
       this.currentSortField = val;
       this.getProducts({

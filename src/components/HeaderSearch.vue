@@ -16,7 +16,9 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+// import { mapActions, mapState } from "vuex";
+import { mapActions, mapState } from "pinia";
+import { useProductsStore } from "@/store/pinia/products";
 
 export default {
   name: "HeaderSearch",
@@ -24,7 +26,7 @@ export default {
     value: "",
   }),
   computed: {
-    ...mapState("Products", ["products"]),
+    ...mapState(useProductsStore, ["products"]),
   },
   watch: {
     $route() {
@@ -35,7 +37,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions("Products", ["productsSearch"]),
+    ...mapActions(useProductsStore, ["productsSearch"]),
   },
 };
 </script>
