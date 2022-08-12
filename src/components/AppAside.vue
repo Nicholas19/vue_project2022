@@ -80,6 +80,8 @@ import AppButton from "@/components/AppButton.vue";
 import AppRange from "@/components/AppRange.vue";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
+import { ref } from "vue";
+
 export default {
   name: "AppAside",
   components: {
@@ -87,9 +89,21 @@ export default {
     AppButton,
     AppRange,
   },
-  data: () => ({
+  setup() {
+    const showColors = ref(false);
+    const allSelected = ref(false);
+    const range = ref({
+      gap: 1,
+    });
+    return {
+      showColors,
+      allSelected,
+      range,
+    };
+  },
+  /*data: () => ({
     showColors: false,
-    /* Дефолтные состояния для тестирования */
+    /!* Дефолтные состояния для тестирования *!/
     range: {
       gap: 1,
     },
@@ -150,7 +164,7 @@ export default {
     filterData() {
       this.$emit("filter-data");
     },
-  },
+  },*/
 };
 </script>
 
