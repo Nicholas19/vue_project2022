@@ -256,6 +256,7 @@ export default {
   line-height: 24px;
   padding: 10px 32px;
   color: #575757;
+  z-index: 5;
 }
 
 .userInfo .info {

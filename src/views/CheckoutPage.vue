@@ -1,6 +1,6 @@
 <template>
   <section class="checkout">
-    <div class="container">
+    <div class="container" v-if="!success">
       <div class="checkout_wrapper">
         <h1 class="sect_title">Shipping Details</h1>
         <form class="user_form">
@@ -46,12 +46,12 @@
           </div>
           <div class="row">
             <div class="form-group">
-              <label for="adress">Address</label>
+              <label for="address">Address</label>
               <input
                 type="text"
                 class="form-control"
-                id="adress"
-                v-model="userInfo.adress"
+                id="address"
+                v-model="userInfo.address"
               />
             </div>
             <div class="form-group">
@@ -99,44 +99,27 @@
         <template v-slot:header>My Orders</template>
         <template v-slot:main_content>
           <div class="items unl">
-            <div class="row">
-              <div class="item_count">x</div>
-              <div class="item_name">Name</div>
-              <div class="item_price">$</div>
-            </div>
-          </div>
-          <div class="summary unl">
-            <div class="row">
-              <div class="label">Subtotal</div>
-              <div class="value">$0</div>
-            </div>
-            <div class="row">
-              <div class="label">Shipping</div>
-              <div class="value">
-                <span class="label">Free Shipping</span>
-                $0
-              </div>
-            </div>
-            <div class="row">
-              <div class="label">Tax</div>
-              <div class="value">$0</div>
+            <div class="row" v-for="item in productsDetailed" :key="item.id">
+              <div class="item_count">{{ quantityById(item.id) }}x</div>
+              <div class="item_name">{{ item.name }}</div>
+              <div class="item_price">${{ item.price }}</div>
             </div>
           </div>
           <div class="total unl">
             <div class="title">Order Total</div>
-            <div class="total_price">$</div>
+            <div class="total_price">$ {{ totalSum }}</div>
           </div>
           <div class="payment">
             <h2 class="title">Payment</h2>
             <div class="checks">
               <app-customcheck
-                v-for="(item, i) in delivery"
+                v-for="(item, i) in paymentMethods"
                 :key="i"
                 class="aside"
                 @cus-input="checkDelivery(item)"
                 :name="item"
                 :lbl="item"
-                :isChecked="userInfo.delivery === item"
+                :isChecked="userInfo.payment === item"
               ></app-customcheck>
             </div>
           </div>
@@ -146,6 +129,8 @@
             name="PLACE ORDER"
             variant="colored"
             class="fw_btn"
+            @btnClick="sendOrder"
+            :disabled="items.length === 0 || !btnEnabled"
           ></app-button>
         </template>
         <template v-slot:footer>
@@ -156,6 +141,10 @@
         </template>
       </app-asidecart>
     </div>
+    <div class="container" v-else>
+      <h1 class="sect_title">Your order was send successfully</h1>
+      <router-link to="/" class="aside_link"> Back to Shopping</router-link>
+    </div>
   </section>
 </template>
 
@@ -163,6 +152,7 @@
 import AppAsidecart from "@/components/AppAsidecart.vue";
 import AppButton from "@/components/AppButton.vue";
 import AppCustomcheck from "@/components/AppCustomcheck.vue";
+import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 
 export default {
   components: {
@@ -176,20 +166,56 @@ export default {
       lastName: "",
       email: "",
       phone: "",
-      adress: "",
+      address: "",
       city: "",
       country: "",
       zip: "",
       note: "",
-      delivery: "",
+      payment: "",
     },
-    delivery: ["Direct Bank Transfer", "Paypol", "Cash On Delivery"],
+    paymentMethods: ["Visa", "MasterCard", "PayPal", "Bitcoin"],
     check: false,
+    success: false,
   }),
-  methods: {
-    checkDelivery(e) {
-      this.userInfo.delivery = e;
+  computed: {
+    ...mapState("Cart", ["productsDetailed", "items"]),
+    ...mapGetters("Cart", ["quantityById", "totalSum"]),
+    btnEnabled() {
+      return Object.keys(this.userInfo).every((key) => {
+        return key === "note" || this.userInfo[key].length > 0;
+      });
     },
+  },
+  methods: {
+    ...mapActions("Cart", [
+      "getCartItems",
+      "getProductByCart",
+      "updateCart",
+      "makeOrder",
+    ]),
+    ...mapMutations("Cart", ["removeFromCart"]),
+    checkDelivery(e) {
+      this.userInfo.payment = e;
+    },
+    sendOrder() {
+      if (this.items.length > 0 && this.btnEnabled) {
+        this.makeOrder(this.userInfo, this.items).then(() => {
+          this.items.forEach((item) => {
+            this.removeFromCart(item.id);
+          });
+          this.updateCart();
+          this.success = true;
+          /* очищаем поля формы */
+          for (const [key] of Object.entries(this.userInfo)) {
+            this.userInfo[key] = "";
+          }
+        });
+      } else return;
+    },
+  },
+  created() {
+    this.getCartItems();
+    this.getProductByCart();
   },
 };
 </script>
@@ -401,5 +427,24 @@ span.footer {
 
 .payment .checks div {
   margin: 15px 0;
+}
+
+.aside_link {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+
+  color: #ff7020;
+}
+
+.aside_link:hover {
+  color: #7b7b7b;
+}
+
+.fw_btn:disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
 </style>

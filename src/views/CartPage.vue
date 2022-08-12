@@ -1,7 +1,7 @@
 <template>
   <section class="cart">
     <div class="container">
-      <div class="cart_wrapper">
+      <div class="cart_wrapper" v-if="productsDetailed.length !== 0">
         <div class="cart_head">
           <div class="cart_head-left">
             <app-customcheck
@@ -37,6 +37,9 @@
           ></app-cartitem>
         </div>
       </div>
+      <div class="cart_wrapper" v-else>
+        <h1>Your cart is empty</h1>
+      </div>
       <app-asidecart>
         <template v-slot:header> Shopping summary</template>
         <template v-slot:main_content>
@@ -51,6 +54,7 @@
               name="CHECKOUT"
               variant="colored"
               class="fw_btn"
+              :disabled="productsDetailed.length === 0"
             ></app-button>
           </router-link>
         </template>
@@ -86,16 +90,7 @@ export default {
   }),
   computed: {
     ...mapState("Cart", ["productsDetailed", "items"]),
-    ...mapGetters("Cart", ["quantityById"]),
-    totalSum() {
-      return this.items?.reduce((acc, item) => {
-        return (
-          acc +
-          item?.quantity *
-            this.productsDetailed?.find((obj) => obj.id === item.id)?.price
-        );
-      }, 0);
-    },
+    ...mapGetters("Cart", ["quantityById", "totalSum"]),
   },
   created() {
     this.getCartItems();
@@ -224,6 +219,11 @@ export default {
   line-height: 24px;
   padding: 20px;
   margin-top: 30px;
+}
+
+.fw_btn:disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 .total {

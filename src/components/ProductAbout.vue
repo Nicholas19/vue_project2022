@@ -61,8 +61,16 @@
     <div class="about__wrapper">
       <div class="about__prices">
         <h3 class="about__price">${{ getOneProduct?.attributes?.price }}</h3>
-        <p class="about__oldprice">$1,020.99</p>
-        <div class="about__discount">
+        <p
+          class="about__oldprice"
+          v-show="getOneProduct?.attributes?.discount > 0"
+        >
+          ${{ oldPrice }}
+        </p>
+        <div
+          class="about__discount"
+          v-show="getOneProduct?.attributes?.discount > 0"
+        >
           {{ getOneProduct?.attributes?.discount }} %
         </div>
       </div>
@@ -109,7 +117,7 @@
       </ul>
     </div>
     <div class="about__footer">
-      <div class="counter">
+      <div class="counter" v-if="!inCart(getOneProduct?.id)">
         <button class="counter__btn" @click="decreaseCount">
           <svg
             class="counter__icon"
@@ -121,7 +129,7 @@
             <path d="M0 0H19V4H0V0Z" />
           </svg>
         </button>
-        <p class="counter__number">{{ count }}</p>
+        <p class="counter__number">{{ quantity }}</p>
         <button class="counter__btn" @click="increaseCount">
           <svg
             class="counter__icon"
@@ -138,14 +146,25 @@
       </div>
       <div class="about__buttons">
         <app-button
+          v-if="!inCart(getOneProduct?.id)"
           class="btn"
-          :name="'BUY'"
-          :variant="'filter-select'"
+          name="BUY"
+          variant="filter-select"
+          @click="handleBy"
         ></app-button>
         <app-button
+          v-if="!inCart(getOneProduct?.id)"
           class="btn"
-          :name="'ADD TO CART'"
-          :variant="'colored'"
+          name="ADD TO CART"
+          @click="handleAddToCart"
+          variant="colored"
+        ></app-button>
+        <app-button
+          v-else
+          class="btn"
+          name="REMOVE FROM CART"
+          @click="handleRemoveFromCart"
+          variant="colored"
         ></app-button>
       </div>
     </div>
@@ -155,7 +174,7 @@
 <script>
 import AppRating from "./AppRating.vue";
 import AppButton from "./AppButton.vue";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "AppAboutProduct",
@@ -165,17 +184,45 @@ export default {
   },
   props: {},
   data: () => ({
-    count: 1,
+    quantity: 1,
   }),
   computed: {
     ...mapGetters("Products", ["getOneProduct", "descriptionShort"]),
+    ...mapGetters("Cart", ["inCart"]),
+    oldPrice() {
+      return (
+        this.getOneProduct?.attributes?.price +
+        (this.getOneProduct?.attributes?.discount / 100) *
+          this.getOneProduct?.attributes?.price
+      );
+    },
+  },
+  created() {
+    this.getCartItems();
   },
   methods: {
+    ...mapMutations("Cart", ["pushToCart", "removeFromCart"]),
+    ...mapActions("Cart", ["updateCart", "getCartItems"]),
     decreaseCount() {
-      this.count > 1 ? this.count-- : -1;
+      this.quantity > 1 ? this.quantity-- : -1;
     },
     increaseCount() {
-      this.count++;
+      this.quantity++;
+    },
+    handleAddToCart() {
+      this.pushToCart({
+        id: this.getOneProduct?.id,
+        quantity: this.quantity,
+      });
+      this.updateCart();
+    },
+    handleRemoveFromCart() {
+      this.removeFromCart(this.getOneProduct?.id);
+      this.updateCart();
+    },
+    handleBy() {
+      this.handleAddToCart();
+      this.$router.push({ path: "/checkout" });
     },
   },
 };

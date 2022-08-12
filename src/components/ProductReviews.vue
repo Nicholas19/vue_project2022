@@ -1,66 +1,76 @@
 <template>
   <div class="reviews__rating">
     <p class="reviews__text">Evaluate:</p>
-    <app-rating :starSize="32"></app-rating>
+    <!-- <app-rating :starSize="32"></app-rating> -->
+    <AppRating :starSize="'32'" />
   </div>
   <div class="reviews__form form">
     <div class="form__block">
       <label class="form__label" for="feedback">Feedback text</label>
-      <textarea class="form__textarea" name="feedback" id="feedback"></textarea>
+      <textarea
+        class="form__textarea"
+        name="feedback"
+        id="feedback"
+        v-model="text"
+      ></textarea>
     </div>
     <div class="form__wrapper">
       <div class="form__block">
         <label class="form__label" for="name">Full name</label>
-        <input class="form__input" type="text" name="name" id="name" />
+        <input
+          class="form__input"
+          type="text"
+          name="name"
+          id="name"
+          v-model="fullName"
+        />
       </div>
       <div class="form__block">
         <label class="form__label" for="email">Email</label>
-        <input class="form__input" type="email" name="email" id="email" />
+        <input
+          class="form__input"
+          type="email"
+          name="email"
+          id="email"
+          v-model="email"
+        />
       </div>
       <app-button
         class="form__btn"
         :name="'SEND'"
         :variant="'colored'"
+        @click="
+          createComment({
+            productId,
+            fullName,
+            email,
+            text,
+          })
+        "
       ></app-button>
     </div>
   </div>
-  <ul class="reviews__list">
-    <li class="comment" v-for="(comment, i) in 3" :key="i">
-      <div class="comment__head">
-        <h4 class="comment__name">Oleg Chernyshov</h4>
-        <p class="comment__date">09 February 2022</p>
-      </div>
-      <app-rating
-        class="comment__rating"
-        :starSize="22"
-        :fillStarColor="'#EBFF00'"
-        :rating="3"
-      ></app-rating>
-      <p class="comment__text">
-        Externally, everything is wonderful, it performs its function perfectly.
-        The compressor is quite noisy compared to our old Samsung refrigerator.
-        On the hotline, they answer that in two weeks it will work more quietly,
-        guys, the deadline for the refund is just ending.
-        <br />
-        By the way, they measured the noise level in decibels, the declared 37
-        does not smell, 47. The measurements were made with a program from the
-        phone, I understand that there is a device for this special. We will
-        return the ego to the store.
-      </p>
-    </li>
-  </ul>
+  <div class="reviews__list">
+    <app-comment
+      v-for="comment in comments"
+      :key="comment.id"
+      :name="comment.fullName"
+      :date="comment.createdAt"
+      :text="comment.text"
+    ></app-comment>
+  </div>
   <div class="pagination">
-    <span class="pagination__show">Showing 9 of 120 result</span>
+    <span class="pagination__show"
+      >Showing {{ pagesSize }} of {{ total }} result</span
+    >
 
-    <ul class="pagination__list">
-      <li class="pagination__item active">
-        <a href="#" class="pagination__number">1</a>
-      </li>
-      <li class="pagination__item">
-        <a href="#" class="pagination__number">2</a>
-      </li>
-      <li class="pagination__item">
-        <a href="#" class="pagination__number">3</a>
+    <ul class="pagination__list" v-if="pagesCount">
+      <li class="pagination__item" v-for="page in pagesCount" :key="page">
+        <router-link
+          :to="{ path: `${$route.fullPath}`, query: { page } }"
+          class="pagination__number"
+          >{{ page }}
+        </router-link>
       </li>
     </ul>
   </div>
@@ -69,12 +79,43 @@
 <script>
 import AppRating from "@/components/AppRating.vue";
 import AppButton from "@/components/AppButton.vue";
+import AppComment from "@/components/AppComment.vue";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "ProductReviews",
   components: {
     AppRating,
     AppButton,
+    AppComment,
+  },
+  data() {
+    return {
+      productId: this.$route.params.productId,
+      fullName: null,
+      email: null,
+      text: null,
+    };
+  },
+  computed: {
+    ...mapGetters("Comments", ["comments", "pagesCount", "pagesSize", "total"]),
+  },
+  watch: {
+    $route() {
+      this.getComments({
+        productId: this.productId,
+        page: this.$route.query.page,
+      });
+    },
+  },
+  created() {
+    this.getComments({
+      productId: this.productId,
+      page: this.$route.query.page,
+    });
+  },
+  methods: {
+    ...mapActions("Comments", ["getComments", "createComment"]),
   },
 };
 </script>
@@ -138,32 +179,6 @@ export default {
   &__btn {
     padding: 23px 100px;
     border-radius: 12px;
-  }
-}
-
-.comment {
-  padding: 26px 40px 42px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-
-  &__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-
-  &__name {
-    font-weight: 500;
-    font-size: 20px;
-  }
-
-  &__date {
-    font-size: 16px;
-  }
-
-  &__rating {
-    margin-bottom: 20px;
   }
 }
 

@@ -86,8 +86,9 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
     width: 100%;
-    min-height: 160px;
+    height: 160px;
     border-radius: 10px;
     overflow: hidden;
     margin-bottom: 24px;
@@ -96,7 +97,7 @@ export default {
   &__img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 
   &__block {

@@ -15,10 +15,19 @@ export default {
     },
     quantityById(state) {
       return function (id) {
-        return state.items?.find((obj) => obj.id === id).quantity;
+        return state.items?.find((obj) => obj.id === id)?.quantity;
       };
     },
     cartCount: (state) => state.items.length,
+    totalSum(state) {
+      return state.items?.reduce((acc, item) => {
+        return (
+          acc +
+          item?.quantity *
+            state.productsDetailed?.find((obj) => obj.id === item.id)?.price
+        );
+      }, 0);
+    },
   },
   mutations: {
     setCartItems(state, items) {
@@ -95,6 +104,42 @@ export default {
           store.commit("setProductsDetailed", resp.data?.products);
         })
         .catch((e) => console.log(e));
+    },
+    makeOrder(store, info) {
+      let data = JSON.stringify({
+        data: {
+          firstName: info.firstName,
+          lastName: info.lastName,
+          email: info.email,
+          mobile: info.phone,
+          addres: info.address,
+          country: info.country,
+          postcode: info.zip,
+          city: info.city,
+          payment: info.payment,
+          products: store.state.items,
+        },
+      });
+
+      let config = {
+        method: "post",
+        url: "/orders",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+
+      return new Promise((resolve) => {
+        axios(config)
+          .then(function (response) {
+            console.log(JSON.stringify(response.data));
+            resolve(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      });
     },
   },
 };
