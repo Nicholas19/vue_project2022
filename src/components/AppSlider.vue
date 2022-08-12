@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+// import { ref } from "vue";
 import { Thumbs, Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { EffectCreative } from "swiper";
@@ -70,20 +70,20 @@ export default {
     Swiper,
     SwiperSlide,
   },
-  setup() {
-    const thumbsSwiper = ref(null);
-    const setThumbsSwiper = (swiper) => {
-      thumbsSwiper.value = swiper;
-    };
+  // setup() {
+  //   const thumbsSwiper = ref(null);
+  //   const setThumbsSwiper = (swiper) => {
+  //     thumbsSwiper.value = swiper;
+  //   };
 
-    return {
-      EffectCreative,
-      Thumbs,
-      thumbsSwiper,
-      setThumbsSwiper,
-      Navigation,
-    };
-  },
+  //   return {
+  //     EffectCreative,
+  //     Thumbs,
+  //     thumbsSwiper,
+  //     setThumbsSwiper,
+  //     Navigation,
+  //   };
+  // },
   props: {
     images: {
       type: Array,
@@ -93,7 +93,17 @@ export default {
   data() {
     return {
       imgURL: process.env.VUE_APP_DOMAIN,
+      thumbsSwiper: null,
+      EffectCreative: EffectCreative,
+      Thumbs: Thumbs,
+      Navigation: Navigation,
     };
+  },
+  methods: {
+    setThumbsSwiper(swiper) {
+      console.log(swiper);
+      this.thumbsSwiper = swiper;
+    },
   },
 };
 </script>
