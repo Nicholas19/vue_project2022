@@ -76,8 +76,8 @@ export default {
     resetFilter(state) {
       state.filter.brand = null;
       state.filter.colors = [];
-      state.filter.rangeMin = null;
-      state.filter.rangeMax = null;
+      state.filter.rangeMin = state.prices.min;
+      state.filter.rangeMax = state.prices.max;
     },
     chooseColor(state, e) {
       if (state.filter.colors.includes(e)) {
